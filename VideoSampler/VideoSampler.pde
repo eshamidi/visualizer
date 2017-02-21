@@ -23,15 +23,15 @@ BeatDetect beat;
 //SoundFile in;
 
 static String videoDirectory = "C:/Users/Jeremy/Google Drive/Drexel/Winter 2017/ECE-12 Senior Design/Source Videos/";
-static String videoExtension = ".AVI";
+static String videoExtension = ".avi";
 
 
 // generate video list
 static final String[] videos = findVideos(videoDirectory, videoExtension);
 
-// legacy code:
+//legacy code:
 //create array of movie file paths 
-//static final String[] FILMS = { "C:/Users/Jeremy/Google Drive/Drexel/Winter 2017/ECE-12 Senior Design/Source Videos/2015-03-06 00.29.38.mp4", 
+//static final String[] videos = { "C:/Users/Jeremy/Google Drive/Drexel/Winter 2017/ECE-12 Senior Design/Source Videos/2015-03-06 00.29.38.mp4", 
 //                                "C:/Users/Jeremy/Google Drive/Drexel/Winter 2017/ECE-12 Senior Design/Source Videos/Cassette Tape H264-1.mp4",
 //                                "C:/Users/Jeremy/Google Drive/Drexel/Winter 2017/ECE-12 Senior Design/Source Videos/IMB_SF_C9_512kb.mp4"};
 
@@ -72,7 +72,7 @@ static final PlayBin2.ABOUT_TO_FINISH FINISHING = new PlayBin2.ABOUT_TO_FINISH()
 void setup() {
   
   //window size
-  size(640,480, P2D);
+  size(640,480);
   //framerate
   frameRate(30);
   noStroke();
@@ -314,6 +314,8 @@ void Pixelate(){
     }
   }
    
+
+   
    
    // for messing with colors? 
    
@@ -368,12 +370,12 @@ void GhostFX(int clrmix){
 }
 
   
-////tap tempo - unfinished
-//void TapUpdate(){
-//  wait = millis() - lastBeat; 
-//  lastBeat = millis(); 
-//  println(wait);
-//}
+//tap tempo - unfinished
+void TapUpdate(){
+  wait = millis() - lastBeat; 
+  lastBeat = millis(); 
+  println(wait);
+}
   
 
 ////midi stuff  - use later 
