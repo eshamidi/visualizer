@@ -9,15 +9,16 @@ import processing.video.*;
 import org.gstreamer.elements.PlayBin2;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
-import processing.sound.*;
 import themidibus.*;
+import processing.sound.*;
 
 
 
 //declaration of objects -- midi, amplitude, audio input 
+Minim minim;
 MidiBus busA; 
 Amplitude amp;
-AudioIn in;
+AudioInput in;
 BeatDetect beat;
 
 //LowPass loband;
@@ -57,7 +58,7 @@ color movColors[];
 //int clrmix = 0;
 boolean pix, clrg, clrr, clrb, ghost = false;
 
-int clrscl = 0;
+int clrmix, clrscl = 0;
 int pixpos = 0; 
 
 
@@ -72,18 +73,16 @@ static final PlayBin2.ABOUT_TO_FINISH FINISHING = new PlayBin2.ABOUT_TO_FINISH()
 void setup() {
   
 //window size
-  size(640,480, P2D);
-//framerate
- frameRate(30);
+  fullScreen(P2D);
+
  noStroke();
-  //timer
+
   
   //audio analysis and playback
+  minim = new Minim(this);
   amp = new Amplitude(this);
-  //in = new SoundFile(this, "D:/Music/dj stuff/02 - Shall Not Fade - It's Been A Long Time.mp3");
-in = new AudioIn(this, 0);
-  in.start();
-  amp.input(in);
+  in = minim.getLineIn();
+
   
   beat = new BeatDetect();
   
@@ -101,16 +100,22 @@ in = new AudioIn(this, 0);
  
  
  //trigger video sequence timing
+ 
 wait = 900;
 time = millis();
+
+
+//pixelation stuff 
 
   numPixelsWide = 720 / blockSize;
   numPixelsHigh = 720 / blockSize;
   movColors = new color[numPixelsWide * numPixelsHigh];
 
+//midi stuff -use later 
 
-MidiBus.list();
-busA = new MidiBus(this, "Teensy MIDI", "Teensy MIDI");
+
+//MidiBus.list();
+//busA = new MidiBus(this, "Teensy MIDI", "Teensy MIDI");
 //busA.addInput("Teensy MIDI"); 
 
 }
@@ -122,8 +127,17 @@ void movieEvent(Movie m) {
 
 void draw() {
   b4 = millis();
-  int clrmix = int(map(amp.analyze(), 0, 0.9, 0, 255)); 
+  beat.detect(in.mix);
+  if(beat.isOnset()){
+     clrmix = 45;
+  }
+  else{
+    clrmix = 0; 
+  }
     //println(clrmix + "   " + amp.analyze());
+    
+    
+    
 
 
   
