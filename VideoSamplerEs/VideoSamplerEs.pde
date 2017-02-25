@@ -42,7 +42,7 @@ int tr1, tr2 = 0;
 //movie array index
 int idx;
 //framerate
-int FPS = 30; 
+
 int val; 
 Movie m; 
 
@@ -74,7 +74,7 @@ void setup() {
   
 //window size
   fullScreen(P2D);
-
+ imageMode(CENTER);
  noStroke();
 
   
@@ -127,9 +127,13 @@ void movieEvent(Movie m) {
 
 void draw() {
   b4 = millis();
+  
+  //detect if beat 
   beat.detect(in.mix);
+  
+  
   if(beat.isOnset()){
-     clrmix = 45;
+     clrmix = 255;
   }
   else{
     clrmix = 0; 
@@ -358,7 +362,7 @@ void Pixelate(){
 
   //draws uneffected video to the screen
   void DryVideo(){
-    image(m, tr1, tr2, 640,480);   
+    image(m,width/2,height/2);   
     
   }
   
