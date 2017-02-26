@@ -41,6 +41,8 @@ int counter = 0;
 int tr1, tr2 = 0; 
 //movie array index
 int idx;
+int i = 0;
+int tempo[] = new int[10];
 //framerate
 
 int val; 
@@ -80,7 +82,6 @@ void setup() {
  imageMode(CENTER);
  noStroke();
 
-  
   //audio analysis and playback
   minim = new Minim(this);
   amp = new Amplitude(this);
@@ -422,8 +423,16 @@ void Pixelate(){
     
     
     lastBeat = millis(); 
-    
-    println(wait/60);
+    println("Wait is"+wait);
+  tempo[i] = wait;
+  i++;
+  if(i >= 10){
+    i = 0;
+  }
+  //trying to display bpm array
+  textSize(100);
+  text(i, width/2, height/2);
+  
   }
   
   boolean UpdateTempo(){
