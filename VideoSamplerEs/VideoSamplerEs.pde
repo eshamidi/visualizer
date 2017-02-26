@@ -50,6 +50,7 @@ Movie m;
 int time, wait, b4, a4;
 int lastBeat;
 boolean tapListen = false; 
+boolean beatFlag = false; 
 
 //pixelation variables
 int numPixelsWide, numPixelsHigh;
@@ -60,6 +61,8 @@ boolean pix, clrg, clrr, clrb, ghost = false;
 
 int clrmix, clrscl = 0;
 int pixpos = 0; 
+
+
 
 
 
@@ -96,7 +99,7 @@ void setup() {
   }
   (m = movies[idx = 0]).play();
  
- m.volume(0); 
+
  
  
  //trigger video sequence timing
@@ -129,10 +132,11 @@ void draw() {
   b4 = millis();
   
   //detect if beat 
-  beat.detect(in.mix);
+  beatFlag = UpdateTempo();
+
   
   
-  if(beat.isOnset()){
+  if(beatFlag == true){
      clrmix = 255;
   }
   else{
@@ -199,6 +203,7 @@ void VidSwitch(int val){
   m = movies[val-97];
   m.jump(0);
   m.play();
+ 
 
   }
 }
@@ -272,6 +277,8 @@ void keyPressed(){
     case 'j':
     if(clrr == false){
     clrr = true; 
+    clrg = false;
+    clrb = false;
     }
     else if(clrr == true){
       clrr = false;
@@ -281,6 +288,8 @@ void keyPressed(){
     case 'k':
     if(clrg == false){
     clrg = true; 
+    clrr = false;
+    clrb = false;
     }
     else if(clrg == true){
       clrg = false;
@@ -290,6 +299,8 @@ void keyPressed(){
     case 'l':
     if(clrb == false){
     clrb = true; 
+    clrr = false;
+    clrg = false;
     }
     else if(clrb == true){
       clrb = false;
@@ -326,7 +337,7 @@ void Pixelate(){
     int count = 0;
     for (int j = 0; j < numPixelsHigh; j++) {
       for (int i = 0; i < numPixelsWide; i++) {
-        movColors[count] = m.get(i*3*blockSize, j*2*blockSize) ; 
+        movColors[count] = m.get(i*3*blockSize, j*2*blockSize) + clrmix ; 
         count++;
       }
     }
@@ -396,7 +407,8 @@ void Pixelate(){
     int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
     tint(clrmix*2,255-clrmix , 0, clrmix_map);
     
-    image(m,0, -50, 800,600);
+    image(m,width/2,height/2, 800,600);
+    image(m,width/2,height/2, 400,300);
     //image(m,0, 0, 1000,800);
     
     
@@ -411,9 +423,26 @@ void Pixelate(){
     
     lastBeat = millis(); 
     
-    println(wait);
+    println(wait/60);
   }
   
+  boolean UpdateTempo(){
+    
+  beat.setSensitivity(100); 
+  beat.detect(in.mix);
+  
+  if(beat.isOnset()){
+  TapUpdate();
+  return true;
+  }
+  else{
+    return false;
+    
+  }
+    
+    
+    
+  }
   
   
   
