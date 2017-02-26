@@ -10,14 +10,13 @@ import org.gstreamer.elements.PlayBin2;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 import themidibus.*;
-import processing.sound.*;
 
 
 
 //declaration of objects -- midi, amplitude, audio input 
 Minim minim;
 MidiBus busA; 
-Amplitude amp;
+
 AudioInput in;
 BeatDetect beat;
 
@@ -63,7 +62,7 @@ boolean pix, clrg, clrr, clrb, ghost = false;
 
 int clrmix, clrscl = 0;
 int pixpos = 0; 
-
+int sense = 0;
 
 
 
@@ -84,7 +83,6 @@ void setup() {
 
   //audio analysis and playback
   minim = new Minim(this);
-  amp = new Amplitude(this);
   in = minim.getLineIn();
 
   
@@ -128,6 +126,13 @@ void movieEvent(Movie m) {
   m.read();
  
 }
+
+//DRAW LOOP 
+//
+//
+//
+//
+//
 
 void draw() {
   b4 = millis();
@@ -188,6 +193,13 @@ void draw() {
  }
 }
 
+//END OF DRAW LOOP
+//
+//
+//
+//
+//
+
 
 
 
@@ -216,11 +228,16 @@ void keyPressed(){
   
   
   //switch video 
+  if(val == 'a' || val == 'b' || val == 'c'){
   VidSwitch(val);
+  }
   
 
  
   switch(val){
+    
+    
+    //pixelation effects
     
     case 'd':
     //toggle pixelate on/off 
@@ -262,6 +279,10 @@ void keyPressed(){
     pixpos-=5;
     break;
     
+    
+    // manual beat detection controls - y for tap tempo
+    //u toggles tap tempo control on/off
+    
     case 'y':
     TapUpdate();
     break;
@@ -275,6 +296,11 @@ void keyPressed(){
     }
     break;
     
+        
+    // tint section -- 
+    //k green, j red, l blue 
+    
+    
     case 'j':
     if(clrr == false){
     clrr = true; 
@@ -285,6 +311,8 @@ void keyPressed(){
       clrr = false;
     }
     break;
+    
+
     
     case 'k':
     if(clrg == false){
@@ -317,6 +345,20 @@ void keyPressed(){
     }
     break;     
     
+    //end of tint section
+    
+    case 'x':
+    sense+=10;
+    break;
+    
+    case 'z':
+    if(sense == 0){
+      sense = 0;
+    }
+    else{
+    sense-=10;
+    }
+    break; 
     
     
     default:
@@ -374,6 +416,7 @@ void Pixelate(){
 
   //draws uneffected video to the screen
   void DryVideo(){
+
     image(m,width/2,height/2);   
     
   }
@@ -408,9 +451,8 @@ void Pixelate(){
     int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
     tint(clrmix*2,255-clrmix , 0, clrmix_map);
     
-    image(m,width/2,height/2, 800,600);
-    image(m,width/2,height/2, 400,300);
-    //image(m,0, 0, 1000,800);
+    image(m,width/2,height/2, width/2,height/2);
+    image(m,width/2,height/2, width/4,height/4);
     
     
     
@@ -430,24 +472,28 @@ void Pixelate(){
     i = 0;
   }
   //trying to display bpm array
-  textSize(100);
-  text(i, width/2, height/2);
+  textSize(40);
+  text(i, width/4, height*8/10);
+
   
   }
   
   boolean UpdateTempo(){
     
-  beat.setSensitivity(100); 
+  beat.setSensitivity(sense); 
   beat.detect(in.mix);
-  
+  // display sensitivity 
+  text(sense, width/4, height*9/10);
   if(beat.isOnset()){
   TapUpdate();
+  
   return true;
   }
   else{
     return false;
     
   }
+  
     
     
     
