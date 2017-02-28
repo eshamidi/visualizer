@@ -20,8 +20,6 @@ MidiBus busA;
 AudioInput in;
 BeatDetect beat;
 
-//LowPass loband;
-//SoundFile in;
 
 
 
@@ -58,11 +56,12 @@ int numPixelsWide, numPixelsHigh;
 int blockSize = 5;
 color movColors[];
 //int clrmix = 0;
-boolean pix, clrg, clrr, clrb, ghost = false;
+boolean pix, clrg, clrr, clrb, ghost, rotate = false;
 
 int clrmix, clrscl = 0;
 int pixpos = 0; 
 int sense = 0;
+float press = 0; 
 
 
 
@@ -77,7 +76,7 @@ static final PlayBin2.ABOUT_TO_FINISH FINISHING = new PlayBin2.ABOUT_TO_FINISH()
 void setup() {
   
 //window size
-  fullScreen(P2D);
+  fullScreen(P3D);
  imageMode(CENTER);
  noStroke();
 
@@ -151,8 +150,9 @@ void draw() {
     //println(clrmix + "   " + amp.analyze());
     
     
-    
-
+ if(rotate == true){   
+ rotatePicture();
+ }
 
   
   if(pix == true ){ //| amp.analyze() > 0.5 ){
@@ -160,6 +160,7 @@ void draw() {
   }
   else{
       DryVideo();
+      
   }
   
   
@@ -278,6 +279,7 @@ void keyPressed(){
     case 't':
     pixpos-=5;
     break;
+   
     
     
     // manual beat detection controls - y for tap tempo
@@ -360,6 +362,14 @@ void keyPressed(){
     }
     break; 
     
+    case 'n':
+    if(rotate == false){
+      rotate = true;
+    }
+    else{
+      rotate = false;
+    }
+    break;
     
     default:
     break;
@@ -453,6 +463,23 @@ void Pixelate(){
     
     image(m,width/2,height/2, width/2,height/2);
     image(m,width/2,height/2, width/4,height/4);
+    
+    
+    
+  }
+  
+  void rotatePicture(){
+    
+  imageMode(CENTER);
+  rotate(press);
+  //translate(0,500*press,0);
+  press+=0.05;
+  if(press>=2*PI){
+    press =0;
+  }
+  
+    
+    
     
     
     
