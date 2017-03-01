@@ -96,18 +96,24 @@ void loop() {
   if (b1State == LOW) {
     debounce(&b1State, b1, 70);
     Serial.println("B1 pressed");
+    usbMIDI.sendNoteOn(21,64,1);
+    usbMIDI.sendNoteOff(21,127,1);
   }
 
   b2State = digitalRead(b2);
   if (b2State == LOW) {
     debounce(&b2State, b2, 70);
     Serial.println("B2 pressed");
+    usbMIDI.sendNoteOn(22,64,1);
+    usbMIDI.sendNoteOff(22,127,1);
   }
 
   b3State = digitalRead(b3);
   if (b3State == LOW ) {
     debounce(&b3State, b3, 70);
     Serial.println("B3 pressed");
+    usbMIDI.sendNoteOn(23,64,1);
+    usbMIDI.sendNoteOff(23,127,1);
   }
 
   encoderSwitchPinState = digitalRead(encoder1SwitchPin);
