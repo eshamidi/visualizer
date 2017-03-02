@@ -62,6 +62,7 @@ int clrmix, clrscl = 0;
 int pixpos = 0; 
 int sense = 0;
 float press = 0; 
+int ghostnum;
 
 
 
@@ -115,9 +116,8 @@ time = millis();
 //midi stuff -use later 
 
 
-//MidiBus.list();
-//busA = new MidiBus(this, "Teensy MIDI", "Teensy MIDI");
-//busA.addInput("Teensy MIDI"); 
+MidiBus.list();
+busA = new MidiBus(this, 0, 0);
 
 }
 
@@ -172,7 +172,7 @@ void draw() {
   }
 
   if(ghost == true){
-    GhostFX(clrmix);
+    GhostFX(clrmix, ghostnum);
   }
   
     
@@ -456,15 +456,15 @@ void Pixelate(){
   }
   
   
-  void GhostFX(int clrmix){
+  void GhostFX(int clrmix, int num){
     
     int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
     tint(clrmix*2,255-clrmix , 0, clrmix_map);
     
-    image(m,width/2,height/2, width/2,height/2);
-    image(m,width/2,height/2, width/4,height/4);
+    for(int i=1; i<num; i++){
+      image(m,width/2,height/2, width/i,height/i);
     
-    
+    }
     
   }
   
@@ -499,8 +499,8 @@ void Pixelate(){
     i = 0;
   }
   //trying to display bpm array
-  textSize(40);
-  text(i, width/4, height*8/10);
+ // textSize(40);
+ // text(i, width/4, height*8/10);
 
   
   }
@@ -545,11 +545,10 @@ void Pixelate(){
     
     if(number == 46 ){
     if(value == 1){
-      tt= true;
+      ghost = true;
     }
     else{
-      tt=false;
-      tint(255,255,255);
+      ghost =false;
     }
   }
   if(number == 45){
@@ -560,12 +559,15 @@ void Pixelate(){
 }
 
 void noteOn(int channel, int pitch, int velocity) {
+  //currently set to 21,22,23 
   println();
   println("Note On:");
   println("--------");
   println("Channel:"+channel);
   println("Pitch:"+pitch);
   println("Velocity:"+velocity);
+  
+  VidSwitch(pitch+76); //add 76 to get to ASCII values expected by function
 
 }
 
