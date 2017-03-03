@@ -475,15 +475,13 @@ void Pixelate(){
   void rotatePicture(){
     
   imageMode(CENTER);
-  rotate(press);
-  //translate(0,500*press,0);
-  press+=0.05;
+  rotate(-press);
+  translate(-press,-50*press,0);
+  press+=0.01;
   if(press>=2*PI){
     press =0;
   }
   
-    
-    
     
     
     
