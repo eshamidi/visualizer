@@ -25,9 +25,10 @@ BeatDetect beat;
 
 
 //create array of movie file paths 
-static final String[] FILMS = { "C:/Users/Esmail/Downloads/source videos/2015-03-06 00.29.38.mp4", 
-                                "C:/Users/Esmail/Downloads/source videos/Cassette Tape H264-1.mp4",
-                                "C:/Users/Esmail/Downloads/source videos/IMB_SF_C9_512kb.mp4"};
+static final String[] FILMS = { "/home/ubuntu/Documents/SourceVideos/Lizard.mp4",
+                                "/home/ubuntu/Documents/SourceVideos/Lizard.mp4",
+                                "/home/ubuntu/Documents/SourceVideos/Lizard.mp4"
+};
 
 //declares array of movies -- empty right now 
 final Movie[] movies = new Movie[FILMS.length];
@@ -63,7 +64,7 @@ int pixpos = 0;
 int sense = 0;
 float press = 0; 
 int ghostnum;
-
+int ccmix = 0; 
 
 
 
@@ -116,7 +117,7 @@ time = millis();
 //midi stuff -use later 
 
 
-MidiBus.list();
+//MidiBus.list();
 busA = new MidiBus(this, 0, 0);
 
 }
@@ -172,7 +173,7 @@ void draw() {
   }
 
   if(ghost == true){
-    GhostFX(clrmix, ghostnum);
+    GhostFX(ccmix, ghostnum);
   }
   
     
@@ -192,6 +193,9 @@ void draw() {
  // //println(a4-b4);
  
  }
+ 
+ 
+ println(clrmix);
 }
 
 //END OF DRAW LOOP
@@ -457,11 +461,11 @@ void Pixelate(){
   
   
   void GhostFX(int clrmix, int num){
-    
+    int ghostnum_map = int(map(num, 0,127,1,40));
     int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
     tint(clrmix*2,255-clrmix , 0, clrmix_map);
     
-    for(int i=1; i<num; i++){
+    for(int i=1; i<ghostnum_map; i++){
       image(m,width/2,height/2, width/i,height/i);
     
     }
@@ -536,12 +540,12 @@ void Pixelate(){
   int ctrl1 = 46;
   int ctrl2 = 45;
   
-  println();
-  println("Controller Change:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Number:"+number);
-  println("Value:"+value);
+  //println();
+  //println("Controller Change:");
+  //println("--------");
+  //println("Channel:"+channel);
+  //println("Number:"+number);
+  //println("Value:"+value);
     
     if(number == 46 ){
     if(value == 1){
@@ -552,9 +556,13 @@ void Pixelate(){
     }
   }
   if(number == 45){
-    if(tt ==true){
-      tint(0,value*2,0);
+    if( ghost ==true){
+     ghostnum = value;
     }
+  }
+  if(number == 47){
+    ccmix = 2*value;
+
   }
 }
 
