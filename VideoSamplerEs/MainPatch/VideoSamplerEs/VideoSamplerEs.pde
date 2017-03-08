@@ -25,9 +25,15 @@ BeatDetect beat;
 
 
 //create array of movie file paths 
-static final String[] FILMS = { "/home/ubuntu/Documents/SourceVideos/Lizard.mp4",
-                                "/home/ubuntu/Documents/SourceVideos/Lizard.mp4",
-                                "/home/ubuntu/Documents/SourceVideos/Lizard.mp4"
+//static final String[] FILMS = { "/home/ubuntu/Documents/SourceVideos/Lizard.mp4",
+//                                "/home/ubuntu/Documents/SourceVideos/Lizard.mp4",
+//                                "/home/ubuntu/Documents/SourceVideos/Lizard.mp4"
+//};
+
+
+static final String[] FILMS = { "C:/Users/Esmail/Downloads/source videos/Lizard_1024_576_Lossless.mp4",
+                                "C:/Users/Esmail/Downloads/source videos/Fractal.mp4",
+                                "C:/Users/Esmail/Downloads/source videos/IMB_SF_C9_512kb.mp4",
 };
 
 //declares array of movies -- empty right now 
@@ -89,17 +95,13 @@ void setup() {
   
   beat = new BeatDetect();
   
- // loband = new LowPass(this);
- // loband.process(in,800);
-  
-  
   //connects the movie index to m
   for (String s : FILMS)  {
   (movies[idx++] = new Movie(this, s)).playbin.connect(FINISHING);
   }
   (m = movies[idx = 0]).play();
- 
-
+   m.stop();
+   
  
  
  //trigger video sequence timing
@@ -165,18 +167,18 @@ void draw() {
   }
   
   
-  if(clrr == true | clrg == true | clrb == true){
-    TintFX(clrmix);   
-  }
-  else{
-    noTint();
-  }
 
   if(ghost == true){
     GhostFX(ccmix, ghostnum);
   }
   
-    
+   if(clrr == true | clrg == true | clrb == true){
+    TintFX(clrmix);   
+  }
+  else{
+    noTint();
+  }
+   
   
   
   
@@ -195,7 +197,7 @@ void draw() {
  }
  
  
- println(clrmix);
+// println(clrmix);
 }
 
 //END OF DRAW LOOP
@@ -226,356 +228,17 @@ void VidSwitch(int val){
   }
 }
 
-//takes keyboard input to switch videos, control, etc.  
-void keyPressed(){
-  
-  val = key; 
-  
-  
-  //switch video 
-  if(val == 'a' || val == 'b' || val == 'c'){
-  VidSwitch(val);
-  }
-  
-
- 
-  switch(val){
-    
-    
-    //pixelation effects
-    
-    case 'd':
-    //toggle pixelate on/off 
-    if(pix == true)
-    pix = false;
-    else
-    pix = true; 
-    break; 
-    
-    //control pixelation quality
-    case 'e':
-    if(blockSize < 30)
-    blockSize+=2;
-    else
-    blockSize = 30;
-    break;
-    
-    case 'w':
-    if(blockSize > 5)
-    blockSize-=2;
-    else
-    blockSize = 5;
-    break; 
-    
-    //color effect
-    case 'o':
-    clrscl+=1;
-    break; 
-    
-    case 'p':
-    clrscl-=1;
-    break;
-    
-    case 'r':
-    pixpos+=5;
-    break;
-    
-    case 't':
-    pixpos-=5;
-    break;
-   
-    
-    
-    // manual beat detection controls - y for tap tempo
-    //u toggles tap tempo control on/off
-    
-    case 'y':
-    TapUpdate();
-    break;
-    
-    case 'u':
-    if(tapListen == false){
-    tapListen = true; 
-    }
-    else{
-      tapListen = false;
-    }
-    break;
-    
-        
-    // tint section -- 
-    //k green, j red, l blue 
-    
-    
-    case 'j':
-    if(clrr == false){
-    clrr = true; 
-    clrg = false;
-    clrb = false;
-    }
-    else if(clrr == true){
-      clrr = false;
-    }
-    break;
-    
-
-    
-    case 'k':
-    if(clrg == false){
-    clrg = true; 
-    clrr = false;
-    clrb = false;
-    }
-    else if(clrg == true){
-      clrg = false;
-    }
-    break;  
-    
-    case 'l':
-    if(clrb == false){
-    clrb = true; 
-    clrr = false;
-    clrg = false;
-    }
-    else if(clrb == true){
-      clrb = false;
-    }
-    break;  
-    
-    case 'm':
-    if(ghost == false){
-    ghost = true; 
-    }
-    else if(ghost == true){
-      ghost = false;
-    }
-    break;     
-    
-    //end of tint section
-    
-    case 'x':
-    sense+=10;
-    break;
-    
-    case 'z':
-    if(sense == 0){
-      sense = 0;
-    }
-    else{
-    sense-=10;
-    }
-    break; 
-    
-    case 'n':
-    if(rotate == false){
-      rotate = true;
-    }
-    else{
-      rotate = false;
-    }
-    break;
-    
-    default:
-    break;
-    
-    
-  }
-  
-  
-  
-}
-
-
-//pixelation effect - need to figure out how to convert output into image so tint can be layered 
-void Pixelate(){
-  
-
-      m.loadPixels();
-    int count = 0;
-    for (int j = 0; j < numPixelsHigh; j++) {
-      for (int i = 0; i < numPixelsWide; i++) {
-        movColors[count] = m.get(i*3*blockSize, j*2*blockSize) + clrmix ; 
-        count++;
-      }
-    }
-   
-   
-   // for messing with colors? 
-   
-   // println(movColors.length);
-    
-    //count = 0;
-    //for(int i = 0; i<200; i++){
-      
-    //   for(int j = 20; j<100; j++){
-    //    movColors[count] = 0;
-    //    count++;
-    //  }
-    //}
-    
-      background(255);
-  for (int j = 0; j < numPixelsHigh; j++) {
-    for (int i = 0; i < numPixelsWide; i++) {
-      fill(movColors[j*numPixelsWide + i]  );//+ clrscl * int(random(100,250))); //+ clrscl*int(10*amp.analyze()));
-      rect(i*blockSize, j*blockSize, blockSize, blockSize);
-  
-
-      
-    }
-  }
-  
-  
-}
-
 
   //draws uneffected video to the screen
   void DryVideo(){
 
-    image(m,width/2,height/2);   
-    
-  }
-  
-  
-   //color tint -- mappable to audio 
-  void TintFX(int clrmix){
-
-
-     
-    
-   
-      if(clrr == true){
-    tint(clrmix*2,0 , 0); 
-      }
-      else if(clrg == true){
-    tint(0, clrmix*2, 0); 
-      } 
-      else if(clrb == true){
-    tint(0,0,clrmix*2); 
-      }
-    else{
-     noTint();
-    }
-    
-    
-  }
-  
-  
-  void GhostFX(int clrmix, int num){
-    int ghostnum_map = int(map(num, 0,127,1,40));
-    int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
-    tint(clrmix*2,255-clrmix , 0, clrmix_map);
-    
-    for(int i=1; i<ghostnum_map; i++){
-      image(m,width/2,height/2, width/i,height/i);
-    
-    }
-    
-  }
-  
-  void rotatePicture(){
-    
-  imageMode(CENTER);
-  rotate(-press);
-  translate(-press,-50*press,0);
-  press+=0.01;
-  if(press>=2*PI){
-    press =0;
-  }
-  
-    
-    
-    
-  }
-
-  
-  //tap tempo - unfinished
-  void TapUpdate(){
-    wait = millis() - lastBeat; 
-    
-    
-    lastBeat = millis(); 
-    println("Wait is"+wait);
-  tempo[i] = wait;
-  i++;
-  if(i >= 10){
-    i = 0;
-  }
-  //trying to display bpm array
- // textSize(40);
- // text(i, width/4, height*8/10);
-
-  
-  }
-  
-  boolean UpdateTempo(){
-    
-  beat.setSensitivity(sense); 
-  beat.detect(in.mix);
-  // display sensitivity 
-  text(sense, width/4, height*9/10);
-  if(beat.isOnset()){
-  TapUpdate();
-  
-  return true;
-  }
-  else{
-    return false;
-    
-  }
-  
-    
-    
+    image(m,width/2,height/2,width,height);   
     
   }
   
   
   
   
-  //midi stuff  - use later 
-      
-  void controllerChange(int channel, int number, int value) {
-  // Receive a controllerChange
-  int ctrl1 = 46;
-  int ctrl2 = 45;
-  
-  //println();
-  //println("Controller Change:");
-  //println("--------");
-  //println("Channel:"+channel);
-  //println("Number:"+number);
-  //println("Value:"+value);
-    
-    if(number == 46 ){
-    if(value == 1){
-      ghost = true;
-    }
-    else{
-      ghost =false;
-    }
-  }
-  if(number == 45){
-    if( ghost ==true){
-     ghostnum = value;
-    }
-  }
-  if(number == 47){
-    ccmix = 2*value;
-
-  }
-}
-
-void noteOn(int channel, int pitch, int velocity) {
-  //currently set to 21,22,23 
-  println();
-  println("Note On:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Pitch:"+pitch);
-  println("Velocity:"+velocity);
-  
-  VidSwitch(pitch+76); //add 76 to get to ASCII values expected by function
-
-}
 
   
 
