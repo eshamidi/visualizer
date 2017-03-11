@@ -3,6 +3,9 @@ void Pixelate(){
   
 
       m.loadPixels();
+      
+      
+
     int count = 0;
     for (int j = 0; j < numPixelsHigh; j++) {
       for (int i = 0; i < numPixelsWide; i++) {
@@ -25,11 +28,11 @@ void Pixelate(){
     //  }
     //}
     
-      background(255);
+      background(0);
   for (int j = 0; j < numPixelsHigh; j++) {
     for (int i = 0; i < numPixelsWide; i++) {
       fill(movColors[j*numPixelsWide + i]  );//+ clrscl * int(random(100,250))); //+ clrscl*int(10*amp.analyze()));
-      rect(i*blockSize, j*blockSize, blockSize, blockSize);
+      rect(i*blockSize+(width/4), j*blockSize+(height/4), blockSize*20, blockSize*20);
   
 
       
@@ -69,9 +72,10 @@ void Pixelate(){
   void GhostFX(int clrmix, int num){
     int ghostnum_map = int(map(num, 0,127,1,40));
     int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
-    tint(255,255 , 255, clrmix_map);
+    
     
     for(int i=1; i<ghostnum_map; i++){
+      tint(255,255 , 255, clrmix_map);
       image(m,width/2,height/2, width/i,height/i);
     
     }
