@@ -3,7 +3,7 @@
     
     
     lastBeat = millis(); 
-    println("Wait is"+wait);
+   // println("Wait is"+wait);
   tempo[i] = wait;
   i++;
   if(i >= 10){

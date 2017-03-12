@@ -33,10 +33,7 @@ void Pixelate(){
   for (int j = 0; j < numPixelsHigh; j++) {
     for (int i = 0; i < numPixelsWide; i++) {
       fill(movColors[j*numPixelsWide + i]  );//+ clrscl * int(random(100,250))); //+ clrscl*int(10*amp.analyze()));
-      rect(i*blockSize+(width/4), j*blockSize+(height/4), blockSize, blockSize);
-  
-
-      
+      rect(i*blockSize+(width/8), j*blockSize+(height/8), blockSize, blockSize);
     }
   }
   
@@ -83,11 +80,17 @@ void Pixelate(){
     
   }
   
+  
+  //3/12/17 - now rotates around center axis ! 
+  
   void rotatePicture(){
     
   imageMode(CENTER);
-  rotate(-press);
-  translate(-press,-50*press,0);
+  translate(width/2,height/2);
+  rotate(press);
+  translate(-width/2,-height/2);
+// Draw image using CENTER mode
+
   press+=0.01;
   if(press>=2*PI){
     press =0;

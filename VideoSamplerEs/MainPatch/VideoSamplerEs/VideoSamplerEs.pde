@@ -116,8 +116,7 @@ time = millis();
   numPixelsHigh = height / blockSize;
   movColors = new color[numPixelsWide * numPixelsHigh];
 
-//midi stuff -use later 
-
+//midi stuff
 
 //MidiBus.list();
 busA = new MidiBus(this, 0, 0);
