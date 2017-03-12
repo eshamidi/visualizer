@@ -63,7 +63,7 @@ int numPixelsWide, numPixelsHigh;
 int blockSize = 5;
 color movColors[];
 //int clrmix = 0;
-boolean pix, clrg, clrr, clrb, ghost, rotate = false;
+boolean pix, clrg, clrr, clrb, clra, ghost, rotate = false;
 
 int clrmix, clrscl = 0;
 int pixpos = 0; 
@@ -147,9 +147,8 @@ void draw() {
      clrmix = 255;
   }
   else{
-    clrmix = 0; 
+    clrmix = 20; 
   }
-    //println(clrmix + "   " + amp.analyze());
     
     
  if(rotate == true){   
@@ -171,7 +170,7 @@ void draw() {
     GhostFX(ccmix, ghostnum);
   }
   
-   if(clrr == true | clrg == true | clrb == true){
+   if(clrr == true | clrg == true | clrb == true | clra == true){
     TintFX(clrmix);   
   }
   else{
@@ -230,7 +229,10 @@ void VidSwitch(int val){
 
   //draws uneffected video to the screen
   void DryVideo(){
-
+    
+    //background is set to black so previous artifacts from older frames do not hold true. 
+    //maybe make this optional somehow? 
+    background(0);
     image(m,width/2,height/2,width,height);   
     
   }

@@ -79,7 +79,7 @@ void keyPressed(){
     //k green, j red, l blue 
     
     
-    case 'j':
+    case '1':
     if(clrr == false){
     clrr = true; 
     clrg = false;
@@ -92,7 +92,7 @@ void keyPressed(){
     
 
     
-    case 'k':
+    case '2':
     if(clrg == false){
     clrg = true; 
     clrr = false;
@@ -103,7 +103,7 @@ void keyPressed(){
     }
     break;  
     
-    case 'l':
+    case '3':
     if(clrb == false){
     clrb = true; 
     clrr = false;
@@ -112,7 +112,20 @@ void keyPressed(){
     else if(clrb == true){
       clrb = false;
     }
-    break;  
+    break; 
+    
+    case '4':
+    if(clra == false){
+    clra = true; 
+    clrb = false;
+    clrr = false;
+    clrg = false;
+    }
+    else if(clra == true){
+      clra = false;
+    }
+    break; 
+    
     
     case 'm':
     if(ghost == false){
@@ -144,6 +157,7 @@ void keyPressed(){
     }
     else{
       rotate = false;
+      press = 0; 
     }
     break;
     

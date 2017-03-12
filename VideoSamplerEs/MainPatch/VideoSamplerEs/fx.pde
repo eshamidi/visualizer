@@ -59,6 +59,9 @@ void Pixelate(){
       else if(clrb == true){
     tint(0,0,clrmix*2); 
       }
+      else if(clra == true){
+        tint(clrmix*2, clrmix*2, clrmix*2);
+      }
     else{
      noTint();
     }
@@ -91,6 +94,9 @@ void Pixelate(){
   translate(-width/2,-height/2);
 // Draw image using CENTER mode
 
+
+//somehow reset press to 0 once effect is turned off? --- added 3/12/17
+//rotation speed should def be a parameter of this effect 
   press+=0.01;
   if(press>=2*PI){
     press =0;
