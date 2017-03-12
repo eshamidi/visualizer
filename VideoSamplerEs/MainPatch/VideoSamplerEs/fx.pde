@@ -1,4 +1,5 @@
 //pixelation effect - need to figure out how to convert output into image so tint can be layered 
+// 3/12/17 
 void Pixelate(){
   
 
@@ -9,7 +10,7 @@ void Pixelate(){
     int count = 0;
     for (int j = 0; j < numPixelsHigh; j++) {
       for (int i = 0; i < numPixelsWide; i++) {
-        movColors[count] = m.get(i*3*blockSize, j*2*blockSize) + clrmix ; 
+        movColors[count] = m.get(i*blockSize, j*blockSize); 
         count++;
       }
     }
@@ -28,11 +29,11 @@ void Pixelate(){
     //  }
     //}
     
-      background(0);
+    background(0);
   for (int j = 0; j < numPixelsHigh; j++) {
     for (int i = 0; i < numPixelsWide; i++) {
       fill(movColors[j*numPixelsWide + i]  );//+ clrscl * int(random(100,250))); //+ clrscl*int(10*amp.analyze()));
-      rect(i*blockSize+(width/4), j*blockSize+(height/4), blockSize*20, blockSize*20);
+      rect(i*blockSize+(width/4), j*blockSize+(height/4), blockSize, blockSize);
   
 
       

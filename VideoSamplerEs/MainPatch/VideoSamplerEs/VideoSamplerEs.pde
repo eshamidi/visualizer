@@ -1,5 +1,5 @@
 //Video Sampler Latest Version 
-// 2/26/17
+// 3/12/17
 
 
 
@@ -112,8 +112,8 @@ time = millis();
 
 //pixelation stuff 
 
-  numPixelsWide = 720 / blockSize;
-  numPixelsHigh = 720 / blockSize;
+  numPixelsWide = width / blockSize;
+  numPixelsHigh = height / blockSize;
   movColors = new color[numPixelsWide * numPixelsHigh];
 
 //midi stuff -use later 
