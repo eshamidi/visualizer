@@ -53,15 +53,17 @@ void Pixelate(){
 
      
     
-   
+   //red to blue 
       if(clrr == true){
-    tint(clrmix*2,0 , 0); 
+    tint(clrmix*2,0 , 255-clrmix*2); 
       }
+      //green to red 
       else if(clrg == true){
-    tint(0, clrmix*2, 0); 
+    tint(255-clrmix*2, clrmix*2, 0); 
       } 
+      //blue to green
       else if(clrb == true){
-    tint(0,0,clrmix*2); 
+    tint(0,255-clrmix*2,clrmix*2); 
       }
       else if(clra == true){
         tint(clrmix*2, clrmix*2, clrmix*2);
@@ -74,14 +76,15 @@ void Pixelate(){
   }
   
   
-  void GhostFX(int clrmix, int num){
+  void GhostFX(int ccmix, int num){
     int ghostnum_map = int(map(num, 0,127,1,40));
-    int clrmix_map = int(map(clrmix, 0, 255, 40, 100));
+    float ccmix_map = map(ccmix, 0, 127, 0.1, 6);
     
     
     for(int i=1; i<ghostnum_map; i++){
-      tint(255,255 , 255, clrmix_map);
-      image(m,width/2,height/2, width/i,height/i);
+      tint(255,255 , 255, 40);
+      
+      image(m,width/2,height/2, width/(ccmix_map*i),height/(ccmix_map*i));
     
     }
     

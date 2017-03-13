@@ -219,7 +219,8 @@ void keyPressed(){
   //println("Channel:"+channel);
   //println("Number:"+number);
   //println("Value:"+value);
-    
+  
+    //encoder pushbutton
     if(number == 46 ){
     if(value == 1){
       ghost = true;
@@ -228,15 +229,19 @@ void keyPressed(){
       ghost =false;
     }
   }
+  //fader
   if(number == 45){
     if( ghost ==true){
      ghostnum = value;
     }
   }
+  
+  //encoder
   if(number == 47){
-    ccmix = 2*value;
+    ccmix = value;
 
   }
+  //audio
   if(number == 50){
     clrmix = 2*value;
   }
