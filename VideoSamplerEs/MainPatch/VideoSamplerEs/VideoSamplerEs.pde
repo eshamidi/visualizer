@@ -118,8 +118,9 @@ time = millis();
 
 //midi stuff
 
-//MidiBus.list();
-busA = new MidiBus(this, 0, 0);
+MidiBus.list();
+//busA = new MidiBus(this, 0, 0); //Jetson
+busA = new MidiBus(this, 2, 0); //PC
 
 }
 
@@ -143,12 +144,12 @@ void draw() {
 
   
   
-  if(beatFlag == true){
-     clrmix = 255;
-  }
-  else{
-    clrmix = 20; 
-  }
+  //if(beatFlag == true){
+  //   clrmix = 255;
+  //}
+  //else{
+  //  clrmix = 20; 
+  //}
     
     
  if(rotate == true){   

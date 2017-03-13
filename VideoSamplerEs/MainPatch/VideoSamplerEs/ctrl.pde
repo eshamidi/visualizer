@@ -1,4 +1,27 @@
-//takes keyboard input to switch videos, control, etc.  
+//Control Functionality - 3/13/17 
+
+//MIDI Functionality for:
+// Triggering 3 video clips 
+// Turning on and off 1 effect 
+// 2 parameters of that effect 
+// Audio Control (untested)
+
+//Keyboard Functionality for: 
+//Triggering 3 video clips (a, b, c)
+
+//Tap tempo: press button in time to determine beat (y)
+//Toggle tap tempo video trigger (u)
+
+//Beat Detection: increase/decrease sensitivity of Minim object (x, z)
+
+//Tint effect: 1 = red 2 = green 3 = blue on/off
+//Ghosting: on/off (m), number of ghosts (g,h)
+//Rotate: on/off (n) 
+//Pixelation: Toggle on/off  (d)
+//Pixelation: change pixel block size (w, e)
+//Pixelation: add pixelation random color noise (o,p) *untested 3/13/17
+//Change unknown parameter?? pixpos (r, t)
+
 void keyPressed(){
   
   val = key; 
@@ -213,6 +236,9 @@ void keyPressed(){
   if(number == 47){
     ccmix = 2*value;
 
+  }
+  if(number == 50){
+    clrmix = 2*value;
   }
 }
 

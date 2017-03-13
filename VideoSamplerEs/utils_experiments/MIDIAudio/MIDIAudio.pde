@@ -1,5 +1,4 @@
-//MIDI control functionality prototype. 3/2/17
-//Audio control via MIDI is not implemented. 
+//Same as MIDIPlay but with audio over MIDI enabled and other functions disabled. 3/13/17 
 
 import processing.video.*;
 import themidibus.*; //Import the library
@@ -32,7 +31,7 @@ void draw() {
   //  moviegst-.read(); 
   //}
   image(movie, 0, 0, width, height);
-  //tint(clrmix, 0, 255-clrmix); 
+  tint(clrmix, 0, 255-clrmix); 
     
 
   fr = int(frameRate);
@@ -54,30 +53,30 @@ void noteOn(int channel, int pitch, int velocity) {
 }
 void controllerChange(int channel, int number, int value) {
    //Receive a controllerChange
-  println();
-  println("Controller Change:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Number:"+number);
-  println("Value:"+value);
+  //println();
+  //println("Controller Change:");
+  //println("--------");
+  //println("Channel:"+channel);
+  //println("Number:"+number);
+  //println("Value:"+value);
   if(number == 46 ){
     if(value == 1){
       tt= true;
     }
     else{
       tt=false;
-      tint(255,255,255);
+    //  tint(255,255,255);
     }
   }
   if(number == 45){
     if(tt ==true){
-      tint(0,value*2,0);
+   //   tint(0,value*2,0);
     }
   }
- //color to audio  
+  
   if(number == 50){
-    //clrmix = int(map(value,0,127,0,255));
-    //println(value);
+    clrmix = int(map(value,0,127,0,255));
+    println(clrmix);
   }
 
   

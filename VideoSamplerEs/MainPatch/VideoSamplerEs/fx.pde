@@ -1,5 +1,9 @@
 //pixelation effect - need to figure out how to convert output into image so tint can be layered 
 // 3/12/17 
+
+
+//in process of adding audio input via MIDI - 3/13/17
+
 void Pixelate(){
   
 
