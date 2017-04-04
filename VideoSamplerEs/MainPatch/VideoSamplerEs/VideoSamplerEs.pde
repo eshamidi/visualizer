@@ -71,7 +71,7 @@ int sense = 0;
 float press = 0; 
 int ghostnum;
 int ccmix = 0; 
-
+boolean AudioEx = false; 
 
 
 
@@ -171,7 +171,7 @@ void draw() {
     GhostFX(ccmix, ghostnum);
   }
   
-   if(clrr == true | clrg == true | clrb == true | clra == true){
+   if(clrr == true | clrg == true | clrb == true | clra == true & AudioEx == true){
     TintFX(clrmix);   
   }
   else{

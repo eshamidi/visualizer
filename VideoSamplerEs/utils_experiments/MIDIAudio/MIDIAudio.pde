@@ -13,7 +13,7 @@ void setup() {
   size(640, 360, P3D);
   background(0);
   MidiBus.list();
-  myBus = new MidiBus(this, 2,0); 
+  myBus = new MidiBus(this, 3,0); 
   // Load and play the video in a loop
   movie = new Movie(this, "C:/Users/Esmail/Downloads/source videos/Lizard_1024_576_Lossless.mp4");
   movie.play();
@@ -53,12 +53,12 @@ void noteOn(int channel, int pitch, int velocity) {
 }
 void controllerChange(int channel, int number, int value) {
    //Receive a controllerChange
-  //println();
-  //println("Controller Change:");
-  //println("--------");
-  //println("Channel:"+channel);
-  //println("Number:"+number);
-  //println("Value:"+value);
+  println();
+  println("Controller Change:");
+  println("--------");
+  println("Channel:"+channel);
+  println("Number:"+number);
+  println("Value:"+value);
   if(number == 46 ){
     if(value == 1){
       tt= true;
@@ -75,7 +75,7 @@ void controllerChange(int channel, int number, int value) {
   }
   
   if(number == 50){
-    clrmix = int(map(value,0,127,0,255));
+    clrmix = int(map(value,0,127,0,100));
     println(clrmix);
   }
 

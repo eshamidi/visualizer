@@ -22,6 +22,10 @@
 //Pixelation: add pixelation random color noise (o,p) *untested 3/13/17
 //Change unknown parameter?? pixpos (r, t)
 
+
+
+
+
 void keyPressed(){
   
   val = key; 
@@ -243,18 +247,33 @@ void keyPressed(){
   }
   //audio
   if(number == 50){
-    clrmix = 2*value;
-  }
+      clrmix = 2*value;
+    }
+  
+ 
 }
 
 void noteOn(int channel, int pitch, int velocity) {
   //currently set to 21,22,23 
-  println();
-  println("Note On:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Pitch:"+pitch);
-  println("Velocity:"+velocity);
+  //println();
+  //println("Note On:");
+  //println("--------");
+  //println("Channel:"+channel);
+  //println("Pitch:"+pitch);
+  //println("Velocity:"+velocity);
+  
+  //if(pitch == 51){
+  //  if(AudioEx == false){
+  //    AudioEx = true;
+
+  //  }
+  //  else{
+  //    AudioEx = false;
+
+  //  }
+    
+  //}
+  
   
   VidSwitch(pitch+76); //add 76 to get to ASCII values expected by function
 
