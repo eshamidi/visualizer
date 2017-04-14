@@ -59,7 +59,7 @@ switch(mode){
     digitalWrite(latchPin, LOW);
     // shift out the bits:
 
-    shiftOut(dataPin, clockPin, MSBFIRST, colorarr[i]);  
+    shiftOut(dataPin, clockPin, MSBFIRST, 33);  
     
     //take the latch pin high so the LEDs will light up:
     digitalWrite(latchPin, HIGH);
