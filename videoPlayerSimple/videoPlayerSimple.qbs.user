@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.1.0, 2017-04-19T11:38:08. -->
+<!-- Written by QtCreator 4.1.0, 2017-04-19T14:34:01. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -219,7 +219,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qbs.RunConfiguration:videoPlayerSimple.qtc_Desktop_79855fc7---Qbs.RC.NameSeparator---videoPlayerSimple</value>
     <value type="QString" key="Qbs.RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory.default"></value>
+    <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory.default">/home/es/OF_0.9.8/apps/visualizer/videoPlayerSimple/bin</value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>

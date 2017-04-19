@@ -2,6 +2,7 @@
 #include <dirent.h>
 
 int currentVid = 0;
+int numVids = 0;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -10,20 +11,48 @@ void ofApp::setup(){
     system("sudo ~/unmountFlash.sh");
     system("sudo ~/mountFlash.sh");
 
-    // to be replaced with auto-finder function
+    string tempName;
+    string videos [6] ;
+    string dirString = "/media/root/fdrive/";
 
+    DIR *dir;
+    struct dirent *entries;
 
+    if (( dir = opendir("/media/root/fdrive/")) != NULL) {;
 
+        int count = 0;
+        while ((entries = readdir (dir)) != NULL && count <6) {
+
+            tempName = entries->d_name;
+
+            if(tempName.substr(tempName.find_last_of(".") + 1) == "avi" || tempName.substr(tempName.find_last_of(".") + 1) == "mp4") {
+                videos[count] = dirString + tempName;
+                count++;
+            }
+        }
+        closedir (dir);
+    }
+
+    // display videos found
+    cout << "videos in array\n" ;
+    for( int i=0; i<6; i++){
+        cout << videos[i] << "\n" ;
+    }
+
+    /* Hard-coded paths - LEGACY
     string vids [3] = {
         "/media/root/fdrive/Lizard_Full.mp4",
         "/media/root/fdrive/animation_demo.avi",
         "/media/root/fdrive/jhomerun.avi" };
+    */
 
-    myMovies[0].load(vids[0]);
-    myMovies[1].load(vids[1]);
-    myMovies[2].load(vids[2]);
+    // load videos into each ofVideoPlayer
+    int i = 0;
+    while(videos[i] != ""){
+        myMovies[i].load(videos[i]);
+        i++;
+    }
 
-    //myMovies[0].play();
 
     /* Audio Setup ~for later use
     soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
@@ -65,17 +94,30 @@ void ofApp::keyPressed(int key){
             myMovies[0].play();
             currentVid = 0;
             break;
-
         case '2':
             myMovies[currentVid].stop();
             myMovies[1].play();
             currentVid = 1;
             break;
-
         case '3':
             myMovies[currentVid].stop();
             myMovies[2].play();
             currentVid = 2;
+            break;
+        case '4':
+            myMovies[currentVid].stop();
+            myMovies[3].play();
+            currentVid = 3;
+            break;
+        case '5':
+            myMovies[currentVid].stop();
+            myMovies[4].play();
+            currentVid = 4;
+            break;
+        case '6':
+            myMovies[currentVid].stop();
+            myMovies[5].play();
+            currentVid = 5;
             break;
     }
 }
