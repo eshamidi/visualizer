@@ -1,14 +1,29 @@
 #include "ofApp.h"
+#include <dirent.h>
+
+int currentVid = 0;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    // Manually find flash drive and name "/media/es/fdrive"
+    // Manually find flash drive and name "/media/root/fdrive"
     system("sudo ~/unmountFlash.sh");
     system("sudo ~/mountFlash.sh");
 
-    myMovies[0].load("/media/es/fdrive/animation_demo.avi");
-    myMovies[0].play();
+    // to be replaced with auto-finder function
+
+
+
+    string vids [3] = {
+        "/media/root/fdrive/Lizard_Full.mp4",
+        "/media/root/fdrive/animation_demo.avi",
+        "/media/root/fdrive/jhomerun.avi" };
+
+    myMovies[0].load(vids[0]);
+    myMovies[1].load(vids[1]);
+    myMovies[2].load(vids[2]);
+
+    //myMovies[0].play();
 
     /* Audio Setup ~for later use
     soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
@@ -31,17 +46,38 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    myMovies[0].update();
+    myMovies[currentVid].update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    myMovies[0].draw(0,0,1920,1080);
+    myMovies[currentVid].draw(0,0,1920,1080);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
+    // switches current video with 1,2,3 button presses
+
+    switch(key){
+        case '1':
+            myMovies[currentVid].stop();
+            myMovies[0].play();
+            currentVid = 0;
+            break;
+
+        case '2':
+            myMovies[currentVid].stop();
+            myMovies[1].play();
+            currentVid = 1;
+            break;
+
+        case '3':
+            myMovies[currentVid].stop();
+            myMovies[2].play();
+            currentVid = 2;
+            break;
+    }
 }
 
 //--------------------------------------------------------------
