@@ -8,6 +8,7 @@ int numVids = 0;
 void ofApp::setup(){
 
     // Manually find flash drive and name "/media/root/fdrive"
+    // put these scripts in home directory (~)
     system("sudo ~/unmountFlash.sh");
     system("sudo ~/mountFlash.sh");
 
