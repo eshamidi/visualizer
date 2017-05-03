@@ -14,6 +14,13 @@ int numVids = 0;
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    serial.listDevices();
+    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
+
+    //need to set up custom to Jetson serial port
+
+    int baud = 57600;
+    //serial.setup(0, 57600); //open the first device and talk to it at 57600 baud
 
 
 
@@ -62,6 +69,8 @@ void ofApp::setup(){
 
     // display videos found
     cout << "videos in array\n" ;
+
+    //TODO: figure out how to limit the size of video array efficiently
     for( int i=0; i<6; i++){
         cout << videos[i] << "\n" ;
     }
@@ -79,6 +88,8 @@ void ofApp::setup(){
         myMovies[i].load(videos[i]);
         i++;
     }
+
+   //still need to verify audio functionality on Jetson 5/3/17
 
 
     /* Audio Setup ~for later use
@@ -109,6 +120,9 @@ void ofApp::update(){
 void ofApp::draw(){
     myMovies[currentVid].draw(0,0,1920,1080);
 }
+
+
+//keyboard control...to be taken out when controller is operational
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -181,18 +195,24 @@ void ofApp::message_handler_loop() {
 }
 
 
-// parses thru serial message
+// parses thru serial message - still gotta figure this out and talk to Chris
 
 void ofApp::serial_handler_loop() {
+    int controldata;
     while(1) {
-        //Do nothing
+        if(serial.available()){
+            controldata = serial.readBytes(0,3);
+        }
     };
 }
 
 // serial communication thread - receives data from serial comms - empty 5/3/17
 void *serial_communication_thread(void *data) {
+
+
     ofApp *app = (ofApp *)data;
     app->serial_handler_loop();
+
     return 0;
 }
 

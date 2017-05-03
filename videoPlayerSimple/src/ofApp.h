@@ -24,5 +24,5 @@ public:
     pthread_t     serial_thread;
     pthread_t     message_thread;
     ofVideoPlayer myMovies [6];
-
+    ofSerial      serial;
 };
