@@ -1,5 +1,12 @@
+//Video Sampler Patch 5/3/17
+// Developed on bump-a-grape
+
 #include "ofApp.h"
 #include <dirent.h>
+#include "protocol.h"
+
+void *serial_communication_thread(void *data);
+void *message_processing_thread(void *data);
 
 int currentVid = 0;
 int numVids = 0;
@@ -7,8 +14,27 @@ int numVids = 0;
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+
+
+
+
+    // Initialize threads and queue for serial comms
+    message_queue = g_async_queue_new();
+    if(pthread_create(&message_thread, NULL, message_processing_thread, this)) {
+        exit();
+    }
+    if(pthread_create(&serial_thread, NULL, serial_communication_thread, this)) {
+        exit();
+        }
+
+
+
     // Manually find flash drive and name "/media/root/fdrive"
     // put these scripts in home directory (~)
+    //seg fault issue on Jetson - had to do with size of array  - 5/3/17
+    //does not break if there are more/less than 6 videos
+
+
     system("sudo ~/unmountFlash.sh");
     system("sudo ~/mountFlash.sh");
 
@@ -128,40 +154,7 @@ void ofApp::keyReleased(int key){
 
 }
 
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
 
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
@@ -171,4 +164,42 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
 
+}
+
+
+
+
+void ofApp::message_handler_loop() {
+    while(1) {
+        protocol_message_t *message = (protocol_message_t *)g_async_queue_pop(message_queue);
+        //Handle message
+        if(message) {
+            free(message);
+        }
+
+    }
+}
+
+
+// parses thru serial message
+
+void ofApp::serial_handler_loop() {
+    while(1) {
+        //Do nothing
+    };
+}
+
+// serial communication thread - receives data from serial comms - empty 5/3/17
+void *serial_communication_thread(void *data) {
+    ofApp *app = (ofApp *)data;
+    app->serial_handler_loop();
+    return 0;
+}
+
+// does processing for fx/input without hanging up display - empty as of 5/3/17
+
+void *message_processing_thread(void *data) {
+    ofApp *app = (ofApp *)data;
+    app->message_handler_loop();
+        return 0;
 }
