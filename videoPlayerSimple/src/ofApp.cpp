@@ -86,6 +86,9 @@ void ofApp::setup(){
     int i = 0;
     while(videos[i] != ""){
         myMovies[i].load(videos[i]);
+
+        //mutes audio in case of HDMI audio output
+        myMovies[i].setVolume(0);
         i++;
     }
 
