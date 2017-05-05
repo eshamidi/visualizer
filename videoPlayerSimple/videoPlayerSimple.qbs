@@ -20,6 +20,7 @@ Project{
         of.addons: [
             'ofxPostProcessing',
 
+
         ]
 
         // additional flags for the project. the of module sets some

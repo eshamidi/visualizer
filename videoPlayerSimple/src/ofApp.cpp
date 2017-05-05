@@ -1,4 +1,4 @@
-//Video Sampler Patch 5/3/17
+//Video Sampler Patch 5/5/17
 // Developed on bump-a-grape
 
 #include "ofApp.h"
@@ -129,16 +129,57 @@ void ofApp::setup(){
     noiseWarp->setEnabled(FALSE);
     toon->setEnabled(FALSE);
     rgbShift->setEnabled(FALSE);
+
+
+    //fx framebuffer experimenting - displays upside down after fx - weird
+
+    for(int i =0; i < 40; i++){
+        tex[i].allocate(1920, 1080, GL_RGB);
+        tex[i].clear();
+    }
+
+
+    fbo.allocate(1920,1080,GL_RGB);
+
+    ofSetVerticalSync(TRUE);
+
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     myMovies[currentVid].update();
+
+    //messing with making a frame buffer to improve framerate - will visit later
+//    fbo.getTextureReference().getTextureData().bFlipTexture = true;
+
+//        fbo.begin();
+//        if(fx == true) post.begin();
+//        myMovies[currentVid].draw(0,0,1920,1080);
+//        if(fx == true) post.end();
+//        fbo.end();
+//        tex[0] = fbo.getTexture();
+
+//        for(int i = 0; i < 39; i++){
+//            tex[i+1] = tex[i];
+//        }
+
+
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    if(fx == true) post.begin();
     myMovies[currentVid].draw(0,0,1920,1080);
+    if(fx == true) post.end();
+
+
+
+    //more buffer stuff
+
+    //fbo.draw(0,0,1920,1080);
+
+
 }
 
 
@@ -180,6 +221,27 @@ void ofApp::keyPressed(int key){
             myMovies[5].play();
             currentVid = 5;
             break;
+        case 's':
+            if(fx == FALSE){
+                rgbShift->setEnabled(TRUE);
+                fx = true;
+            }
+            else{
+                rgbShift->setEnabled(FALSE);
+                fx = false;
+            }
+            break;
+        case 'x':
+            b = b + .01;
+            rgbShift->setAmount(b);
+            cout << b;
+            break;
+        case 'z':
+            b = b - .01;
+            rgbShift->setAmount(b);
+            cout << b;
+            break;
+
     }
 }
 

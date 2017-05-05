@@ -3,6 +3,9 @@
 #include "ofMain.h"
 #include "ofxPostProcessing.h"
 
+
+
+
 class ofApp : public ofBaseApp{
 
 public:
@@ -43,4 +46,14 @@ public:
     float m = 5;
     float b = 0;
     float v = 5;
+
+    bool fx = false;
+
+
+    //buffer stuff
+
+
+    ofFbo      fbo;
+    ofTexture  tex [40];
+    int bufIndex = 0;
 };
