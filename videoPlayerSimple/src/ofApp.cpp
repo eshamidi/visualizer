@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include "protocol.h"
 
+
 void *serial_communication_thread(void *data);
 void *message_processing_thread(void *data);
 
@@ -13,6 +14,8 @@ int numVids = 0;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+
+    //serial comms init
 
     serial.listDevices();
     vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
@@ -112,6 +115,20 @@ void ofApp::setup(){
 
     soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
     */
+
+
+    //fx
+
+    post.init(ofGetWidth(), ofGetHeight());
+
+    kScope = post.createPass<KaleidoscopePass>();
+    noiseWarp = post.createPass<NoiseWarpPass>();
+    rgbShift = post.createPass<RGBShiftPass>();
+    toon = post.createPass<ToonPass>();
+    kScope->setEnabled(FALSE);
+    noiseWarp->setEnabled(FALSE);
+    toon->setEnabled(FALSE);
+    rgbShift->setEnabled(FALSE);
 }
 
 //--------------------------------------------------------------
