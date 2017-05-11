@@ -18,7 +18,7 @@ Project{
         ]
 
         of.addons: [
-            'ofxPostProcessing',
+
 
 
         ]

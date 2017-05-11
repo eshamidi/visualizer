@@ -117,21 +117,6 @@ void ofApp::setup(){
     */
 
 
-    //fx
-
-    post.init(ofGetWidth(), ofGetHeight());
-
-    kScope = post.createPass<KaleidoscopePass>();
-    noiseWarp = post.createPass<NoiseWarpPass>();
-    rgbShift = post.createPass<RGBShiftPass>();
-    toon = post.createPass<ToonPass>();
-    kScope->setEnabled(FALSE);
-    noiseWarp->setEnabled(FALSE);
-    toon->setEnabled(FALSE);
-    rgbShift->setEnabled(FALSE);
-
-
-    //fx framebuffer experimenting - displays upside down after fx - weird
 
     for(int i =0; i < 40; i++){
         tex[i].allocate(1920, 1080, GL_RGB);
@@ -150,34 +135,28 @@ void ofApp::setup(){
 void ofApp::update(){
     myMovies[currentVid].update();
 
-    //messing with making a frame buffer to improve framerate - will visit later
-//    fbo.getTextureReference().getTextureData().bFlipTexture = true;
-
-//        fbo.begin();
-//        if(fx == true) post.begin();
-//        myMovies[currentVid].draw(0,0,1920,1080);
-//        if(fx == true) post.end();
-//        fbo.end();
-//        tex[0] = fbo.getTexture();
-
-//        for(int i = 0; i < 39; i++){
-//            tex[i+1] = tex[i];
-//        }
 
 
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    if(fx == true) post.begin();
+
+    if(colorfx == true) ofSetColor(255,47,255,255);
     myMovies[currentVid].draw(0,0,1920,1080);
-    if(fx == true) post.end();
+
+    if(ghostfx == true){
+        for(int i = 1; i < 10; i++){
+            ofSetColor(255,255,255,40);
+            myMovies[currentVid].draw(0,0,1920/i,1080/i);
+            ofSetColor(255,255,255,255);
+        }
+    }
 
 
 
-    //more buffer stuff
 
-    //fbo.draw(0,0,1920,1080);
+
 
 
 }
@@ -192,55 +171,59 @@ void ofApp::keyPressed(int key){
 
     switch(key){
         case '1':
-            myMovies[currentVid].stop();
-            myMovies[0].play();
+        //pause current, rewind to first frame, play new. This produces improvement in switching hi quality videos
+            myMovies[currentVid].setPaused(true);
+            myMovies[currentVid].firstFrame();
+
+            myMovies[0].setPaused(false);
+
             currentVid = 0;
             break;
         case '2':
-            myMovies[currentVid].stop();
-            myMovies[1].play();
+            myMovies[currentVid].setPaused(true);
+            myMovies[currentVid].firstFrame();
+
+            myMovies[1].setPaused(false);
+
             currentVid = 1;
             break;
         case '3':
-            myMovies[currentVid].stop();
-            myMovies[2].play();
+            myMovies[currentVid].setPaused(true);
+            myMovies[currentVid].firstFrame();
+
+            myMovies[2].setPaused(false);
             currentVid = 2;
             break;
         case '4':
-            myMovies[currentVid].stop();
-            myMovies[3].play();
+            myMovies[currentVid].setPaused(true);
+            myMovies[currentVid].firstFrame();
+
+            myMovies[3].setPaused(false);
             currentVid = 3;
             break;
         case '5':
-            myMovies[currentVid].stop();
-            myMovies[4].play();
+            myMovies[currentVid].setPaused(true);
+            myMovies[currentVid].firstFrame();
+
+            myMovies[4].setPaused(false);
             currentVid = 4;
             break;
         case '6':
-            myMovies[currentVid].stop();
-            myMovies[5].play();
+            myMovies[currentVid].setPaused(true);
+            myMovies[currentVid].firstFrame();
+
+            myMovies[5].setPaused(false);
             currentVid = 5;
             break;
-        case 's':
-            if(fx == FALSE){
-                rgbShift->setEnabled(TRUE);
-                fx = true;
-            }
-            else{
-                rgbShift->setEnabled(FALSE);
-                fx = false;
-            }
+        case '7':
+            if(colorfx == false) colorfx = true;
+            else colorfx = false;
             break;
-        case 'x':
-            b = b + .01;
-            rgbShift->setAmount(b);
-            cout << b;
+        case '8':
+            if(ghostfx == false) ghostfx = true;
+            else ghostfx = false;
             break;
-        case 'z':
-            b = b - .01;
-            rgbShift->setAmount(b);
-            cout << b;
-            break;
+
 
     }
 }

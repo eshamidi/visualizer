@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxPostProcessing.h"
+
 
 
 
@@ -35,20 +35,8 @@ public:
 
 
     //fx
-
-    ofxPostProcessing post;
-
-    itg::NoiseWarpPass::Ptr noiseWarp;
-    itg::KaleidoscopePass::Ptr kScope;
-    itg::RGBShiftPass::Ptr rgbShift;
-    itg::ToonPass::Ptr toon;
-    float n = 5;
-    float m = 5;
-    float b = 0;
-    float v = 5;
-
-    bool fx = false;
-
+    bool colorfx = false;
+    bool ghostfx = false;
 
     //buffer stuff
 
