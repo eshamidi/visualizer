@@ -30,18 +30,21 @@ public:
     GAsyncQueue*  message_queue;
     pthread_t     serial_thread;
     pthread_t     message_thread;
-    ofVideoPlayer myMovies [6];
+    ofVideoPlayer myMovies [12];
     ofSerial      serial;
 
 
     //fx
     bool colorfx = false;
     bool ghostfx = false;
+    int numGhosts = 1;
+
+    ofPixels pixelated;
 
     //buffer stuff
 
 
     ofFbo      fbo;
-    ofTexture  tex [40];
+    ofTexture  tex [5];
     int bufIndex = 0;
 };

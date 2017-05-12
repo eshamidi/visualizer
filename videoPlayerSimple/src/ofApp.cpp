@@ -88,10 +88,12 @@ void ofApp::setup(){
     // load videos into each ofVideoPlayer
     int i = 0;
     while(videos[i] != ""){
-        myMovies[i].load(videos[i]);
+        myMovies[i*2].load(videos[i]);
+        myMovies[i*2+1].load(videos[i]);
 
         //mutes audio in case of HDMI audio output
-        myMovies[i].setVolume(0);
+        myMovies[i*2].setVolume(0);
+        myMovies[i*2+1].setVolume(0);
         i++;
     }
 
@@ -118,13 +120,14 @@ void ofApp::setup(){
 
 
 
-    for(int i =0; i < 40; i++){
-        tex[i].allocate(1920, 1080, GL_RGB);
+    for(int i =0; i < 3; i++){
+        tex[i].allocate(1920, 1080, OF_PIXELS_RGB);
         tex[i].clear();
     }
 
+    pixelated.allocate(1920 ,1080,OF_PIXELS_RGB);
 
-    fbo.allocate(1920,1080,GL_RGB);
+    //fbo.allocate(1920,1080,GL_RGB);
 
     ofSetVerticalSync(TRUE);
 
@@ -135,6 +138,20 @@ void ofApp::setup(){
 void ofApp::update(){
     myMovies[currentVid].update();
 
+    //an fbo would probably be best used here. hope it works on the jetson!
+    //this pixelation algorithm only runs the loop as long as needed for the downsampling operation.
+//    if(myMovies[currentVid].isFrameNew()){
+//            ofPixels & pixels = myMovies[currentVid].getPixels();
+
+
+//            for(int i = 0; i < pixels.size(); i++){
+
+//                pixelated[i] = pixels[i];
+//            }
+//            //load the pixels
+//            tex[1].loadData(pixelated);
+//        }
+
 
 
 }
@@ -143,12 +160,15 @@ void ofApp::update(){
 void ofApp::draw(){
 
     if(colorfx == true) ofSetColor(255,47,255,255);
+    if(colorfx == false) ofSetColor(255,255,255,255);
+
     myMovies[currentVid].draw(0,0,1920,1080);
 
     if(ghostfx == true){
-        for(int i = 1; i < 10; i++){
-            ofSetColor(255,255,255,40);
-            myMovies[currentVid].draw(0,0,1920/i,1080/i);
+        for(int i = 1; i < numGhosts; i++){
+            ofSetColor(i*25,250/i,255/i,80);
+            //TODO - need to figure out transformation of ghost position
+            myMovies[currentVid].draw(50*i,50*i,1920/i,1080/i);
             ofSetColor(255,255,255,255);
         }
     }
@@ -172,57 +192,105 @@ void ofApp::keyPressed(int key){
     switch(key){
         case '1':
         //pause current, rewind to first frame, play new. This produces improvement in switching hi quality videos
+        //TODO: functionize
+
             myMovies[currentVid].setPaused(true);
             myMovies[currentVid].firstFrame();
 
+            if(currentVid == 0){
+                myMovies[1].setPaused(false);
+                currentVid = 1;
+            }
+            else{
             myMovies[0].setPaused(false);
-
             currentVid = 0;
+            }
+
             break;
         case '2':
             myMovies[currentVid].setPaused(true);
             myMovies[currentVid].firstFrame();
 
-            myMovies[1].setPaused(false);
-
-            currentVid = 1;
+            if(currentVid == 2){
+                myMovies[3].setPaused(false);
+                currentVid = 3;
+            }
+            else{
+            myMovies[2].setPaused(false);
+            currentVid = 2;
+            }
             break;
         case '3':
             myMovies[currentVid].setPaused(true);
             myMovies[currentVid].firstFrame();
 
-            myMovies[2].setPaused(false);
-            currentVid = 2;
+            if(currentVid == 4){
+                myMovies[5].setPaused(false);
+                currentVid = 5;
+            }
+            else{
+            myMovies[4].setPaused(false);
+            currentVid = 4;
+            }
             break;
         case '4':
             myMovies[currentVid].setPaused(true);
             myMovies[currentVid].firstFrame();
 
-            myMovies[3].setPaused(false);
-            currentVid = 3;
+
+            if(currentVid == 6){
+                myMovies[7].setPaused(false);
+                currentVid = 7;
+            }
+            else{
+            myMovies[6].setPaused(false);
+            currentVid = 6;
+            }
             break;
         case '5':
             myMovies[currentVid].setPaused(true);
             myMovies[currentVid].firstFrame();
 
-            myMovies[4].setPaused(false);
-            currentVid = 4;
+            if(currentVid == 8){
+                myMovies[9].setPaused(false);
+                currentVid = 9;
+            }
+            else{
+            myMovies[8].setPaused(false);
+            currentVid = 8;
+            }
             break;
         case '6':
             myMovies[currentVid].setPaused(true);
             myMovies[currentVid].firstFrame();
 
-            myMovies[5].setPaused(false);
-            currentVid = 5;
+            if(currentVid == 10){
+                myMovies[11].setPaused(false);
+                currentVid = 11;
+            }
+            else{
+            myMovies[10].setPaused(false);
+            currentVid = 10;
+            }
             break;
         case '7':
+            //color tint
             if(colorfx == false) colorfx = true;
             else colorfx = false;
             break;
         case '8':
+            //ghost
             if(ghostfx == false) ghostfx = true;
             else ghostfx = false;
             break;
+        case '9':
+            numGhosts++;
+            break;
+        case '0':
+            numGhosts--;
+            break;
+
+
 
 
     }
