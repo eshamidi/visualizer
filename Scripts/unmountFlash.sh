@@ -1,4 +1,4 @@
 #!/bin/sh
 
-umount /dev/sdb || { echo "umount failed, no worries" ; : ; } 
+umount /dev/sdc1 || { echo "umount failed, no worries" ; : ; } 
 

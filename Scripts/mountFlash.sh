@@ -1,4 +1,4 @@
 #!/bin/sh
 
-mkdir -p /media/es/fdrive
-mount -o rw,users,umask=000 /dev/sdb /media/es/fdrive
+mkdir -p /media/jere/fdrive
+mount -o rw,users,umask=000 /dev/sdc1 /media/jere/fdrive
