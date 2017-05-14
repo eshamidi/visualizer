@@ -16,7 +16,7 @@ void ofApp::setup(){
     //need to set up custom to Jetson serial port
 
     int baud = 57600;
-    serial.setup(0, baud); //open the first device and talk to it at 57600 baud
+    //serial.setup(0, baud); //open the first device and talk to it at 57600 baud
 
     // Initialize threads and queue for serial comms
     message_queue = g_async_queue_new();
@@ -36,12 +36,12 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    string dirString = "/media/ubuntu/fdrive/";
+    string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
 
-    cout << "successfully found videos";
+
 
 
     // load videos into each ofVideoPlayer, each video has 2 for faster switching
@@ -61,7 +61,6 @@ void ofApp::setup(){
     //still need to verify audio functionality on Jetson 5/3/17
     //audio functionality verified on Jetson 5/14/17
 
-    //Audio Setup ~for later use
 
     soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
 
@@ -102,40 +101,50 @@ void ofApp::update(){
     myMovies[currentVid][toggle].update();
 
 
-    //myMovies[currentVid].update();
-
-    //an fbo would probably be best used here. hope it works on the jetson!
-    //this pixelation algorithm only runs the loop as long as needed for the downsampling operation.
-//    if(myMovies[currentVid].isFrameNew()){
-//            ofPixels & pixels = myMovies[currentVid].getPixels();
-
-
-//            for(int i = 0; i < pixels.size(); i++){
-
-//                pixelated[i] = pixels[i];
-//            }
-//            //load the pixels
-//            tex[1].loadData(pixelated);
-//        }
 
     //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed.
 
     if(colorfx == true) timer+=3;
 
         //progressive color tint
-            //gets more blue
-            if(step == 0) ofSetColor(255-timer,255-timer,255,255);
-            //gets more green
-            if(step == 1) ofSetColor(0,timer,255-timer,255);
-            //gets more red
-            if(step == 2) ofSetColor(timer,255-timer,0,255);
-            //gets more green
-            if(step == 3) ofSetColor(255,timer,0,255);
-            //gets more blue
-            if(step == 4) ofSetColor(255,255,timer,255);
+    //gets more blue
+    if(step == 0){
+        drawcolor.r = 255-timer;
+        drawcolor.g = 255-timer;
+        drawcolor.b = 255;
+        drawcolor.a = 255;
+    }
+    //gets more green
+    if(step == 1){
+        drawcolor.r = 0;
+        drawcolor.g = timer;
+        drawcolor.b = 255-timer;
+        drawcolor.a = 255;
+    }
+    //gets more red
+    if(step == 2){
+        drawcolor.r = timer;
+        drawcolor.g = 255-timer;
+        drawcolor.b = 0;
+        drawcolor.a = 255;
+    }
+    //gets more green
+    if(step == 3){
+        drawcolor.r = 255;
+        drawcolor.g = timer;
+        drawcolor.b = 0;
+        drawcolor.a = 255;
+    }
+    //gets more blue
+    if(step == 4){
+        drawcolor.r = 255;
+        drawcolor.g = 255;
+        drawcolor.b = timer;
+        drawcolor.a = 255;
+    }
 
 
-    if(timer > 256){
+    if(timer > 254){
         timer = 0;
         if(colorfx == true) step++;
         if(step == 5) step = 0;
@@ -145,6 +154,7 @@ void ofApp::update(){
 
 
 
+    //audio update envelope
 
 	scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
 	numGhosts = ofMap(scaledVol, 0.0, 1.0,0,40,true);
@@ -159,19 +169,26 @@ void ofApp::update(){
 
 //-----------------------------------------------------
 void ofApp::draw(){
+    ofSetColor(drawcolor);
 
-
-   if(zoom>0) myMovies[currentVid][toggle].draw(-300*zoom,-300*zoom,1920*(zoom+1),1080*(zoom+1));
+   if(zoom>0) myMovies[currentVid][toggle].draw(-300*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
     else myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
+
     if(ghostfx == true){
+        drawcolor.a = 50;
         for(int i = 1; i < numGhosts; i++){
-            ofSetColor(255,255,255,60);
+
+            ofSetColor(drawcolor);
             //TODO - need to figure out transformation of ghost position
-            myMovies[currentVid][toggle].draw(50*i,0,1920-100*i,1080);
-            ofSetColor(255,255,255,255);
+            //ghost position is roughly centered now
+            myMovies[currentVid][toggle].draw(50*i,25*i,1920-100*i,1080-50*i);
+
         }
     }
+
+
+
 
 
 
@@ -259,15 +276,22 @@ void ofApp::keyPressed(int key){
             numGhosts--;
             if(numGhosts < 0) numGhosts = 0;
             break;
-	case 'q':
-	    zoom--;
-	    if(zoom<0) zoom = 0;
-	    break;
-	case 'w':
-	    zoom++;
-	    if(zoom>9) zoom = 9;
-	    break;
-
+        case 'q':
+            zoom--;
+            if(zoom<0) zoom = 0;
+            break;
+        case 'w':
+            zoom++;
+            if(zoom>9) zoom = 9;
+            break;
+        case 'a':
+            zoomx++;
+            if(zoomx > 5) zoomx = 0;
+            break;
+        case 's':
+            zoomx--;
+            if(zoomx < 0) zoomx = 5;
+            break;
     }
 }
 

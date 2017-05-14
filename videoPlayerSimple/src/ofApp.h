@@ -53,6 +53,8 @@ public:
     ofPixels pixelated;
 	
     int zoom = 0; 
+    int zoomx = 0;
+    ofColor drawcolor;
 
 
     //buffer stuff
