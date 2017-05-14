@@ -152,7 +152,7 @@ void ofApp::update(){
 void ofApp::draw(){
 
 
-   if(zoom>0) myMovies[currentVid][toggle].draw(-100*zoom,-100*zoom,1920*(zoom+1),1080*(zoom+1));
+   if(zoom>0) myMovies[currentVid][toggle].draw(-300*zoom,-300*zoom,1920*(zoom+1),1080*(zoom+1));
     else myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
     if(ghostfx == true){
