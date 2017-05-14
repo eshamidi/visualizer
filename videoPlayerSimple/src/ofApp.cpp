@@ -146,9 +146,18 @@ void ofApp::update(){
 
 
 
+	scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
+	numGhosts = ofMap(scaledVol, 0.0, 1.0,0,40,true);
+        //lets record the volume into an array
+        volHistory.push_back( scaledVol );
+
+        //if we are bigger the the size we want to record - lets drop the oldest value
+        if( volHistory.size() >= 400 ){
+                volHistory.erase(volHistory.begin(), volHistory.begin()+1);
+        }
 }
 
-//--------------------------------------------------------------
+//-----------------------------------------------------
 void ofApp::draw(){
 
 
@@ -157,16 +166,16 @@ void ofApp::draw(){
 
     if(ghostfx == true){
         for(int i = 1; i < numGhosts; i++){
-            ofSetColor(i*25,250/i,255/i,80);
+            ofSetColor(255,255,255,60);
             //TODO - need to figure out transformation of ghost position
-            myMovies[currentVid][toggle].draw(50*i,50*i,1920/i,1080/i);
+            myMovies[currentVid][toggle].draw(50*i,0,1920-100*i,1080);
             ofSetColor(255,255,255,255);
         }
     }
 
 
 
-
+ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 4, 18);
 
 }
 
@@ -243,10 +252,12 @@ void ofApp::keyPressed(int key){
 
         case '9':
             numGhosts++;
+	    if(numGhosts > 20) numGhosts = 60;
             break;
 
         case '0':
             numGhosts--;
+            if(numGhosts < 0) numGhosts = 0;
             break;
 	case 'q':
 	    zoom--;
