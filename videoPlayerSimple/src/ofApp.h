@@ -51,7 +51,8 @@ public:
     bool inc = true;
     int step = 0;
     ofPixels pixelated;
-
+	
+    int zoom = 0; 
 
 
     //buffer stuff

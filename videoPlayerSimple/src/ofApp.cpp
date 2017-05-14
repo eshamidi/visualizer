@@ -16,7 +16,7 @@ void ofApp::setup(){
     //need to set up custom to Jetson serial port
 
     int baud = 57600;
-    //serial.setup(31, baud); //open the first device and talk to it at 57600 baud
+    serial.setup(0, baud); //open the first device and talk to it at 57600 baud
 
     // Initialize threads and queue for serial comms
     message_queue = g_async_queue_new();
@@ -36,7 +36,7 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    string dirString = "/media/root/fdrive/";
+    string dirString = "/media/ubuntu/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -152,7 +152,8 @@ void ofApp::update(){
 void ofApp::draw(){
 
 
-    myMovies[currentVid][toggle].draw(0,0,1920,1080);
+   if(zoom>0) myMovies[currentVid][toggle].draw(-100*zoom,-100*zoom,1920*(zoom+1),1080*(zoom+1));
+    else myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
     if(ghostfx == true){
         for(int i = 1; i < numGhosts; i++){
@@ -247,6 +248,15 @@ void ofApp::keyPressed(int key){
         case '0':
             numGhosts--;
             break;
+	case 'q':
+	    zoom--;
+	    if(zoom<0) zoom = 0;
+	    break;
+	case 'w':
+	    zoom++;
+	    if(zoom>9) zoom = 9;
+	    break;
+
     }
 }
 
