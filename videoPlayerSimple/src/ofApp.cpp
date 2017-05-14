@@ -171,7 +171,7 @@ void ofApp::update(){
 void ofApp::draw(){
     ofSetColor(drawcolor);
 
-   if(zoom>0) myMovies[currentVid][toggle].draw(-300*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
+   if(zoom>0) myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
     else myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
 
@@ -286,11 +286,11 @@ void ofApp::keyPressed(int key){
             break;
         case 'a':
             zoomx++;
-            if(zoomx > 5) zoomx = 0;
+            if(zoomx > 20) zoomx = 0;
             break;
         case 's':
             zoomx--;
-            if(zoomx < 0) zoomx = 5;
+            if(zoomx < 0) zoomx = 20;
             break;
     }
 }
