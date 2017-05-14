@@ -15,6 +15,7 @@ Project{
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',
+            'src/protocol.h',
         ]
 
         of.addons: [

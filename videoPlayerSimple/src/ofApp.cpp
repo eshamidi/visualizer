@@ -1,4 +1,4 @@
-//Video Sampler Patch 5/5/17
+//Video Sampler Patch 5/14/17
 // Developed on bump-a-grape
 
 #include "ofApp.h"
@@ -16,10 +16,13 @@ void ofApp::setup(){
     //need to set up custom to Jetson serial port
 
     int baud = 57600;
-    serial.setup(0, baud); //open the first device and talk to it at 57600 baud
+    //serial.setup(31, baud); //open the first device and talk to it at 57600 baud
 
     // Initialize threads and queue for serial comms
-//    message_queue = g_async_queue_new();
+    message_queue = g_async_queue_new();
+
+
+    //unknown purpose - TODO- ask Chris Buchter about this
 //    if(pthread_create(&message_thread, NULL, message_processing_thread, this)) {
 //        exit();
 //    }
@@ -38,6 +41,9 @@ void ofApp::setup(){
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
 
+    cout << "successfully found videos";
+
+
     // load videos into each ofVideoPlayer, each video has 2 for faster switching
     int i = 0;
     while(i < videos.size()){
@@ -50,9 +56,13 @@ void ofApp::setup(){
         i++;
     }
 
-    //still need to verify audio functionality on Jetson 5/3/17
 
-    /* Audio Setup ~for later use
+
+    //still need to verify audio functionality on Jetson 5/3/17
+    //audio functionality verified on Jetson 5/14/17
+
+    //Audio Setup ~for later use
+
     soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
 
     int bufferSize = 256;
@@ -67,16 +77,17 @@ void ofApp::setup(){
     smoothedVol     = 0.0;
     scaledVol		= 0.0;
 
-    soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
-    */
+    soundStream.setup(this, 0, 2, 48000, bufferSize, 4);
 
 
-    for(int i =0; i < 3; i++){
-        tex[i].allocate(1920, 1080, OF_PIXELS_RGB);
-        tex[i].clear();
-    }
+    //OF_PIXELS_RGB seems to involve OpenGL in some way, beware
 
-    pixelated.allocate(1920 ,1080,OF_PIXELS_RGB);
+//    for(int i =0; i < 3; i++){
+//        tex[i].allocate(1920, 1080, OF_PIXELS_RGB);
+//        tex[i].clear();
+//    }
+
+//    pixelated.allocate(1920 ,1080,OF_PIXELS_RGB);
 
     //fbo.allocate(1920,1080,GL_RGB);
 
@@ -86,7 +97,11 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+    //2 dimensional array of videos
     myMovies[currentVid][toggle].update();
+
+
     //myMovies[currentVid].update();
 
     //an fbo would probably be best used here. hope it works on the jetson!
@@ -103,6 +118,32 @@ void ofApp::update(){
 //            tex[1].loadData(pixelated);
 //        }
 
+    //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed.
+
+    if(colorfx == true) timer+=3;
+
+        //progressive color tint
+            //gets more blue
+            if(step == 0) ofSetColor(255-timer,255-timer,255,255);
+            //gets more green
+            if(step == 1) ofSetColor(0,timer,255-timer,255);
+            //gets more red
+            if(step == 2) ofSetColor(timer,255-timer,0,255);
+            //gets more green
+            if(step == 3) ofSetColor(255,timer,0,255);
+            //gets more blue
+            if(step == 4) ofSetColor(255,255,timer,255);
+
+
+    if(timer > 256){
+        timer = 0;
+        if(colorfx == true) step++;
+        if(step == 5) step = 0;
+
+    }
+
+
+
 
 
 }
@@ -110,21 +151,22 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    if(colorfx == true) ofSetColor(255,47,255,255);
-    if(colorfx == false) ofSetColor(255,255,255,255);
 
     myMovies[currentVid][toggle].draw(0,0,1920,1080);
-    //myMovies[currentVid].draw(0,0,1920,1080);
 
     if(ghostfx == true){
         for(int i = 1; i < numGhosts; i++){
             ofSetColor(i*25,250/i,255/i,80);
             //TODO - need to figure out transformation of ghost position
             myMovies[currentVid][toggle].draw(50*i,50*i,1920/i,1080/i);
-            //myMovies[currentVid].draw(50*i,50*i,1920/i,1080/i);
             ofSetColor(255,255,255,255);
         }
     }
+
+
+
+
+
 }
 
 //--------------------------------------------------------------
@@ -280,3 +322,35 @@ void *message_processing_thread(void *data) {
     app->message_handler_loop();
         return 0;
 }
+
+
+void ofApp::audioIn(ofSoundBuffer & input){
+
+    float curVol = 0.0;
+
+    // samples are "interleaved"
+    int numCounted = 0;
+
+    //lets go through each sample and calculate the root mean square which is a rough way to calculate volume
+    for (int i = 0; i < input.getNumFrames(); i++){
+        left[i]		= input[i*2]*0.5;
+        right[i]	= input[i*2+1]*0.5;
+
+        curVol += left[i] * left[i];
+        curVol += right[i] * right[i];
+        numCounted+=2;
+    }
+
+    //this is how we get the mean of rms :)
+    curVol /= (float)numCounted;
+
+    // this is how we get the root of rms :)
+    curVol = sqrt( curVol );
+
+    smoothedVol *= 0.93;
+    smoothedVol += 0.07 * curVol;
+
+    bufferCounter++;
+
+}
+
