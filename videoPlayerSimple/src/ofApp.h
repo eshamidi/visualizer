@@ -56,6 +56,13 @@ public:
     int zoomx = 0;
     ofColor drawcolor;
 
+    bool tilefx;
+    int drawx = 0;
+    int drawy = 0;
+    int numTiles = 1;
+    int numhoriz = 1;
+    int numvert = 1;
+
 
     //buffer stuff
 

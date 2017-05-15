@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.1.0, 2017-05-13T02:23:43. -->
+<!-- Written by QtCreator 4.1.0, 2017-05-15T09:53:27. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{670e0cd7-8a02-4fa8-b429-9a78761b25b4}</value>
+  <value type="QByteArray">{cfe27c9f-632f-47cc-89c5-b53e12b6dbb2}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -61,12 +61,12 @@
   <valuemap type="QVariantMap">
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{36ec6ba6-4893-4825-8d3d-bb946a7e84ce}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{dbb45655-1c6f-4ea9-8c2e-a29dcff205fd}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/jere/OF_0.9.8/apps/visualizer/build-videoPlayerSimple-Desktop-Debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/es/OF_0.9.8/apps/myApps/build-videoPlayerSimple-Desktop-Debug</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -76,12 +76,12 @@
       <value type="bool" key="Qbs.CleanInstallRoot">false</value>
       <valuemap type="QVariantMap" key="Qbs.Configuration">
        <value type="QString" key="qbs.buildVariant">debug</value>
-       <value type="QString" key="qbs.profile">qtc_Desktop_54d032fa</value>
+       <value type="QString" key="qbs.profile">qtc_Desktop_79855fc7</value>
       </valuemap>
       <value type="bool" key="Qbs.DryKeepGoing">false</value>
       <value type="bool" key="Qbs.DryRun">false</value>
       <value type="bool" key="Qbs.Install">true</value>
-      <value type="int" key="Qbs.MaxJobs">8</value>
+      <value type="int" key="Qbs.MaxJobs">4</value>
       <value type="bool" key="Qbs.ShowCommandLines">false</value>
       <value type="bool" key="Qbs.forceProbesKey">false</value>
      </valuemap>
@@ -112,7 +112,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qbs.QbsBuildConfiguration</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/jere/OF_0.9.8/apps/visualizer/build-videoPlayerSimple-Desktop-Release</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/es/OF_0.9.8/apps/myApps/build-videoPlayerSimple-Desktop-Release</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -122,7 +122,7 @@
       <value type="bool" key="Qbs.CleanInstallRoot">false</value>
       <valuemap type="QVariantMap" key="Qbs.Configuration">
        <value type="QString" key="qbs.buildVariant">release</value>
-       <value type="QString" key="qbs.profile">qtc_Desktop_54d032fa</value>
+       <value type="QString" key="qbs.profile">qtc_Desktop_79855fc7</value>
       </valuemap>
       <value type="bool" key="Qbs.DryKeepGoing">false</value>
       <value type="bool" key="Qbs.DryRun">false</value>
@@ -216,10 +216,10 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">videoPlayerSimple</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qbs.RunConfiguration:videoPlayerSimple.qtc_Desktop_54d032fa---Qbs.RC.NameSeparator---videoPlayerSimple</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qbs.RunConfiguration:videoPlayerSimple.qtc_Desktop_79855fc7---Qbs.RC.NameSeparator---videoPlayerSimple</value>
     <value type="QString" key="Qbs.RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory.default">/home/jere/OF_0.9.8/apps/visualizer/videoPlayerSimple/bin</value>
+    <value type="QString" key="Qbs.RunConfiguration.WorkingDirectory.default">/home/es/OF_0.9.8/apps/visualizer/videoPlayerSimple/bin</value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>

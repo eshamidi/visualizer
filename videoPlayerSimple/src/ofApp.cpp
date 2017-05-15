@@ -36,6 +36,7 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
+    //string dirString = "media/ubuntu/fdrive";
     string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
@@ -88,7 +89,7 @@ void ofApp::setup(){
 
 //    pixelated.allocate(1920 ,1080,OF_PIXELS_RGB);
 
-    //fbo.allocate(1920,1080,GL_RGB);
+    fbo.allocate(1920,1080,GL_RGB);
 
     ofSetVerticalSync(TRUE);
 
@@ -105,42 +106,42 @@ void ofApp::update(){
     //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed.
 
     if(colorfx == true) timer+=3;
-
+    drawcolor.a = 255;
         //progressive color tint
     //gets more blue
     if(step == 0){
         drawcolor.r = 255-timer;
         drawcolor.g = 255-timer;
         drawcolor.b = 255;
-        drawcolor.a = 255;
+
     }
     //gets more green
     if(step == 1){
-        drawcolor.r = 0;
+        //drawcolor.r = 0;
         drawcolor.g = timer;
         drawcolor.b = 255-timer;
-        drawcolor.a = 255;
+
     }
     //gets more red
     if(step == 2){
         drawcolor.r = timer;
         drawcolor.g = 255-timer;
-        drawcolor.b = 0;
-        drawcolor.a = 255;
+        //drawcolor.b = 0;
+
     }
     //gets more green
     if(step == 3){
         drawcolor.r = 255;
         drawcolor.g = timer;
-        drawcolor.b = 0;
-        drawcolor.a = 255;
+        //drawcolor.b = 0;
+
     }
     //gets more blue
     if(step == 4){
         drawcolor.r = 255;
         drawcolor.g = 255;
         drawcolor.b = timer;
-        drawcolor.a = 255;
+
     }
 
 
@@ -157,7 +158,7 @@ void ofApp::update(){
     //audio update envelope
 
 	scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
-	numGhosts = ofMap(scaledVol, 0.0, 1.0,0,40,true);
+    numGhosts = ofMap(scaledVol, 0.0, 1.0,1,40,true);
         //lets record the volume into an array
         volHistory.push_back( scaledVol );
 
@@ -171,8 +172,22 @@ void ofApp::update(){
 void ofApp::draw(){
     ofSetColor(drawcolor);
 
-   if(zoom>0) myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
-    else myMovies[currentVid][toggle].draw(0,0,1920,1080);
+   //if(zoom>0) myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
+   if(tilefx == true) {
+       for(int i = 0; i < numhoriz; i++){
+       //steps thru vertical dim
+
+
+            for(int v = 0; v < numvert; v++){
+           //horizontal drawing across
+            drawx = (1920/numhoriz)*i;
+            drawy = (1080/numvert)*v;
+            myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
+
+            }
+       }
+   }
+   else myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
 
     if(ghostfx == true){
@@ -269,7 +284,7 @@ void ofApp::keyPressed(int key){
 
         case '9':
             numGhosts++;
-	    if(numGhosts > 20) numGhosts = 60;
+        if(numGhosts > 20) numGhosts = 20;
             break;
 
         case '0':
@@ -284,7 +299,7 @@ void ofApp::keyPressed(int key){
             zoom++;
             if(zoom>9) zoom = 9;
             break;
-        case 'a':
+       case 'a':
             zoomx++;
             if(zoomx > 20) zoomx = 0;
             break;
@@ -292,6 +307,21 @@ void ofApp::keyPressed(int key){
             zoomx--;
             if(zoomx < 0) zoomx = 20;
             break;
+        case 'e':
+            tilefx = !tilefx;
+        break;
+        case 'r':
+            numhoriz++;
+            numvert++;
+        break;
+        case 't':
+            numhoriz--;
+            numvert--;
+            if(numhoriz < 1) numhoriz = 1;
+            if(numvert < 1) numvert = 1;
+
+
+
     }
 }
 
