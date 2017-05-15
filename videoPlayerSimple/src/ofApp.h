@@ -66,8 +66,8 @@ public:
 
     //buffer stuff
 
-    ofFbo      fbo;
-    ofTexture  tex [5];
+    //ofFbo      fbo;
+    //ofTexture  tex [5];
     int bufIndex = 0;
 
 

@@ -89,7 +89,6 @@ void ofApp::setup(){
 
 //    pixelated.allocate(1920 ,1080,OF_PIXELS_RGB);
 
-    fbo.allocate(1920,1080,GL_RGB);
 
     ofSetVerticalSync(TRUE);
 
@@ -174,13 +173,13 @@ void ofApp::draw(){
 
    //if(zoom>0) myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
    if(tilefx == true) {
-       for(int i = 0; i < numhoriz; i++){
+       for(int f = 0; f < numhoriz; f++){
        //steps thru vertical dim
 
 
             for(int v = 0; v < numvert; v++){
            //horizontal drawing across
-            drawx = (1920/numhoriz)*i;
+            drawx = (1920/numhoriz)*f;
             drawy = (1080/numvert)*v;
             myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
 
@@ -192,12 +191,11 @@ void ofApp::draw(){
 
     if(ghostfx == true){
         drawcolor.a = 50;
-        for(int i = 1; i < numGhosts; i++){
-
+        for(int g = 1; g < numGhosts; g++){
             ofSetColor(drawcolor);
             //TODO - need to figure out transformation of ghost position
             //ghost position is roughly centered now
-            myMovies[currentVid][toggle].draw(50*i,25*i,1920-100*i,1080-50*i);
+            myMovies[currentVid][toggle].draw(50*g,25*g,1920-100*g,1080-50*g);
 
         }
     }
