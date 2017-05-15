@@ -64,12 +64,6 @@ public:
     int numvert = 1;
 
 
-    //buffer stuff
-
-    //ofFbo      fbo;
-    //ofTexture  tex [5];
-    int bufIndex = 0;
-
 
 
 

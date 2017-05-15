@@ -80,17 +80,6 @@ void ofApp::setup(){
     soundStream.setup(this, 0, 2, 48000, bufferSize, 4);
 
 
-    //OF_PIXELS_RGB seems to involve OpenGL in some way, beware
-
-//    for(int i =0; i < 3; i++){
-//        tex[i].allocate(1920, 1080, OF_PIXELS_RGB);
-//        tex[i].clear();
-//    }
-
-//    pixelated.allocate(1920 ,1080,OF_PIXELS_RGB);
-
-
-    ofSetVerticalSync(TRUE);
 
 }
 
@@ -171,7 +160,7 @@ void ofApp::update(){
 void ofApp::draw(){
     ofSetColor(drawcolor);
 
-   //if(zoom>0) myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
+
    if(tilefx == true) {
        for(int f = 0; f < numhoriz; f++){
        //steps thru vertical dim
