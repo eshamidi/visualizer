@@ -50,10 +50,12 @@ public:
     int timer = 0;
     bool inc = true;
     int step = 0;
+    int colorspeed = 0;
+    int colordepth = 40;
 	
     ofColor drawcolor;
 
-    bool tilefx=false;
+
     int drawx = 0;
     int drawy = 0;
     int numTiles = 1;

@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    string dirString = "/media/ubuntu/fdrive/";
-     //string dirString = "/media/root/fdrive/";
+    //string dirString = "/media/ubuntu/fdrive/";
+     string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -92,54 +92,70 @@ void ofApp::update(){
 
 
 
-    //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed.
+    //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed. should maybe use a separate free-running loop so I can control the timing better
 
-    timer+=3;
+    //timer++;
     drawcolor.a = 255;
         //progressive color tint
-    //gets more blue
+    //red -, green -, result is blue
     if(step == 0){
-        drawcolor.r = 255-timer;
-        drawcolor.g = 255-timer;
-        drawcolor.b = 255;
+        drawcolor.r = drawcolor.r-colorspeed;
+        drawcolor.g = drawcolor.g-colorspeed;
+        if(drawcolor.r < 255 - 20) drawcolor.r = 255 - 20;
+        if(drawcolor.g < 255 - 20) drawcolor.g = 255 - 20;
+        if(drawcolor.r  == 255 - 20){
+            step++;
+        }
 
     }
-    //gets more green
+    //green +, blue -, result is green
     if(step == 1){
-        //drawcolor.r = 0;
-        drawcolor.g = timer;
-        drawcolor.b = 255-timer;
+        drawcolor.g = drawcolor.g + colorspeed;
+        drawcolor.b = drawcolor.b - colorspeed;
+        if(drawcolor.b < 255 -20) drawcolor.b = 255 -20;
+        if(drawcolor.b == 255 - 20){
+            step++;
+        }
+
 
     }
-    //gets more red
+    //red +, green -, result is red
     if(step == 2){
-        drawcolor.r = timer;
-        drawcolor.g = 255-timer;
-        //drawcolor.b = 0;
+        drawcolor.r = drawcolor.r + colorspeed;
+        drawcolor.g = drawcolor.g - colorspeed;
+        if(drawcolor.g < 255 - 20) drawcolor.g = 255-20;
+        if(drawcolor.r > 254) drawcolor.r = 255;
+        if(drawcolor.g == 255 - 20){
+            step++;
+        }
+
 
     }
-    //gets more green
+    //green +, result is red + green
     if(step == 3){
-        drawcolor.r = 255;
-        drawcolor.g = timer;
-        //drawcolor.b = 0;
+        drawcolor.g = drawcolor.g + colorspeed;
+        if(drawcolor.g > 254) {
+            drawcolor.g = 255;
+            step++;
+        }
+        //stop when green gets back 2 normal
+
+
 
     }
-    //gets more blue
+    //blue +, result is white
     if(step == 4){
-        drawcolor.r = 255;
-        drawcolor.g = 255;
-        drawcolor.b = timer;
+        drawcolor.b = drawcolor.b + colorspeed;
+        if(drawcolor.b > 255) drawcolor.b = 255;
+        //stop when blue gets back 2 normal
+        if(drawcolor.b > 254) {
+            drawcolor.b = 255;
+            step = 0;
+        }
+
 
     }
 
-
-    if(timer > 254){
-        timer = 0;
-        step++;
-        if(step == 5) step = 0;
-
-    }
 
 
 
@@ -154,6 +170,8 @@ void ofApp::update(){
         if( volHistory.size() >= 400 ){
                 volHistory.erase(volHistory.begin(), volHistory.begin()+1);
         }
+
+
 }
 
 //-----------------------------------------------------
@@ -223,8 +241,14 @@ void ofApp::draw(){
 
 
 
-
+drawcolor.a = 255;
+ofSetColor(drawcolor);
 ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 4, 18);
+ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 500, 500);
+ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 500, 520);
+ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 500, 540);
+ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
+ofDrawBitmapString("timer" + ofToString(timer * 1.0, 0), 500, 580);
 
 }
 
@@ -338,6 +362,28 @@ void ofApp::keyPressed(int key){
             if(numvert > 15 ) numvert = 15;
 
         break;
+
+        case 'g':
+            colorspeed--;
+            if(colorspeed < 0) colorspeed = 0;
+        break;
+
+        case 'h':
+            colorspeed++;
+        break;
+
+        case 'j':
+            colordepth+=10;
+            if(colordepth > 250)colordepth = 250;
+        break;
+
+        case 'k':
+            colordepth-=10;
+            if(colordepth < 0)colordepth = 0;
+        break;
+
+
+
 
 
         case 'y':
