@@ -49,12 +49,21 @@ public:
     int cycle = 2000;
     int timer = 0;
     bool inc = true;
+
+
+    //color fade stuff
+
     int step = 0;
-    int colorspeed = 50;
+    int colorspeed_p = 50;
+    int colorspeed;
     int colordepth;
     int clrdep_new;
-	
-    ofColor drawcolor;
+    int chgamt = 2;
+	ofColor drawcolor;
+
+
+
+    //tiling and drawing variables
 
 
     int drawx = 0;

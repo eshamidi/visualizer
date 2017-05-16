@@ -1,4 +1,4 @@
-//Video Sampler Patch 5/14/17
+//Video Sampler Patch 5/16/17
 // Developed on bump-a-grape
 
 #include "ofApp.h"
@@ -93,6 +93,8 @@ void ofApp::update(){
 
 
     //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed. should maybe use a separate free-running loop so I can control the timing better
+    //dynamically change the amount of colorchg based on depth so speed will remain relatively consistent while depth is changing.
+    //Not great when depth is high and speed is low - looks steppy - could incorporate colorspeed in my calculation
 
     //timer++;
     drawcolor.a = 255;
@@ -107,9 +109,12 @@ void ofApp::update(){
     switch(step){
     case 0:
         colordepth = clrdep_new;
+        colorspeed = colorspeed_p;
+
+        chgamt = colordepth/10;
         if(timer > colorspeed){
-            drawcolor.r = drawcolor.r - 1;
-            drawcolor.g = drawcolor.g -1;
+            drawcolor.r = drawcolor.r - chgamt;
+            drawcolor.g = drawcolor.g - chgamt;
             ofResetElapsedTimeCounter();
         }
 
@@ -125,13 +130,13 @@ void ofApp::update(){
     //green +, blue -, result is green
     case 1:
         if(timer > colorspeed){
-            drawcolor.g = drawcolor.g + 1;
-            drawcolor.b = drawcolor.b - 1;
+            drawcolor.g = drawcolor.g + chgamt;
+            drawcolor.b = drawcolor.b - chgamt;
             ofResetElapsedTimeCounter();
         }
 
 
-        if(drawcolor.b < 255 - colordepth){
+        if(drawcolor.b <= 255 - colordepth){
             drawcolor.b = 255 - colordepth;
             drawcolor.g = 255;
             step++;
@@ -143,16 +148,14 @@ void ofApp::update(){
     //red +, green -, result is red
     case 2:
         if(timer > colorspeed){
-        drawcolor.r = drawcolor.r + 1;
-        drawcolor.g = drawcolor.g - 1;
+        drawcolor.r = drawcolor.r + chgamt;
+        drawcolor.g = drawcolor.g - chgamt;
         ofResetElapsedTimeCounter();
         }
 
-        if(drawcolor.g < 255 - colordepth) drawcolor.g = 255-colordepth;
-
-        if(drawcolor.r > 254){
-            drawcolor.r = 255;
+        if(drawcolor.g <= 255 - colordepth){
             drawcolor.g = 255-colordepth;
+            drawcolor.r = 255;
             step++;
             ofResetElapsedTimeCounter();
         }
@@ -162,11 +165,11 @@ void ofApp::update(){
     //green +, result is red + green
     case 3:
         if(timer > colorspeed){
-        drawcolor.g = drawcolor.g + 1;
+        drawcolor.g = drawcolor.g + chgamt;
         ofResetElapsedTimeCounter();
         }
 
-        if(drawcolor.g > 254) {
+        if(drawcolor.g >= 254) {
                 drawcolor.g = 255;
                 step++;
                 ofResetElapsedTimeCounter();
@@ -179,11 +182,11 @@ void ofApp::update(){
     //blue +, result is white
     case 4:
         if(timer > colorspeed){
-        drawcolor.b = drawcolor.b + 1;
+        drawcolor.b = drawcolor.b + chgamt;
         ofResetElapsedTimeCounter();
         }
 
-        if(drawcolor.b > 254){
+        if(drawcolor.b >= 254){
             drawcolor.b = 255;
             step = 0;
 
@@ -294,7 +297,8 @@ ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 500, 520);
 ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 500, 540);
 ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
 ofDrawBitmapString("timer" + ofToString(timer * 1.0, 0), 500, 580);
-
+ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
+ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
 }
 
 //--------------------------------------------------------------
@@ -409,12 +413,12 @@ void ofApp::keyPressed(int key){
         break;
 
         case 'g':
-            colorspeed-=50;
-            if(colorspeed < 0) colorspeed = 0;
+            colorspeed_p-=50;
+            if(colorspeed_p < 50) colorspeed_p = 50;
         break;
 
         case 'h':
-            colorspeed+=50;
+            colorspeed_p+=50;
         break;
 
         case 'j':
