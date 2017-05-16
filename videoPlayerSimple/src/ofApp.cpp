@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    //string dirString = "media/ubuntu/fdrive";
-    string dirString = "/media/root/fdrive/";
+    string dirString = "/media/ubuntu/fdrive/";
+    // string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -79,7 +79,7 @@ void ofApp::setup(){
 
     soundStream.setup(this, 0, 2, 48000, bufferSize, 4);
 
-
+    ofSetVerticalSync(TRUE);
 
 }
 
@@ -180,13 +180,13 @@ void ofApp::draw(){
 
     if(ghostfx == true){
         drawcolor.a = 50;
-        for(int g = 1; g < numGhosts; g++){
+        for(int g = 0; g < numGhosts; g++){
             ofSetColor(drawcolor);
             //TODO - need to figure out transformation of ghost position
             //ghost position is roughly centered now
             myMovies[currentVid][toggle].draw(50*g,25*g,1920-100*g,1080-50*g);
 
-        }
+       }
     }
 
 
