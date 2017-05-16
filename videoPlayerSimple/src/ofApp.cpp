@@ -97,63 +97,100 @@ void ofApp::update(){
     //timer++;
     drawcolor.a = 255;
         //progressive color tint
+
+
+
+    timer = ofGetElapsedTimeMillis();
+
     //red -, green -, result is blue
-    if(step == 0){
-        drawcolor.r = drawcolor.r-colorspeed;
-        drawcolor.g = drawcolor.g-colorspeed;
-        if(drawcolor.r < 255 - 20) drawcolor.r = 255 - 20;
-        if(drawcolor.g < 255 - 20) drawcolor.g = 255 - 20;
-        if(drawcolor.r  == 255 - 20){
-            step++;
+    switch(step){
+    case 0:
+        if(timer > 200){
+            drawcolor.r = drawcolor.r - 1;
+            drawcolor.g = drawcolor.g -1;
+            ofResetElapsedTimeCounter();
         }
 
-    }
+        if(drawcolor.r < 255 - 40) drawcolor.r = 255 - 40;
+        if(drawcolor.g < 255 - 40) drawcolor.g = 255 - 40;
+        if(drawcolor.r == 255-40){
+           step++;
+           ofResetElapsedTimeCounter();
+        }
+
+    break;
+
     //green +, blue -, result is green
-    if(step == 1){
-        drawcolor.g = drawcolor.g + colorspeed;
-        drawcolor.b = drawcolor.b - colorspeed;
-        if(drawcolor.b < 255 -20) drawcolor.b = 255 -20;
-        if(drawcolor.b == 255 - 20){
-            step++;
+    case 1:
+        if(timer > 200){
+            drawcolor.g = drawcolor.g + 1;
+            drawcolor.b = drawcolor.b - 1;
+            ofResetElapsedTimeCounter();
         }
 
 
-    }
-    //red +, green -, result is red
-    if(step == 2){
-        drawcolor.r = drawcolor.r + colorspeed;
-        drawcolor.g = drawcolor.g - colorspeed;
-        if(drawcolor.g < 255 - 20) drawcolor.g = 255-20;
-        if(drawcolor.r > 254) drawcolor.r = 255;
-        if(drawcolor.g == 255 - 20){
-            step++;
-        }
-
-
-    }
-    //green +, result is red + green
-    if(step == 3){
-        drawcolor.g = drawcolor.g + colorspeed;
-        if(drawcolor.g > 254) {
+        if(drawcolor.b < 255 - 40){
+            drawcolor.b = 255 -40;
             drawcolor.g = 255;
             step++;
+            ofResetElapsedTimeCounter();
         }
+
+
+    break;
+    //red +, green -, result is red
+    case 2:
+        if(timer > 200){
+        drawcolor.r = drawcolor.r + 1;
+        drawcolor.g = drawcolor.g - 1;
+        ofResetElapsedTimeCounter();
+        }
+
+        if(drawcolor.g < 255 - 40) drawcolor.g = 255-40;
+
+        if(drawcolor.r > 254){
+            drawcolor.r = 255;
+            step++;
+            ofResetElapsedTimeCounter();
+        }
+
+
+    break;
+    //green +, result is red + green
+    case 3:
+        if(timer > 200){
+        drawcolor.g = drawcolor.g + 1;
+        ofResetElapsedTimeCounter();
+        }
+
+        if(drawcolor.g > 254) {
+                drawcolor.g = 255;
+                step++;
+                ofResetElapsedTimeCounter();
+            }
         //stop when green gets back 2 normal
 
 
 
-    }
+    break;
     //blue +, result is white
-    if(step == 4){
-        drawcolor.b = drawcolor.b + colorspeed;
-        if(drawcolor.b > 255) drawcolor.b = 255;
-        //stop when blue gets back 2 normal
-        if(drawcolor.b > 254) {
+    case 4:
+        if(timer > 200){
+        drawcolor.b = drawcolor.b + 1;
+        ofResetElapsedTimeCounter();
+        }
+
+        if(drawcolor.b > 254){
             drawcolor.b = 255;
             step = 0;
+            ofResetElapsedTimeCounter();
         }
 
 
+    break;
+
+    default:
+        break;
     }
 
 
