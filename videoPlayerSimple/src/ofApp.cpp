@@ -287,10 +287,13 @@ void ofApp::draw(){
 
 
 
-
-
 drawcolor.a = 255;
 ofSetColor(drawcolor);
+
+
+//debug stuff -- get rid of in final version
+
+int fr = int(ofGetFrameRate());
 ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 4, 18);
 ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 500, 500);
 ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 500, 520);
@@ -299,6 +302,8 @@ ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
 ofDrawBitmapString("timer" + ofToString(timer * 1.0, 0), 500, 580);
 ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
 ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
+ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 500, 640);
+
 }
 
 //--------------------------------------------------------------
@@ -362,15 +367,6 @@ void ofApp::keyPressed(int key){
             switchVideo(5);
             break;
 
-        case '7':
-            //color tint
-            colorfx = !colorfx;
-            break;
-
-        case '8':
-            //ghost
-            ghostfx = !ghostfx;
-            break;
 
         case '9':
             maxGhosts++;
@@ -430,10 +426,6 @@ void ofApp::keyPressed(int key){
             clrdep_new-=10;
             if(clrdep_new < 0)clrdep_new = 0;
         break;
-
-
-
-
 
         case 'y':
             ang++;
