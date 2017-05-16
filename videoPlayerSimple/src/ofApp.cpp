@@ -334,12 +334,15 @@ void ofApp::keyPressed(int key){
         case 'r':
             numhoriz--;
             numvert--;
+            if(numhoriz < 1) numhoriz = 1;
+            if(numvert < 1) numvert = 1;
         break;
         case 't':
             numhoriz++;
             numvert++;
-            if(numhoriz < 1) numhoriz = 1;
-            if(numvert < 1) numvert = 1;
+            if(numhoriz > 15) numhoriz = 15;
+            if(numvert > 15 ) numvert = 15;
+
         break;
 
 
