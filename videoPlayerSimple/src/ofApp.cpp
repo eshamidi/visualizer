@@ -103,9 +103,10 @@ void ofApp::update(){
     timer = ofGetElapsedTimeMillis();
 
     //red -, green -, result is blue
+    if(colorspeed < 1000){
     switch(step){
     case 0:
-        if(timer > 200){
+        if(timer > colorspeed){
             drawcolor.r = drawcolor.r - 1;
             drawcolor.g = drawcolor.g -1;
             ofResetElapsedTimeCounter();
@@ -122,7 +123,7 @@ void ofApp::update(){
 
     //green +, blue -, result is green
     case 1:
-        if(timer > 200){
+        if(timer > colorspeed){
             drawcolor.g = drawcolor.g + 1;
             drawcolor.b = drawcolor.b - 1;
             ofResetElapsedTimeCounter();
@@ -140,7 +141,7 @@ void ofApp::update(){
     break;
     //red +, green -, result is red
     case 2:
-        if(timer > 200){
+        if(timer > colorspeed){
         drawcolor.r = drawcolor.r + 1;
         drawcolor.g = drawcolor.g - 1;
         ofResetElapsedTimeCounter();
@@ -158,7 +159,7 @@ void ofApp::update(){
     break;
     //green +, result is red + green
     case 3:
-        if(timer > 200){
+        if(timer > colorspeed){
         drawcolor.g = drawcolor.g + 1;
         ofResetElapsedTimeCounter();
         }
@@ -175,7 +176,7 @@ void ofApp::update(){
     break;
     //blue +, result is white
     case 4:
-        if(timer > 200){
+        if(timer > colorspeed){
         drawcolor.b = drawcolor.b + 1;
         ofResetElapsedTimeCounter();
         }
@@ -193,6 +194,8 @@ void ofApp::update(){
         break;
     }
 
+    }
+
 
 
 
@@ -207,6 +210,8 @@ void ofApp::update(){
         if( volHistory.size() >= 400 ){
                 volHistory.erase(volHistory.begin(), volHistory.begin()+1);
         }
+
+
 
 
 }
@@ -401,12 +406,12 @@ void ofApp::keyPressed(int key){
         break;
 
         case 'g':
-            colorspeed--;
+            colorspeed-=50;
             if(colorspeed < 0) colorspeed = 0;
         break;
 
         case 'h':
-            colorspeed++;
+            colorspeed+=50;
         break;
 
         case 'j':
