@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    //string dirString = "/media/ubuntu/fdrive/";
-     string dirString = "/media/root/fdrive/";
+    string dirString = "/media/ubuntu/fdrive/";
+     //string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -164,14 +164,13 @@ void ofApp::draw(){
 //    ofTranslate(-1920/2,-1080/2,0);
 
     ofSetColor(drawcolor);
-   if(zoom>0 || tilefx == true){
    if(zoom>0){
        drawcolor.a = 50;
        myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
    }
 
 
-   if(tilefx == true) {
+
 
        for(int f = 0; f < numhoriz; f++){
 
@@ -205,10 +204,7 @@ void ofApp::draw(){
             }
          ofTranslate(-drawx,0,0);
        }
-   }
-   }
-   //re-adding zoom to see what I can do with it -- beware
-   else  myMovies[currentVid][toggle].draw(0,0,1920,1080);
+
 
 
 
@@ -328,9 +324,7 @@ void ofApp::keyPressed(int key){
             zoomx--;
             if(zoomx < 0) zoomx = 20;
             break;
-        case 'e':
-            tilefx = !tilefx;
-        break;
+
         case 'r':
             numhoriz--;
             numvert--;
