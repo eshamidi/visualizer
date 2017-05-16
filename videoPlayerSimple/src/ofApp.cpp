@@ -174,22 +174,34 @@ void ofApp::draw(){
    if(tilefx == true) {
 
        for(int f = 0; f < numhoriz; f++){
+
        //steps thru vertical dim
         drawx = (1920/numhoriz)*f;
         ofTranslate(drawx, 0,0);
+
             for(int v = 0; v < numvert; v++){
            //horizontal drawing across
 
             drawy = (1080/numvert)*v;
             ofTranslate(0,drawy,0);
 
-//                ofTranslate(drawx/2,drawy/2,0);
-//                ofRotate(ang*5,0,0,1);
-//                ofTranslate(-drawx/2,-drawy/2,0);
+                ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
+                ofRotate(ang*5,0,0,1);
+                ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
             //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
             myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
+
+
+            ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
+            ofRotate(-ang*5,0,0,1);
+            ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
+
+
             ofTranslate(0,-drawy,0);
+
+
+
             }
          ofTranslate(-drawx,0,0);
        }
