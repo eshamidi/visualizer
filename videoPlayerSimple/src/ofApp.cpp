@@ -106,15 +106,16 @@ void ofApp::update(){
     if(colorspeed < 1000){
     switch(step){
     case 0:
+        colordepth = clrdep_new;
         if(timer > colorspeed){
             drawcolor.r = drawcolor.r - 1;
             drawcolor.g = drawcolor.g -1;
             ofResetElapsedTimeCounter();
         }
 
-        if(drawcolor.r < 255 - 40) drawcolor.r = 255 - 40;
-        if(drawcolor.g < 255 - 40) drawcolor.g = 255 - 40;
-        if(drawcolor.r == 255-40){
+        if(drawcolor.r < 255 - colordepth) drawcolor.r = 255 - colordepth;
+        if(drawcolor.g < 255 - colordepth) drawcolor.g = 255 - colordepth;
+        if(drawcolor.r == 255-colordepth){
            step++;
            ofResetElapsedTimeCounter();
         }
@@ -130,8 +131,8 @@ void ofApp::update(){
         }
 
 
-        if(drawcolor.b < 255 - 40){
-            drawcolor.b = 255 -40;
+        if(drawcolor.b < 255 - colordepth){
+            drawcolor.b = 255 - colordepth;
             drawcolor.g = 255;
             step++;
             ofResetElapsedTimeCounter();
@@ -147,10 +148,11 @@ void ofApp::update(){
         ofResetElapsedTimeCounter();
         }
 
-        if(drawcolor.g < 255 - 40) drawcolor.g = 255-40;
+        if(drawcolor.g < 255 - colordepth) drawcolor.g = 255-colordepth;
 
         if(drawcolor.r > 254){
             drawcolor.r = 255;
+            drawcolor.g = 255-colordepth;
             step++;
             ofResetElapsedTimeCounter();
         }
@@ -184,6 +186,7 @@ void ofApp::update(){
         if(drawcolor.b > 254){
             drawcolor.b = 255;
             step = 0;
+
             ofResetElapsedTimeCounter();
         }
 
@@ -415,13 +418,13 @@ void ofApp::keyPressed(int key){
         break;
 
         case 'j':
-            colordepth+=10;
-            if(colordepth > 250)colordepth = 250;
+            clrdep_new+=10;
+            if(clrdep_new > 250)clrdep_new = 250;
         break;
 
         case 'k':
-            colordepth-=10;
-            if(colordepth < 0)colordepth = 0;
+            clrdep_new-=10;
+            if(clrdep_new < 0)clrdep_new = 0;
         break;
 
 

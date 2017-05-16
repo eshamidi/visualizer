@@ -50,8 +50,9 @@ public:
     int timer = 0;
     bool inc = true;
     int step = 0;
-    int colorspeed = 1100;
-    int colordepth = 40;
+    int colorspeed = 50;
+    int colordepth;
+    int clrdep_new;
 	
     ofColor drawcolor;
 
