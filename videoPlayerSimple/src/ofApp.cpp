@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    string dirString = "/media/ubuntu/fdrive/";
-    // string dirString = "/media/root/fdrive/";
+    //string dirString = "/media/ubuntu/fdrive/";
+     string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -94,7 +94,7 @@ void ofApp::update(){
 
     //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed.
 
-    if(colorfx == true) timer+=3;
+    timer+=3;
     drawcolor.a = 255;
         //progressive color tint
     //gets more blue
@@ -136,7 +136,7 @@ void ofApp::update(){
 
     if(timer > 254){
         timer = 0;
-        if(colorfx == true) step++;
+        step++;
         if(step == 5) step = 0;
 
     }
@@ -146,7 +146,7 @@ void ofApp::update(){
     //audio update envelope
 
 	scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
-    numGhosts = ofMap(scaledVol, 0.0, 1.0,1,40,true);
+    numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
         //lets record the volume into an array
         volHistory.push_back( scaledVol );
 
@@ -211,7 +211,7 @@ void ofApp::draw(){
    else  myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
 
-    if(ghostfx == true){
+
         drawcolor.a = 50;
         for(int g = 0; g < numGhosts; g++){
 
@@ -221,7 +221,7 @@ void ofApp::draw(){
             myMovies[currentVid][toggle].draw(50*g,25*g,1920-100*g,1080-50*g);
 
        }
-    }
+
 
 
 
@@ -304,13 +304,13 @@ void ofApp::keyPressed(int key){
             break;
 
         case '9':
-            numGhosts++;
-        if(numGhosts > 20) numGhosts = 20;
+            maxGhosts++;
+        if(maxGhosts > 20) maxGhosts = 20;
             break;
 
         case '0':
-            numGhosts--;
-            if(numGhosts < 0) numGhosts = 0;
+            maxGhosts--;
+            if(maxGhosts < 0) maxGhosts = 0;
             break;
         case 'q':
             zoom--;

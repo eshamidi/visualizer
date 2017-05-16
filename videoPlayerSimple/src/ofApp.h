@@ -44,6 +44,7 @@ public:
 
     bool colorfx = false;
     bool ghostfx = false;
+    int maxGhosts = 1;
     int numGhosts = 1;
     int cycle = 2000;
     int timer = 0;
