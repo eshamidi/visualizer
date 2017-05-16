@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    //string dirString = "/media/ubuntu/fdrive/";
-     string dirString = "/media/root/fdrive/";
+    string dirString = "/media/ubuntu/fdrive/";
+    // string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);

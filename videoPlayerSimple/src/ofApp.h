@@ -52,7 +52,7 @@ public:
 	
     ofColor drawcolor;
 
-    bool tilefx;
+    bool tilefx=false;
     int drawx = 0;
     int drawy = 0;
     int numTiles = 1;
