@@ -36,8 +36,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    string dirString = "/media/ubuntu/fdrive/";
-    // string dirString = "/media/root/fdrive/";
+    //string dirString = "/media/ubuntu/fdrive/";
+     string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -80,6 +80,7 @@ void ofApp::setup(){
     soundStream.setup(this, 0, 2, 48000, bufferSize, 4);
 
     ofSetVerticalSync(TRUE);
+    ofBackground(0,0,0);
 
 }
 
@@ -142,7 +143,6 @@ void ofApp::update(){
 
 
 
-
     //audio update envelope
 
 	scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
@@ -158,29 +158,51 @@ void ofApp::update(){
 
 //-----------------------------------------------------
 void ofApp::draw(){
+
+//    ofTranslate(1920/2,1080/2,0);
+//    ofRotate(ang*5,0,0,1);
+//    ofTranslate(-1920/2,-1080/2,0);
+
     ofSetColor(drawcolor);
+   if(zoom>0 || tilefx == true){
+   if(zoom>0){
+       drawcolor.a = 50;
+       myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
+   }
 
 
    if(tilefx == true) {
+
        for(int f = 0; f < numhoriz; f++){
        //steps thru vertical dim
-
-
+        drawx = (1920/numhoriz)*f;
+        ofTranslate(drawx, 0,0);
             for(int v = 0; v < numvert; v++){
            //horizontal drawing across
-            drawx = (1920/numhoriz)*f;
-            drawy = (1080/numvert)*v;
-            myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
 
+            drawy = (1080/numvert)*v;
+            ofTranslate(0,drawy,0);
+
+//                ofTranslate(drawx/2,drawy/2,0);
+//                ofRotate(ang*5,0,0,1);
+//                ofTranslate(-drawx/2,-drawy/2,0);
+
+            //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
+            myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
+            ofTranslate(0,-drawy,0);
             }
+         ofTranslate(-drawx,0,0);
        }
    }
-   else myMovies[currentVid][toggle].draw(0,0,1920,1080);
+   }
+   //re-adding zoom to see what I can do with it -- beware
+   else  myMovies[currentVid][toggle].draw(0,0,1920,1080);
 
 
     if(ghostfx == true){
         drawcolor.a = 50;
         for(int g = 0; g < numGhosts; g++){
+
             ofSetColor(drawcolor);
             //TODO - need to figure out transformation of ghost position
             //ghost position is roughly centered now
@@ -298,16 +320,20 @@ void ofApp::keyPressed(int key){
             tilefx = !tilefx;
         break;
         case 'r':
-            numhoriz++;
-            numvert++;
-        break;
-        case 't':
             numhoriz--;
             numvert--;
+        break;
+        case 't':
+            numhoriz++;
+            numvert++;
             if(numhoriz < 1) numhoriz = 1;
             if(numvert < 1) numvert = 1;
+        break;
 
 
+        case 'y':
+            ang++;
+        break;
 
     }
 }

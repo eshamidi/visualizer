@@ -45,15 +45,11 @@ public:
     bool colorfx = false;
     bool ghostfx = false;
     int numGhosts = 1;
-    int red, green, blue;
     int cycle = 2000;
     int timer = 0;
     bool inc = true;
     int step = 0;
-    ofPixels pixelated;
 	
-    int zoom = 0; 
-    int zoomx = 0;
     ofColor drawcolor;
 
     bool tilefx;
@@ -62,7 +58,9 @@ public:
     int numTiles = 1;
     int numhoriz = 1;
     int numvert = 1;
-
+    int zoomx = 0;
+    int zoom = 0;
+    int ang = 0;
 
 
 
