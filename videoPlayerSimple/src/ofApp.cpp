@@ -121,16 +121,16 @@ void ofApp::update(){
     case 0:
 
 
-            drawcolor.r -= chgamt;
-            drawcolor.g -= chgamt;
+           if(drawcolor.r > 1) drawcolor.r -= chgamt;
+           if(drawcolor.g > 1) drawcolor.g -= chgamt;
 
     break;
 
     //green +, blue -, result is green
     case 1:
 
-            drawcolor.g += chgamt;
-            drawcolor.b -= chgamt;
+            if(drawcolor.g < 254) drawcolor.g += chgamt;
+            if(drawcolor.b > 1) drawcolor.b -= chgamt;
           //  ofResetElapsedTimeCounter();
 
 
@@ -147,26 +147,26 @@ void ofApp::update(){
     //red +, green -, result is red
     case 2:
 
-        drawcolor.r += chgamt;
-        drawcolor.g -= chgamt;
+        if(drawcolor.r < 254) drawcolor.r += chgamt;
+        if(drawcolor.g > 1) drawcolor.g -= chgamt;
 
         //ofResetElapsedTimeCounter();
 
 
-        if(drawcolor.r > 254){
-            drawcolor.r = 255;
-        }
+//        if(drawcolor.r > 254){
+//            drawcolor.r = 255;
+//        }
 
     break;
     //green +, result is red + green
     case 3:
 
-        drawcolor.g += chgamt;
+        if(drawcolor.g < 254) drawcolor.g += chgamt;
 
 
-        if(drawcolor.g > 254){
-            drawcolor.g = 255;
-        }
+//        if(drawcolor.g > 254){
+//            drawcolor.g = 255;
+//        }
         //stop when green gets back 2 normal
 
 
@@ -175,10 +175,10 @@ void ofApp::update(){
     //blue +, result is white
     case 4:
 
-        drawcolor.b += chgamt;
-        if(drawcolor.b > 254){
-            drawcolor.b = 255;
-        }
+        if(drawcolor.b < 254) drawcolor.b += chgamt;
+//        if(drawcolor.b > 254){
+//            drawcolor.b = 255;
+//        }
 
 
     break;
