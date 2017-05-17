@@ -320,7 +320,7 @@ vector <string> ofApp::findVideos(string directory){
         while ((entries = readdir (dir)) != NULL && count < 6) {
 
             tempName = entries->d_name;
-            if(tempName.substr(tempName.find_last_of(".") + 1) == "avi" || tempName.substr(tempName.find_last_of(".") + 1) == "mp4") {
+            if(tempName.substr(tempName.find_last_of(".") + 1) == "avi" || tempName.substr(tempName.find_last_of(".") + 1) == "mp4" || tempName.substr(tempName.find_last_of(".") + 1) == "mov") {
 
                 videos.push_back( directory + tempName );
                 count++;
