@@ -9,7 +9,7 @@
 void ofApp::setup(){
 
     //timer init
-    colorTimer.setup(2000);
+    colorTimer.setup(colorspeed_p);
 
      ofAddListener( colorTimer.TIMER_COMPLETE , this, &ofApp::colorTimerCompleteHandler ) ;
 
@@ -101,91 +101,8 @@ void ofApp::update(){
     //2 dimensional array of videos
     myMovies[currentVid][toggle].update();
 
+    colorModulator(step);
 
-
-    //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed. should maybe use a separate free-running loop so I can control the timing better
-    //dynamically change the amount of colorchg based on depth so speed will remain relatively consistent while depth is changing.
-    //Not great when depth is high and speed is low - looks steppy - could incorporate colorspeed in my calculation
-
-    //timer++;
-    drawcolor.a = 255;
-        //progressive color tint
-
-
-
-    //timer = ofGetElapsedTimeMillis();
-
-    //red -, green -, result is blue
-    chgamt = 1;\
-    switch(step){
-    case 0:
-
-
-           if(drawcolor.r > 1) drawcolor.r -= chgamt;
-           if(drawcolor.g > 1) drawcolor.g -= chgamt;
-
-    break;
-
-    //green +, blue -, result is green
-    case 1:
-
-            if(drawcolor.g < 254) drawcolor.g += chgamt;
-            if(drawcolor.b > 1) drawcolor.b -= chgamt;
-          //  ofResetElapsedTimeCounter();
-
-
-
-//        if(drawcolor.b <= 255 - colordepth){
-//            drawcolor.b = 255 - colordepth;
-//            drawcolor.g = 255;
-          //  step++;
-            //ofResetElapsedTimeCounter();
-       // }
-
-
-    break;
-    //red +, green -, result is red
-    case 2:
-
-        if(drawcolor.r < 254) drawcolor.r += chgamt;
-        if(drawcolor.g > 1) drawcolor.g -= chgamt;
-
-        //ofResetElapsedTimeCounter();
-
-
-//        if(drawcolor.r > 254){
-//            drawcolor.r = 255;
-//        }
-
-    break;
-    //green +, result is red + green
-    case 3:
-
-        if(drawcolor.g < 254) drawcolor.g += chgamt;
-
-
-//        if(drawcolor.g > 254){
-//            drawcolor.g = 255;
-//        }
-        //stop when green gets back 2 normal
-
-
-
-    break;
-    //blue +, result is white
-    case 4:
-
-        if(drawcolor.b < 254) drawcolor.b += chgamt;
-//        if(drawcolor.b > 254){
-//            drawcolor.b = 255;
-//        }
-
-
-    break;
-
-    default:
-        break;
-    }
 
 
 
@@ -206,12 +123,6 @@ void ofApp::update(){
 
 colorTimer.update();
 
-if(drawcolor.g > 254) drawcolor.g = 255;
-if(drawcolor.g < 1) drawcolor.g = 1;
-if(drawcolor.b > 254) drawcolor.b = 255;
-if(drawcolor.b < 1) drawcolor.b = 1;
-if(drawcolor.r > 254) drawcolor.r = 255;
-if(drawcolor.r < 1) drawcolor.r = 1;
 
 }
 
@@ -543,9 +454,10 @@ void ofApp::colorTimerCompleteHandler( int &args )
 colorTimer.draw(90,90);
 
 
-if(step < 4) step++;
+if(step < 5) step++;
 else{
-
+    colorTimer.setup(colorspeed_p);
+    chgamt = 30*clrdep_new/colorspeed_p;
     step = 0;
 }
 
@@ -554,5 +466,70 @@ else{
 
 }
 
+void ofApp::colorModulator(int step){
+
+    //this is a sloppy timer for progressive color tint effects. Increment amount controls the speed. should maybe use a separate free-running loop so I can control the timing better
+    //dynamically change the amount of colorchg based on depth so speed will remain relatively consistent while depth is changing.
+    //Not great when depth is high and speed is low - looks steppy - could incorporate colorspeed in my calculation
+
+    //timer++;
+    drawcolor.a = 255;
+        //progressive color tint
+
+
+
+    //timer = ofGetElapsedTimeMillis();
+
+    //red -, green -, result is blue
+
+    switch(step){
+
+    case 0:
+
+    break;
+
+    case 1:
+
+
+           if(drawcolor.r > 1) drawcolor.r -= chgamt;
+           if(drawcolor.g > 1) drawcolor.g -= chgamt;
+
+    break;
+
+    //green +, blue -, result is green
+    case 2:
+
+            if(drawcolor.g < 254) drawcolor.g += chgamt;
+            if(drawcolor.b > 1) drawcolor.b -= chgamt;
+
+
+    break;
+    //red +, green -, result is red
+    case 3:
+
+        if(drawcolor.r < 254) drawcolor.r += chgamt;
+        if(drawcolor.g > 1) drawcolor.g -= chgamt;
+
+
+    break;
+    //green +, result is red + green
+    case 4:
+
+        if(drawcolor.g < 254) drawcolor.g += chgamt;
+
+    break;
+    //blue +, result is white
+    case 5:
+
+        if(drawcolor.b < 254) drawcolor.b += chgamt;
+        if(drawcolor.r < 254) drawcolor.r += chgamt;
+    break;
+
+    default:
+        break;
+    }
+
+
+}
 
 

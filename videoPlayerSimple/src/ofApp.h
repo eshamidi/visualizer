@@ -50,6 +50,8 @@ public:
 
     //fx
 
+    void colorModulator(int step) ;
+
     bool colorfx = false;
     bool ghostfx = false;
     int maxGhosts = 1;
@@ -62,11 +64,11 @@ public:
     //color fade stuff
 
     int step = 0;
-    int colorspeed_p = 50;
+    int colorspeed_p = 500;
     int colorspeed;
     int colordepth;
     int clrdep_new;
-    int chgamt = 2;
+    int chgamt = 0;
 	ofColor drawcolor;
 
 
