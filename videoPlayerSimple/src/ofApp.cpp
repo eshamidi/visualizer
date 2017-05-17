@@ -8,6 +8,11 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    //timer init
+    colorTimer.setup(2000);
+
+     ofAddListener( colorTimer.TIMER_COMPLETE , this, &ofApp::colorTimerCompleteHandler ) ;
+
     //serial comms init;
 
     serial.listDevices();
@@ -82,10 +87,16 @@ void ofApp::setup(){
     ofSetVerticalSync(TRUE);
     ofBackground(0,0,0);
 
+
+    colorTimer.start(true);
+    step = 0;
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+
 
     //2 dimensional array of videos
     myMovies[currentVid][toggle].update();
@@ -102,78 +113,60 @@ void ofApp::update(){
 
 
 
-    timer = ofGetElapsedTimeMillis();
+    //timer = ofGetElapsedTimeMillis();
 
     //red -, green -, result is blue
-    if(colorspeed < 1000){
+    chgamt = 1;\
     switch(step){
     case 0:
-        colordepth = clrdep_new;
-        colorspeed = colorspeed_p;
 
-        chgamt = colordepth/10;
-        if(timer > colorspeed){
-            drawcolor.r = drawcolor.r - chgamt;
-            drawcolor.g = drawcolor.g - chgamt;
-            ofResetElapsedTimeCounter();
-        }
 
-        if(drawcolor.r < 255 - colordepth) drawcolor.r = 255 - colordepth;
-        if(drawcolor.g < 255 - colordepth) drawcolor.g = 255 - colordepth;
-        if(drawcolor.r == 255-colordepth){
-           step++;
-           ofResetElapsedTimeCounter();
-        }
+            drawcolor.r -= chgamt;
+            drawcolor.g -= chgamt;
 
     break;
 
     //green +, blue -, result is green
     case 1:
-        if(timer > colorspeed){
-            drawcolor.g = drawcolor.g + chgamt;
-            drawcolor.b = drawcolor.b - chgamt;
-            ofResetElapsedTimeCounter();
-        }
+
+            drawcolor.g += chgamt;
+            drawcolor.b -= chgamt;
+          //  ofResetElapsedTimeCounter();
 
 
-        if(drawcolor.b <= 255 - colordepth){
-            drawcolor.b = 255 - colordepth;
-            drawcolor.g = 255;
-            step++;
-            ofResetElapsedTimeCounter();
-        }
+
+//        if(drawcolor.b <= 255 - colordepth){
+//            drawcolor.b = 255 - colordepth;
+//            drawcolor.g = 255;
+          //  step++;
+            //ofResetElapsedTimeCounter();
+       // }
 
 
     break;
     //red +, green -, result is red
     case 2:
-        if(timer > colorspeed){
-        drawcolor.r = drawcolor.r + chgamt;
-        drawcolor.g = drawcolor.g - chgamt;
-        ofResetElapsedTimeCounter();
-        }
 
-        if(drawcolor.g <= 255 - colordepth){
-            drawcolor.g = 255-colordepth;
+        drawcolor.r += chgamt;
+        drawcolor.g -= chgamt;
+
+        //ofResetElapsedTimeCounter();
+
+
+        if(drawcolor.r > 254){
             drawcolor.r = 255;
-            step++;
-            ofResetElapsedTimeCounter();
         }
-
 
     break;
     //green +, result is red + green
     case 3:
-        if(timer > colorspeed){
-        drawcolor.g = drawcolor.g + chgamt;
-        ofResetElapsedTimeCounter();
-        }
 
-        if(drawcolor.g >= 254) {
-                drawcolor.g = 255;
-                step++;
-                ofResetElapsedTimeCounter();
-            }
+        drawcolor.g += chgamt;
+
+
+        if(drawcolor.g > 254){
+            drawcolor.g = 255;
+        }
         //stop when green gets back 2 normal
 
 
@@ -181,16 +174,10 @@ void ofApp::update(){
     break;
     //blue +, result is white
     case 4:
-        if(timer > colorspeed){
-        drawcolor.b = drawcolor.b + chgamt;
-        ofResetElapsedTimeCounter();
-        }
 
-        if(drawcolor.b >= 254){
+        drawcolor.b += chgamt;
+        if(drawcolor.b > 254){
             drawcolor.b = 255;
-            step = 0;
-
-            ofResetElapsedTimeCounter();
         }
 
 
@@ -200,7 +187,7 @@ void ofApp::update(){
         break;
     }
 
-    }
+
 
 
 
@@ -217,8 +204,14 @@ void ofApp::update(){
                 volHistory.erase(volHistory.begin(), volHistory.begin()+1);
         }
 
+colorTimer.update();
 
-
+if(drawcolor.g > 254) drawcolor.g = 255;
+if(drawcolor.g < 1) drawcolor.g = 1;
+if(drawcolor.b > 254) drawcolor.b = 255;
+if(drawcolor.b < 1) drawcolor.b = 1;
+if(drawcolor.r > 254) drawcolor.r = 255;
+if(drawcolor.r < 1) drawcolor.r = 1;
 
 }
 
@@ -299,10 +292,12 @@ ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 500, 500);
 ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 500, 520);
 ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 500, 540);
 ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
-ofDrawBitmapString("timer" + ofToString(timer * 1.0, 0), 500, 580);
+ofDrawBitmapString("timer" + ofToString(colorTimer.getNormalizedProgress() * 1.0, 0), 500, 580);
 ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
 ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
 ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 500, 640);
+
+colorTimer.draw(40,40);
 
 }
 
@@ -411,10 +406,14 @@ void ofApp::keyPressed(int key){
         case 'g':
             colorspeed_p-=50;
             if(colorspeed_p < 50) colorspeed_p = 50;
+
+
         break;
 
         case 'h':
             colorspeed_p+=50;
+
+
         break;
 
         case 'j':
@@ -537,4 +536,23 @@ void ofApp::audioIn(ofSoundBuffer & input){
     bufferCounter++;
 
 }
+
+
+void ofApp::colorTimerCompleteHandler( int &args )
+{
+colorTimer.draw(90,90);
+
+
+if(step < 4) step++;
+else{
+
+    step = 0;
+}
+
+
+
+
+}
+
+
 

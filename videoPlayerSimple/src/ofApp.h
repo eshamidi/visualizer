@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxSimpleTimer.h"
 
 class ofApp : public ofBaseApp{
 
@@ -38,6 +39,13 @@ public:
     int currentVid = 0;
     bool toggle = false;
 
+
+    //timers
+
+    ofxSimpleTimer colorTimer;
+    ofxSimpleTimer rotateTimer;
+
+    void colorTimerCompleteHandler( int &args ) ;
 
 
     //fx
