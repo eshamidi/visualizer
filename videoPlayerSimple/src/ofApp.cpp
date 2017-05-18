@@ -99,7 +99,12 @@ void ofApp::update(){
     //audio update envelope
 
     scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
-    numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
+
+
+    if(ghostfx) numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
+    else numGhosts = maxGhosts;
+
+
     if(clrdep_new > 0) clrUpdate = ofMap(scaledVol,0.0,1,clrdep_new,true);
         //lets record the volume into an array
         volHistory.push_back( scaledVol );
@@ -150,7 +155,7 @@ void ofApp::draw(){
             ofTranslate(0,drawy,0);
 
                 ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-                ofRotate(ang*5,0,0,1);
+                ofRotate(xang*5,0,yang*5,1);
                 ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
             //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
@@ -166,9 +171,10 @@ void ofApp::draw(){
 
            }
            drawcolor.a = 255;
+           ofSetColor(drawcolor);
 
             ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-            ofRotate(-ang*5,0,0,1);
+            ofRotate(-xang*5,0,-yang*5,1);
             ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
 
@@ -204,6 +210,7 @@ ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
 ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
 ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
 ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 500, 640);
+
 
 colorTimer.draw(40,40);
 
@@ -269,7 +276,8 @@ void ofApp::keyPressed(int key){
         case '6':
             switchVideo(5);
             break;
-
+        case '8':
+            ghostfx = !ghostfx;
 
         case '9':
             maxGhosts++;
@@ -282,18 +290,6 @@ void ofApp::keyPressed(int key){
             break;
         case 'q':
             colorfx = !colorfx;
-            break;
-        case 'w':
-            zoom++;
-            if(zoom>9) zoom = 9;
-            break;
-       case 'a':
-            zoomx++;
-            if(zoomx > 20) zoomx = 0;
-            break;
-        case 's':
-            zoomx--;
-            if(zoomx < 0) zoomx = 20;
             break;
 
         case 'r':
@@ -334,8 +330,23 @@ void ofApp::keyPressed(int key){
         break;
 
         case 'y':
-            ang++;
+            xang++;
+            if(xang > 36) xang = 36;
         break;
+        case 'u':
+            xang--;
+            if(xang < 0) xang = 0;
+        break;
+        case 'i':
+            yang++;
+            if(yang>36) yang = 36;
+        break;
+        case 'o':
+            yang--;
+            if(yang<0) yang = 0;
+        break;
+
+
 
     }
 }

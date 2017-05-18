@@ -86,9 +86,11 @@ public:
     int numTiles = 1;
     int numhoriz = 1;
     int numvert = 1;
-    int zoomx = 0;
-    int zoom = 0;
-    int ang = 0;
+
+
+    //rotation variables
+    int xang = 0;
+    int yang = 0;
 
 
 
