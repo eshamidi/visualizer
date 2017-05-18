@@ -96,23 +96,11 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-
-
-    //2 dimensional array of videos
-    myMovies[currentVid][toggle].update();
-
-    colorModulator(step);
-
-
-
-
-
-
-
     //audio update envelope
 
-	scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
+    scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
     numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
+    if(clrdep_new > 0) clrUpdate = ofMap(scaledVol,0.0,1,clrdep_new,true);
         //lets record the volume into an array
         volHistory.push_back( scaledVol );
 
@@ -121,7 +109,22 @@ void ofApp::update(){
                 volHistory.erase(volHistory.begin(), volHistory.begin()+1);
         }
 
-colorTimer.update();
+    colorTimer.update();
+
+
+
+    //2 dimensional array of videos
+    myMovies[currentVid][toggle].update();
+
+    if(colorfx) colorModulator(step);
+    if(!colorfx) colorAudio(clrUpdate);
+
+
+
+
+
+
+
 
 
 }
@@ -129,19 +132,11 @@ colorTimer.update();
 //-----------------------------------------------------
 void ofApp::draw(){
 
-//    ofTranslate(1920/2,1080/2,0);
-//    ofRotate(ang*5,0,0,1);
-//    ofTranslate(-1920/2,-1080/2,0);
-
     ofSetColor(drawcolor);
-   if(zoom>0){
-       drawcolor.a = 50;
-       myMovies[currentVid][toggle].draw(-50*zoom*zoomx,-300*zoom,1920*(zoom+1),1080*(zoom+1));
-   }
 
 
 
-
+//LOOP FOR TILING
        for(int f = 0; f < numhoriz; f++){
 
        //steps thru vertical dim
@@ -178,6 +173,7 @@ void ofApp::draw(){
 
 
 
+       //LOOP FOR GHOSTING
         drawcolor.a = 50;
         for(int g = 0; g < numGhosts; g++){
 
@@ -203,7 +199,6 @@ ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 500, 500);
 ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 500, 520);
 ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 500, 540);
 ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
-ofDrawBitmapString("timer" + ofToString(colorTimer.getNormalizedProgress() * 1.0, 0), 500, 580);
 ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
 ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
 ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 500, 640);
@@ -284,8 +279,7 @@ void ofApp::keyPressed(int key){
             if(maxGhosts < 0) maxGhosts = 0;
             break;
         case 'q':
-            zoom--;
-            if(zoom<0) zoom = 0;
+            colorfx = !colorfx;
             break;
         case 'w':
             zoom++;
@@ -534,6 +528,23 @@ void ofApp::colorModulator(int step){
     default:
         break;
     }
+
+
+}
+
+void ofApp::colorAudio(int clrUpdate){
+
+   drawcolor.r = 255-clrUpdate;
+   drawcolor.g = 0 + clrUpdate;
+   drawcolor.b = 128 + clrUpdate;
+
+
+
+
+
+
+
+
 
 
 }

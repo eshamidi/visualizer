@@ -51,8 +51,10 @@ public:
     //fx
 
     void colorModulator(int step) ;
+    void colorAudio(int clrUpdate);
 
-    bool colorfx = false;
+    bool colorfx = true;
+    int clrUpdate = 0;
     bool ghostfx = false;
     int maxGhosts = 1;
     int numGhosts = 1;
