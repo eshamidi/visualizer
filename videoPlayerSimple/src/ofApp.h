@@ -50,7 +50,10 @@ public:
 
     //fx
 
+    //function for auto-modulating color
     void colorModulator(int step) ;
+
+    //function for modulating color based on audio
     void colorAudio(int clrUpdate);
 
     bool colorfx = true;

@@ -156,6 +156,16 @@ void ofApp::draw(){
             //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
             myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
 
+            drawcolor.a = 50;
+            for(int g = 0; g < numGhosts; g++){
+
+                ofSetColor(drawcolor);
+                //TODO - need to figure out transformation of ghost position
+                //ghost position is roughly centered now
+                myMovies[currentVid][toggle].draw(50*g,25*g,(1920/numhoriz)-100*g,(1080/numvert)-50*g);
+
+           }
+           drawcolor.a = 255;
 
             ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
             ofRotate(-ang*5,0,0,1);
@@ -174,15 +184,7 @@ void ofApp::draw(){
 
 
        //LOOP FOR GHOSTING
-        drawcolor.a = 50;
-        for(int g = 0; g < numGhosts; g++){
 
-            ofSetColor(drawcolor);
-            //TODO - need to figure out transformation of ghost position
-            //ghost position is roughly centered now
-            myMovies[currentVid][toggle].draw(50*g,25*g,1920-100*g,1080-50*g);
-
-       }
 
 
 
@@ -534,9 +536,9 @@ void ofApp::colorModulator(int step){
 
 void ofApp::colorAudio(int clrUpdate){
 
-   drawcolor.r = 255-clrUpdate;
-   drawcolor.g = 0 + clrUpdate;
-   drawcolor.b = 128 + clrUpdate;
+   drawcolor.r = 255 - clrUpdate;
+   drawcolor.g = 128 + clrUpdate;
+   drawcolor.b = 128 + clrUpdate*2;
 
 
 
