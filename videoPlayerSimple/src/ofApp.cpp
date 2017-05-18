@@ -454,10 +454,10 @@ void ofApp::colorTimerCompleteHandler( int &args )
 colorTimer.draw(90,90);
 
 
-if(step < 5) step++;
+if(step <= 4) step++;
 else{
     colorTimer.setup(colorspeed_p);
-    chgamt = 30*clrdep_new/colorspeed_p;
+    chgamt = 35*clrdep_new/colorspeed_p;
     step = 0;
 }
 
@@ -520,9 +520,15 @@ void ofApp::colorModulator(int step){
     break;
     //blue +, result is white
     case 5:
-
+       // colorTimer.togglePause();
         if(drawcolor.b < 254) drawcolor.b += chgamt;
         if(drawcolor.r < 254) drawcolor.r += chgamt;
+        if(drawcolor.g < 254) drawcolor.g += chgamt;
+
+//        if(drawcolor.b == 254 & drawcolor.g == 254 & drawcolor.r == 254){
+//            step = 0;
+//            colorTimer.togglePause();
+//        }
     break;
 
     default:
