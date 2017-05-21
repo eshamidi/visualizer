@@ -86,6 +86,7 @@ void ofApp::setup(){
     colorTimer.start(true);
     step = 0;
 
+
     rotateTimer.start(true);
 
 }
@@ -157,8 +158,8 @@ void ofApp::draw(){
             for(int v = 0; v < numvert; v++){
 
     //Adjusts draw y coordinates to corner of next tile
-            drawy = (1080/numvert)*v;
-            ofTranslate(0,drawy,0);
+                drawy = (1080/numvert)*v;
+                ofTranslate(0,drawy,0);
 
    //
                 ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
@@ -167,64 +168,68 @@ void ofApp::draw(){
                 ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
             //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
-            myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
+                myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
 
-            drawcolor.a = 50;
-            for(int g = 0; g < numGhosts; g++){
+                drawcolor.a = 50;
+                for(int g = 0; g < numGhosts; g++){
 
-                ofSetColor(drawcolor);
+                    ofSetColor(drawcolor);
                 //TODO - need to figure out transformation of ghost position
                 //ghost position is roughly centered now
-                myMovies[currentVid][toggle].draw(50*g,25*g,(1920/numhoriz)-100*g,(1080/numvert)-50*g);
+                    myMovies[currentVid][toggle].draw(-50*g,-25*g,(1920/numhoriz)+100*g,(1080/numvert)+100*g);
 
            }
            drawcolor.a = 255;
            ofSetColor(drawcolor);
 
-            ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-            ofRotate(-xang,0,0,1);
+           ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
+           ofRotate(-xang,0,0,1);
 
-            ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
-
-
-            ofTranslate(0,-drawy,0);
+           ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
 
+           ofTranslate(0,-drawy,0);
 
-            }
-         ofTranslate(-drawx,0,0);
+
+
+           }
+       ofTranslate(-drawx,0,0);
        }
 
 
 
 
-       //LOOP FOR GHOSTING
 
 
 
 
 
-drawcolor.a = 255;
-ofSetColor(drawcolor);
+
+    drawcolor.a = 255;
+    ofSetColor(drawcolor);
 
 
 //debug stuff -- get rid of in final version
 
-int fr = int(ofGetFrameRate());
-ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 4, 18);
-ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 500, 500);
-ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 500, 520);
-ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 500, 540);
-ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
-ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
-ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
-ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 500, 640);
-ofDrawBitmapString("xang" + ofToString(xang * 1.0, 0), 500, 660);
+    int fr = int(ofGetFrameRate());
+    ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 4, 18);
+    ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 50, 500);
+    ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 50, 520);
+    ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 50, 540);
+    ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 50, 560);
+    ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 50, 600);
+    ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 50, 620);
+    ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 50, 640);
+    ofDrawBitmapString("xang" + ofToString(xang * 1.0, 0), 50, 660);
 
 
-colorTimer.draw(40,40);
-rotateTimer.draw(40,80);
+    colorTimer.draw(50,40);
+    rotateTimer.draw(50,80);
 
+    ofDrawBitmapString("Controls:" , 50, 200);
+    ofDrawBitmapString("Video triggers nums 1-7" , 50, 220);
+    ofDrawBitmapString("Audio toggles: color = q, ghosting = 8 " , 50, 240);
+    ofDrawBitmapString("Rotate: i+, o- :: speed: p+, o-" , 50, 260);
 }
 
 //--------------------------------------------------------------
@@ -264,6 +269,7 @@ void ofApp::keyPressed(int key){
 
     // switches current video with 1,2,3 button presses
     switch(key){
+        //video trigger buttons
         case '1':
             switchVideo(0);
             break;
@@ -287,66 +293,62 @@ void ofApp::keyPressed(int key){
         case '6':
             switchVideo(5);
             break;
+
+        //toggle ghost audio
         case '8':
             ghostfx = !ghostfx;
+        break;
 
+        //max amount of ghosts
         case '9':
             maxGhosts++;
         if(maxGhosts > 20) maxGhosts = 20;
             break;
-
         case '0':
             maxGhosts--;
             if(maxGhosts < 0) maxGhosts = 0;
             break;
+
+        //toggle color audio
         case 'q':
             colorfx = !colorfx;
             break;
 
+        //fewer tiles
         case 'r':
             numhoriz--;
             numvert--;
             if(numhoriz < 1) numhoriz = 1;
             if(numvert < 1) numvert = 1;
         break;
+        //more tiles
         case 't':
             numhoriz++;
             numvert++;
-            if(numhoriz > 15) numhoriz = 15;
-            if(numvert > 15 ) numvert = 15;
-
+            if(numhoriz > 10) numhoriz = 10;
+            if(numvert > 10 ) numvert = 10;
         break;
 
+        //adjust auto color speed
         case 'g':
             colorspeed_p-=50;
             if(colorspeed_p < 50) colorspeed_p = 50;
-
-
         break;
-
         case 'h':
             colorspeed_p+=50;
-
-
         break;
 
+        //adjust color mod depth
         case 'j':
             clrdep_new+=10;
             if(clrdep_new > 250)clrdep_new = 250;
         break;
-
         case 'k':
             clrdep_new-=10;
             if(clrdep_new < 0)clrdep_new = 0;
         break;
 
-        case 'y':
-            xang++;
-            if(xang > 36) xang = 36;
-        break;
-        case 'u':
-            xang--;
-            if(xang < 0) xang = 0;
+        //rotate speed + rotate amount per step
         case 'i':
             rotate_spd+=100;
         break;
@@ -456,14 +458,14 @@ void ofApp::audioIn(ofSoundBuffer & input){
 
 void ofApp::colorTimerCompleteHandler( int &args )
 {
-colorTimer.draw(90,90);
+    colorTimer.draw(90,90);
 
 
-if(step <= 4) step++;
-else{
-    colorTimer.setup(colorspeed_p);
-    chgamt = 35*clrdep_new/colorspeed_p;
-    step = 0;
+    if(step <= 4) step++;
+    else{
+        colorTimer.setup(colorspeed_p);
+        chgamt = 35*clrdep_new/colorspeed_p;
+        step = 0;
 }
 
 
@@ -543,20 +545,13 @@ void ofApp::colorModulator(int step){
 
 }
 
+//audio driven color update function
+
 void ofApp::colorAudio(int clrUpdate){
 
    drawcolor.r = 255 - clrUpdate;
    drawcolor.g = 128 + clrUpdate;
    drawcolor.b = 128 + clrUpdate*2;
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -564,9 +559,8 @@ void ofApp::rotateTimerCompleteHandler(int &args) {
 
     xang += rotate_amt;
     if(xang > 360 ){
-        if(rotate_spd > 0 & rotate_amt > 0){
-        rotateTimer.setup(100);
-        }
+        if(rotate_spd > 0 & rotate_amt > 0) rotateTimer.setup(rotate_spd);
+        else rotateTimer.togglePause();
         xang = 0;
 }
 
