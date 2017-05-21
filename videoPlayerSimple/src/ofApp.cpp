@@ -1,17 +1,19 @@
-//Video Sampler Patch 5/16/17
+//Video Sampler Patch 5/18/17
 // Developed on bump-a-grape
 
 #include "ofApp.h"
 #include <dirent.h>
-#include "protocol.h"
+
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 
     //timer init
     colorTimer.setup(colorspeed_p);
+    rotateTimer.setup(rotate_spd);
 
      ofAddListener( colorTimer.TIMER_COMPLETE , this, &ofApp::colorTimerCompleteHandler ) ;
+     ofAddListener( rotateTimer.TIMER_COMPLETE , this, &ofApp::rotateTimerCompleteHandler ) ;
 
     //serial comms init;
 
@@ -27,13 +29,7 @@ void ofApp::setup(){
     message_queue = g_async_queue_new();
 
 
-    //unknown purpose - TODO- ask Chris Buchter about this
-//    if(pthread_create(&message_thread, NULL, message_processing_thread, this)) {
-//        exit();
-//    }
-//    if(pthread_create(&serial_thread, NULL, serial_communication_thread, this)) {
-//        exit();
-//    }
+
 
     system("sudo ~/unmountFlash.sh");
     system("sudo ~/mountFlash.sh");
@@ -63,10 +59,7 @@ void ofApp::setup(){
     }
 
 
-
-    //still need to verify audio functionality on Jetson 5/3/17
-    //audio functionality verified on Jetson 5/14/17
-
+// Audio setup stuff
 
     soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
 
@@ -88,8 +81,12 @@ void ofApp::setup(){
     ofBackground(0,0,0);
 
 
+
+    //timer start
     colorTimer.start(true);
     step = 0;
+
+    rotateTimer.start(true);
 
 }
 
@@ -114,13 +111,17 @@ void ofApp::update(){
                 volHistory.erase(volHistory.begin(), volHistory.begin()+1);
         }
 
+    //update color timer for ColorModulator
     colorTimer.update();
+    rotateTimer.update();
 
 
-
-    //2 dimensional array of videos
+    //update video frames
     myMovies[currentVid][toggle].update();
 
+
+
+    //update colorModulator or coloraudio depending on which is selected
     if(colorfx) colorModulator(step);
     if(!colorfx) colorAudio(clrUpdate);
 
@@ -137,25 +138,32 @@ void ofApp::update(){
 //-----------------------------------------------------
 void ofApp::draw(){
 
+    //At the beginning of the draw loop, this sets the draw color to the updated value from effects.
+
     ofSetColor(drawcolor);
 
 
 
-//LOOP FOR TILING
+    //This is where the drawing happens.
+
+    //First nesting loop: pans horizontal thru tiles
        for(int f = 0; f < numhoriz; f++){
 
-       //steps thru vertical dim
+    //Adjusts draw x coordinates to corner of next tile
         drawx = (1920/numhoriz)*f;
         ofTranslate(drawx, 0,0);
 
+    //Second nested loop: steps thru vertical tiles
             for(int v = 0; v < numvert; v++){
-           //horizontal drawing across
 
+    //Adjusts draw y coordinates to corner of next tile
             drawy = (1080/numvert)*v;
             ofTranslate(0,drawy,0);
 
+   //
                 ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-                ofRotate(xang*5,0,yang*5,1);
+                ofRotate(xang,0,0,1);
+
                 ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
             //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
@@ -174,7 +182,8 @@ void ofApp::draw(){
            ofSetColor(drawcolor);
 
             ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-            ofRotate(-xang*5,0,-yang*5,1);
+            ofRotate(-xang,0,0,1);
+
             ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
 
@@ -210,9 +219,11 @@ ofDrawBitmapString("step" + ofToString(step * 1.0, 0), 500, 560);
 ofDrawBitmapString("clrdep_new" + ofToString(clrdep_new * 1.0, 0), 500, 600);
 ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 500, 620);
 ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 500, 640);
+ofDrawBitmapString("xang" + ofToString(xang * 1.0, 0), 500, 660);
 
 
 colorTimer.draw(40,40);
+rotateTimer.draw(40,80);
 
 }
 
@@ -336,15 +347,20 @@ void ofApp::keyPressed(int key){
         case 'u':
             xang--;
             if(xang < 0) xang = 0;
-        break;
         case 'i':
-            yang++;
-            if(yang>36) yang = 36;
+            rotate_spd+=100;
         break;
         case 'o':
-            yang--;
-            if(yang<0) yang = 0;
+            rotate_spd-=100;
         break;
+        case 'l':
+        rotate_amt+=0.2;
+        break;
+        case 'p':
+        rotate_amt-=0.2;
+        break;
+
+
 
 
 
@@ -376,24 +392,6 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){
-
-}
-
-
-//--------------------------------------------------------------
-void ofApp::message_handler_loop() {
-    while(1) {
-        protocol_message_t *message = (protocol_message_t *)g_async_queue_pop(message_queue);
-        //Handle message
-        if(message) {
-            free(message);
-        }
-
-    }
-}
-
 
 // parses thru serial message - still gotta figure this out and talk to Chris
 void ofApp::serial_handler_loop() {
@@ -417,12 +415,12 @@ void *serial_communication_thread(void *data) {
 }
 
 
-// does processing for fx/input without hanging up display - empty as of 5/3/17
-void *message_processing_thread(void *data) {
-    ofApp *app = (ofApp *)data;
-    app->message_handler_loop();
-        return 0;
-}
+//// does processing for fx/input without hanging up display - empty as of 5/3/17
+//void *message_processing_thread(void *data) {
+//    ofApp *app = (ofApp *)data;
+//    app->message_handler_loop();
+//        return 0;
+//}
 
 
 void ofApp::audioIn(ofSoundBuffer & input){
@@ -562,4 +560,16 @@ void ofApp::colorAudio(int clrUpdate){
 
 }
 
+void ofApp::rotateTimerCompleteHandler(int &args) {
 
+    xang += rotate_amt;
+    if(xang > 360 ){
+        if(rotate_spd > 0 & rotate_amt > 0){
+        rotateTimer.setup(100);
+        }
+        xang = 0;
+}
+
+
+
+}

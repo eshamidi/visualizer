@@ -12,14 +12,15 @@ Project{
         name: { return FileInfo.baseName(path) }
 
         files: [
-            'src/main.cpp',
-            'src/ofApp.cpp',
-            'src/ofApp.h',
-            'src/protocol.h',
+            "src/main.cpp",
+            "src/ofApp.cpp",
+            "src/ofApp.h",
+            "src/protocol.h",
         ]
 
         of.addons: [
             'ofxSimpleTimer',
+
 
 
 

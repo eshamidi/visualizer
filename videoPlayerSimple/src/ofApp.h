@@ -13,7 +13,6 @@ public:
     void keyPressed(int key);
     void keyReleased(int key);
 
-    void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
     //serial comms
@@ -89,11 +88,10 @@ public:
 
 
     //rotation variables
-    int xang = 0;
-    int yang = 0;
-
-
-
+    float xang = 0;
+    float rotate_amt = 0.2;
+    int rotate_spd = 10;
+    void rotateTimerCompleteHandler( int &args ) ;
 
     //audio stuff
 
