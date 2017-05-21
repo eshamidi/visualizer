@@ -87,12 +87,16 @@ void ofApp::setup(){
     step = 0;
 
 
-    rotateTimer.start(true);
+   // rotateTimer.start(true);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+    TotalDraws = pow(numhoriz, 2)*maxGhosts;
+
+    if(TotalDraws > 32) maxGhosts--;
 
     //audio update envelope
 
@@ -127,13 +131,6 @@ void ofApp::update(){
     if(!colorfx) colorAudio(clrUpdate);
 
 
-
-
-
-
-
-
-
 }
 
 //-----------------------------------------------------
@@ -161,36 +158,35 @@ void ofApp::draw(){
                 drawy = (1080/numvert)*v;
                 ofTranslate(0,drawy,0);
 
-   //
+
                 ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
                 ofRotate(xang,0,0,1);
 
                 ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
-
-            //myMovies[currentVid][toggle].draw(drawx,drawy,1920/numhoriz,1080/numvert);
                 myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
-
+                //sets alpha value to 50  for ghosting
                 drawcolor.a = 50;
-                for(int g = 0; g < numGhosts; g++){
 
+
+                //
+                for(int g = 0; g < numGhosts; g++){
+                    //sets draw color with new alpha value
                     ofSetColor(drawcolor);
                 //TODO - need to figure out transformation of ghost position
                 //ghost position is roughly centered now
-                    myMovies[currentVid][toggle].draw(-50*g,-25*g,(1920/numhoriz)+100*g,(1080/numvert)+100*g);
+                    myMovies[currentVid][toggle].draw(-50*g,-50*g,(1920/numhoriz)+100*g,(1080/numvert)+100*g);
 
            }
+
            drawcolor.a = 255;
            ofSetColor(drawcolor);
 
            ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
            ofRotate(-xang,0,0,1);
-
            ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
 
            ofTranslate(0,-drawy,0);
-
-
 
            }
        ofTranslate(-drawx,0,0);
@@ -230,6 +226,11 @@ void ofApp::draw(){
     ofDrawBitmapString("Video triggers nums 1-7" , 50, 220);
     ofDrawBitmapString("Audio toggles: color = q, ghosting = 8 " , 50, 240);
     ofDrawBitmapString("Rotate: i+, o- :: speed: p+, o-" , 50, 260);
+
+    ofDrawBitmapString("Number tiles " + ofToString((numhoriz), 0), 50, 280);
+    ofDrawBitmapString("max ghosts" + ofToString(maxGhosts,0) , 50, 300);
+    ofDrawBitmapString("total draw operations " + ofToString(TotalDraws,0) , 50, 320);
+
 }
 
 //--------------------------------------------------------------
@@ -301,8 +302,9 @@ void ofApp::keyPressed(int key){
 
         //max amount of ghosts
         case '9':
+
             maxGhosts++;
-        if(maxGhosts > 20) maxGhosts = 20;
+      //  if(TotalDraws >= 32) maxGhosts = TotalDraws/pow(numhoriz,2);
             break;
         case '0':
             maxGhosts--;
@@ -325,8 +327,9 @@ void ofApp::keyPressed(int key){
         case 't':
             numhoriz++;
             numvert++;
-            if(numhoriz > 10) numhoriz = 10;
-            if(numvert > 10 ) numvert = 10;
+            if(numhoriz > 5) numhoriz = 5;
+            if(numvert > 5 ) numvert = 5;
+            //if(TotalDraws >= 32) maxGhosts = TotalDraws/pow(numhoriz,2);
         break;
 
         //adjust auto color speed

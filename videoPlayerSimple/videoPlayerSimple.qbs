@@ -20,6 +20,7 @@ Project{
 
         of.addons: [
             'ofxSimpleTimer',
+            'ofxSimpleSerial',
 
 
 

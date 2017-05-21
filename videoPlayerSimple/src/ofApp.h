@@ -92,7 +92,8 @@ public:
     float rotate_amt = 0.2;
     int rotate_spd = 10;
     void rotateTimerCompleteHandler( int &args ) ;
-
+    int TotalDraws;
+    int ghostLimit = 32;
     //audio stuff
 
     void audioIn(ofSoundBuffer & input);
