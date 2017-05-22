@@ -89,7 +89,9 @@ void ofApp::setup(){
 
    // rotateTimer.start(true);
 
-    thread.startThread(true, false);
+
+
+    thread.start();
 
 }
 
@@ -400,26 +402,8 @@ void ofApp::gotMessage(ofMessage msg){
 
 
 
-// parses thru serial message - still gotta figure this out and talk to Chris
-void ofApp::serial_handler_loop() {
-    int controldata;
-    while(1) {
-        if(serial.available()){
-            controldata = serial.readBytes(0,3);
-        }
-    };
-}
 
 
-// serial communication thread - receives data from serial comms - empty 5/3/17
-void *serial_communication_thread(void *data) {
-
-
-    ofApp *app = (ofApp *)data;
-    app->serial_handler_loop();
-
-    return 0;
-}
 
 
 //// does processing for fx/input without hanging up display - empty as of 5/3/17

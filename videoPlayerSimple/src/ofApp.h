@@ -18,7 +18,6 @@ public:
     void exit();
 
     //serial comms
-    ofSerial      serial;
     void get_serial_message(char *data);
     void message_handler_loop();
     void serial_handler_loop();

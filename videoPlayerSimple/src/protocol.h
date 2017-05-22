@@ -4,7 +4,7 @@
 #include "ofThread.h"
 
 class MyThread : public ofThread {
-
+public:
     /// Start the thread.
     void start()
     {
@@ -16,6 +16,7 @@ class MyThread : public ofThread {
 
         int baud = 9600;
         serial1.setup(1, baud);
+        cout << "serial check";
     }
 
     /// Signal the thread to stop.  After calling this method,
@@ -31,10 +32,10 @@ class MyThread : public ofThread {
 
 
                  while(isThreadRunning()){
-                     cout << "good 2 go";
-                     if(serial1.available()){
+                    // cout << "good 2 go";
+                    // if(serial1.available()){
 
-                     }
+                  //   }
 
 
         }
