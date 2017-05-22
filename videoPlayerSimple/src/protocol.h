@@ -11,6 +11,11 @@ class MyThread : public ofThread {
         // Mutex blocking is set to true by default
         // It is rare that one would want to use startThread(false).
         startThread();
+        serial1.listDevices();
+        vector <ofSerialDeviceInfo> deviceList = serial1.getDeviceList();
+
+        int baud = 9600;
+        serial1.setup(1, baud);
     }
 
     /// Signal the thread to stop.  After calling this method,
@@ -26,16 +31,19 @@ class MyThread : public ofThread {
 
 
                  while(isThreadRunning()){
-
                      cout << "good 2 go";
+                     if(serial1.available()){
+
+                     }
 
 
         }
 
-        // done
+
 
 
     }
+    ofSerial      serial1;
 
 };
 

@@ -17,13 +17,13 @@ void ofApp::setup(){
 
     //serial comms init;
 
-    serial.listDevices();
-    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
+//    serial.listDevices();
+//    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
 
-    //need to set up custom to Jetson serial port - ttyTHS1
-    //open the first device and talk to it at 57600 baud
-    int baud = 9600;
-    serial.setup(0, baud);
+//    //need to set up custom to Jetson serial port - ttyTHS1
+//    //open the first device and talk to it at 57600 baud
+//    int baud = 9600;
+//    serial.setup(0, baud);
 
     // Initialize threads and queue for serial comms
     message_queue = g_async_queue_new();
