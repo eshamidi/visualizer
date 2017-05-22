@@ -38,7 +38,7 @@ public:
     pthread_t     serial_thread;
     pthread_t     message_thread;
 
-    MyThread thread;
+    MyThread serialThread;
 
 
     //video switching/playback/finding
@@ -46,6 +46,7 @@ public:
 
     void switchVideo(int targetVid);
 
+    vector <int> controlHI;
 
     ofVideoPlayer myMovies[6][2];
     int currentVid = 0;

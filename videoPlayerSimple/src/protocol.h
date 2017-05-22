@@ -83,6 +83,11 @@ void parseSomeShit(string complete){
 
     }
 
+vector<int> pushParams(){
+    return params;
+
+}
+
 
 };
 
