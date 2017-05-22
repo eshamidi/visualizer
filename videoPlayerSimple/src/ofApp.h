@@ -95,9 +95,15 @@ public:
 
     //rotation variables
     float xang = 0;
-    float rotate_amt = 0.2;
+    float rotate_amt = 0;
     int rotate_spd = 10;
     void rotateTimerCompleteHandler( int &args ) ;
+    bool rotateAudio = false;
+
+
+
+
+
     int TotalDraws;
     int ghostLimit = 32;
     //audio stuff

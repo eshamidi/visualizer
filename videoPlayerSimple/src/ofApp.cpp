@@ -87,7 +87,7 @@ void ofApp::setup(){
     step = 0;
 
 
-   // rotateTimer.start(true);
+    rotateTimer.start(true);
 
 
 
@@ -133,6 +133,11 @@ void ofApp::update(){
     //update colorModulator or coloraudio depending on which is selected
     if(colorfx) colorModulator(step);
     if(!colorfx) colorAudio(clrUpdate);
+    if(rotateAudio) xang = ofMap(scaledVol, 0.1, 1.0, 0, 150, true);
+
+//    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
+//        rotateTimer.togglePause();
+//    }
 
 
 }
@@ -144,7 +149,7 @@ void ofApp::draw(){
 
     ofSetColor(drawcolor);
 
-
+    ofTranslate(0,0,-200);
 
     //This is where the drawing happens.
 
@@ -375,17 +380,20 @@ void ofApp::keyPressed(int key){
         break;
 
         //rotate speed + rotate amount per step
-        case 'i':
-            rotate_spd+=100;
-        break;
-        case 'o':
-            rotate_spd-=100;
-        break;
+//        case 'i':
+//            rotate_spd+=100;
+//        break;
+//        case 'o':
+//            rotate_spd-=100;
+//        break;
         case 'l':
         rotate_amt+=0.2;
         break;
         case 'p':
         rotate_amt-=0.2;
+        break;
+        case 'o':
+            rotateAudio = !rotateAudio;
         break;
 
 
@@ -566,9 +574,8 @@ void ofApp::colorAudio(int clrUpdate){
 void ofApp::rotateTimerCompleteHandler(int &args) {
 
     xang += rotate_amt;
-    if(xang > 360 ){
-        if(rotate_spd > 0 & rotate_amt > 0) rotateTimer.setup(rotate_spd);
-        else rotateTimer.togglePause();
+    if(abs(xang) > 360){
+        if(rotate_amt == 0)rotateTimer.togglePause();
         xang = 0;
 }
 
