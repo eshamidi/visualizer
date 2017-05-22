@@ -35,14 +35,15 @@ public:
                  while(isThreadRunning()){
                     if(serial1.available() > 0){
                         myByte = serial1.readByte();
-                        if(myByte != "/n"){
+                        if(myByte != "\n"){
                             complete+=myByte;
                         }
                         else{
-                            parseSomeShit(complete);
-                            //cout << complete;
-                            //cout << endl;
-                            //complete = " ";
+                            //parseSomeShit(complete);
+			    params = parseInput(complete);
+                           // cout << complete;
+                           // cout << endl;
+                            complete = " ";
                         }
                     }
                 }
@@ -50,8 +51,31 @@ public:
 
     ofSerial      serial1;
 
+    vector <int> params;
 
-    void parseSomeShit(string complete){
+vector <int> parseInput(string input){
+
+    vector <int> params;
+    istringstream stream(input);
+    int tmp;
+
+    while (stream >> tmp)
+      params.push_back(tmp);
+
+    if( params[9] != 9 ){
+	cout << "Encoder pressed: " << params[9] << endl;
+    }
+
+    for(int i = 0; i<params.size(); i++)
+        cout << params[i] << ", ";
+
+    cout << endl;
+
+    return params;
+
+} 
+
+void parseSomeShit(string complete){
         cout << complete;
         cout << endl;
 

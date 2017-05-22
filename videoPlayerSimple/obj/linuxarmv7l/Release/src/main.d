@@ -329,7 +329,9 @@ obj/linuxarmv7l/Release/src/main.o: \
  /home/ubuntu/of_v0.9.8_linuxarmv7l_release/libs/openFrameworks/video/ofGstVideoPlayer.h \
  /home/ubuntu/of_v0.9.8_linuxarmv7l_release/libs/openFrameworks/3d/ofCamera.h \
  /home/ubuntu/of_v0.9.8_linuxarmv7l_release/libs/openFrameworks/3d/ofEasyCam.h \
- /home/ubuntu/of_v0.9.8_linuxarmv7l_release/apps/visualizer/videoPlayerSimple/src/ofApp.h
+ /home/ubuntu/of_v0.9.8_linuxarmv7l_release/apps/visualizer/videoPlayerSimple/src/ofApp.h \
+ /home/ubuntu/of_v0.9.8_linuxarmv7l_release/addons/ofxSimpleTimer/src/ofxSimpleTimer.h \
+ /home/ubuntu/of_v0.9.8_linuxarmv7l_release/apps/visualizer/videoPlayerSimple/src/protocol.h
 
 /home/ubuntu/of_v0.9.8_linuxarmv7l_release/libs/openFrameworks/ofMain.h:
 
@@ -1022,3 +1024,7 @@ obj/linuxarmv7l/Release/src/main.o: \
 /home/ubuntu/of_v0.9.8_linuxarmv7l_release/libs/openFrameworks/3d/ofEasyCam.h:
 
 /home/ubuntu/of_v0.9.8_linuxarmv7l_release/apps/visualizer/videoPlayerSimple/src/ofApp.h:
+
+/home/ubuntu/of_v0.9.8_linuxarmv7l_release/addons/ofxSimpleTimer/src/ofxSimpleTimer.h:
+
+/home/ubuntu/of_v0.9.8_linuxarmv7l_release/apps/visualizer/videoPlayerSimple/src/protocol.h:
