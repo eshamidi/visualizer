@@ -4,6 +4,16 @@
 #include "ofxSimpleTimer.h"
 #include "protocol.h"
 
+#define E0 0
+#define F0 1
+#define E1 2
+#define F1 3
+#define E2 4
+#define F2 5
+#define E3 6
+#define F3 7
+
+
 class ofApp : public ofBaseApp{
 
 public:

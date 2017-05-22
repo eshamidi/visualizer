@@ -15,8 +15,7 @@ public:
         vector <ofSerialDeviceInfo> deviceList = serial1.getDeviceList();
 
         int baud = 9600;
-        serial1.setup(1, baud);
-        cout << "serial check";
+        serial1.setup("/dev/ttyTHS1", baud);
     }
 
     /// Signal the thread to stop.  After calling this method,
@@ -29,22 +28,37 @@ public:
 
     // the thread function
     void threadedFunction() {
+        string myByte = " ";
+        string complete = " ";
 
 
                  while(isThreadRunning()){
-                    // cout << "good 2 go";
-                    // if(serial1.available()){
+                    if(serial1.available() > 0){
+                        myByte = serial1.readByte();
+                        if(myByte != "/n"){
+                            complete+=myByte;
+                        }
+                        else{
+                            parseSomeShit(complete);
+                            //cout << complete;
+                            //cout << endl;
+                            //complete = " ";
+                        }
+                    }
+                }
+    }
 
-                  //   }
+    ofSerial      serial1;
 
 
-        }
-
+    void parseSomeShit(string complete){
+        cout << complete;
+        cout << endl;
 
 
 
     }
-    ofSerial      serial1;
+
 
 };
 

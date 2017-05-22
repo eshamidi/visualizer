@@ -8,6 +8,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+   // system(" ~/initAudio.sh");
+
     //timer init
     colorTimer.setup(colorspeed_p);
     rotateTimer.setup(rotate_spd);
