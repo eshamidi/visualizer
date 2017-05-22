@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxSimpleTimer.h"
+#include "protocol.h"
 
 class ofApp : public ofBaseApp{
 
@@ -14,6 +15,7 @@ public:
     void keyReleased(int key);
 
     void gotMessage(ofMessage msg);
+    void exit();
 
     //serial comms
     ofSerial      serial;
@@ -26,6 +28,8 @@ public:
     GAsyncQueue*  message_queue;
     pthread_t     serial_thread;
     pthread_t     message_thread;
+
+    MyThread thread;
 
 
     //video switching/playback/finding

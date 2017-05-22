@@ -1,30 +1,42 @@
-#include <stdlib.h>
-#include <stdint.h>
+#pragma once
 
-typedef enum {
-	EFFECT_ON,
-	EFFECT_OFF,
-	EFFECT_PROPERTY
-} protocol_message_type_e;
+#include "ofMain.h"
+#include "ofThread.h"
 
-typedef enum {
-	EFFECT_NAME
-} protocol_message_effect_type_e;
+class MyThread : public ofThread {
 
-typedef enum {
-	PROPERTY_X_LOCATION,
-	PROPERTY_Y_LOCATION,
-	PROPERTY_WIDTH,
-	PROPERTY_HEGIHT
-} protocol_message_effect_property_e;
+    /// Start the thread.
+    void start()
+    {
+        // Mutex blocking is set to true by default
+        // It is rare that one would want to use startThread(false).
+        startThread();
+    }
 
-typedef struct {
-	protocol_message_effect_property_e property;
-	int32_t                            value;
-} protocol_message_effect_property_t;
+    /// Signal the thread to stop.  After calling this method,
+    /// isThreadRunning() will return false and the while loop will stop
+    /// next time it has the chance to.
+    void stop()
+    {
+        stopThread();
+    }
 
-typedef struct {
-	protocol_message_type_e            message_type;
-	protocol_message_effect_type_e     effect_type;
-	protocol_message_effect_property_t property;
-} protocol_message_t;
+    // the thread function
+    void threadedFunction() {
+
+
+                 while(isThreadRunning()){
+
+                     cout << "good 2 go";
+
+
+        }
+
+        // done
+
+
+    }
+
+};
+
+

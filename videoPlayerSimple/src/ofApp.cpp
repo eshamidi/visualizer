@@ -3,7 +3,7 @@
 
 #include "ofApp.h"
 #include <dirent.h>
-
+#include "protocol.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -20,10 +20,10 @@ void ofApp::setup(){
     serial.listDevices();
     vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
 
-    //need to set up custom to Jetson serial port
-
-    int baud = 57600;
-    //serial.setup(0, baud); //open the first device and talk to it at 57600 baud
+    //need to set up custom to Jetson serial port - ttyTHS1
+    //open the first device and talk to it at 57600 baud
+    int baud = 9600;
+    serial.setup(0, baud);
 
     // Initialize threads and queue for serial comms
     message_queue = g_async_queue_new();
@@ -89,6 +89,8 @@ void ofApp::setup(){
 
    // rotateTimer.start(true);
 
+    thread.startThread(true, false);
+
 }
 
 //--------------------------------------------------------------
@@ -145,7 +147,7 @@ void ofApp::draw(){
     //This is where the drawing happens.
 
     //First nesting loop: pans horizontal thru tiles
-       for(int f = 0; f < numhoriz; f++){
+       for(int f = 0; f < numTiles; f++){
 
     //Adjusts draw x coordinates to corner of next tile
         drawx = (1920/numhoriz)*f;
@@ -569,4 +571,11 @@ void ofApp::rotateTimerCompleteHandler(int &args) {
 
 
 
+}
+
+
+void ofApp::exit() {
+
+    // stop the thread
+    thread.stopThread();
 }
