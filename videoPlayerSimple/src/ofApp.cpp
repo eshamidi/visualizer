@@ -109,7 +109,7 @@ void ofApp::update(){
 
     if(ghostfx) numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
     else numGhosts = maxGhosts;
-
+    if(tilefx) tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
 
     if(clrdep_new > 0) clrUpdate = ofMap(scaledVol,0.0,1,clrdep_new,true);
         //lets record the volume into an array
@@ -148,6 +148,9 @@ void ofApp::draw(){
 
     //This is where the drawing happens.
 
+    //Mapping tile horizontal amount to audio variable if effect is engaged
+    if(tilefx == true) numTiles = tileAudio;
+    else numTiles = numhoriz;
     //First nesting loop: pans horizontal thru tiles
        for(int f = 0; f < numTiles; f++){
 
@@ -178,7 +181,7 @@ void ofApp::draw(){
                     ofSetColor(drawcolor);
                 //TODO - need to figure out transformation of ghost position
                 //ghost position is roughly centered now
-                    myMovies[currentVid][toggle].draw(-50*g,-50*g,(1920/numhoriz)+100*g,(1080/numvert)+100*g);
+                    myMovies[currentVid][toggle].draw(-50*ghostSize*g,-50*ghostSize*g,(1920/numhoriz)+100*g*ghostSize,(1080/numvert)+100*g*ghostSize);
 
            }
 
@@ -315,6 +318,17 @@ void ofApp::keyPressed(int key){
             if(maxGhosts < 0) maxGhosts = 0;
             break;
 
+        case 'n':
+            ghostSize +=0.5;
+            if(ghostSize > 7) ghostSize = 7;
+        break;
+        case 'm':
+            ghostSize-=0.5;
+            if(ghostSize < 1) ghostSize = 1;
+        break;
+
+
+
         //toggle color audio
         case 'q':
             colorfx = !colorfx;
@@ -335,6 +349,11 @@ void ofApp::keyPressed(int key){
             if(numvert > 5 ) numvert = 5;
             //if(TotalDraws >= 32) maxGhosts = TotalDraws/pow(numhoriz,2);
         break;
+
+        case 'e':
+            tilefx = !tilefx;
+        break;
+
 
         //adjust auto color speed
         case 'g':

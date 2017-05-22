@@ -63,6 +63,7 @@ public:
     bool ghostfx = false;
     int maxGhosts = 1;
     int numGhosts = 1;
+    float ghostSize = 1;
     int cycle = 2000;
     int timer = 0;
     bool inc = true;
@@ -85,7 +86,9 @@ public:
 
     int drawx = 0;
     int drawy = 0;
-    int numTiles = 1;
+    bool tilefx = false;
+    int numTiles;
+    int tileAudio = 0;
     int numhoriz = 1;
     int numvert = 1;
 
