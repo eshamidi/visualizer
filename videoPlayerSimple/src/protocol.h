@@ -43,12 +43,12 @@ public:
 			    lock();
 			    params = parseInput(complete);
 			    unlock();
-                        //    cout << complete;
-			unsigned char stuff = 117;
-		        bool isWritten =  serial1.writeByte(stuff);
+                            cout << complete;
+		//	unsigned char stuff = 117;
+		       // bool isWritten =  serial1.writeByte(stuff);
 			
 
-                          //  cout << endl;
+                           cout << endl;
                             complete = " ";
                         }
                     }

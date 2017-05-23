@@ -415,7 +415,7 @@ void ofApp::keyPressed(int key){
 void ofApp::controlUpdate(vector <int> control){
     if(control.at(VB) != 9){
         switch(control.at(VB)){
-            case 8:
+            case 0:
             switchVideo(0);
             break;
 
