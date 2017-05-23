@@ -141,14 +141,14 @@ void ofApp::update(){
 //    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
 //        rotateTimer.togglePause();
 //    }
-serialThread.lock();
+    serialThread.lock();
 //controlHI = serialThread.params;
 //serialThread.unlock();
     controlHI = serialThread.pushParams();
-serialThread.unlock();
-if(controlHI.size() == 10){
-cout << controlHI.at(1) << endl;
-}
+    serialThread.unlock();
+    if(controlHI.size() == 10){
+        controlUpdate(controlHI);
+    }
 }
 
 //-----------------------------------------------------
@@ -410,6 +410,21 @@ void ofApp::keyPressed(int key){
 
 
     }
+}
+
+void ofApp::controlUpdate(vector <int> control){
+    cout << "This is where controller mapping will happen" << endl;
+
+
+
+
+
+
+
+
+
+
+
 }
 
 // pause&rewind video, flip toggle, play new video

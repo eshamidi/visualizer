@@ -13,6 +13,9 @@
 #define E3 6
 #define F3 7
 
+#define VB 8
+#define FX 9
+
 
 class ofApp : public ofBaseApp{
 
@@ -39,6 +42,8 @@ public:
     pthread_t     message_thread;
 
     MyThread serialThread;
+
+    void controlUpdate(vector<int> control);
     
 
     //video switching/playback/finding
