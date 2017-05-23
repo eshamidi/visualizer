@@ -413,9 +413,18 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::controlUpdate(vector <int> control){
-    cout << "This is where controller mapping will happen" << endl;
+    if(control.at(VB) != 9){
+        switch(control.at(VB)){
+            case 8:
+            switchVideo(0);
+            break;
+
+            default:
+            break;
 
 
+        }
+    }
 
 
 
