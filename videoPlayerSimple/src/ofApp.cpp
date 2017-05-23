@@ -452,6 +452,8 @@ void ofApp::controlUpdate(vector <int> control){
 
         }
     }
+    colorspeed_p = ofMap(control.at(E0),0,127,0,400,false);
+    clrdep_new = ofMap(control.at(F0),0,127,0,160,false);
 
 
 
