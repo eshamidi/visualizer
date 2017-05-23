@@ -39,8 +39,8 @@ void ofApp::setup(){
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
-    //string dirString = "/media/ubuntu/fdrive/";
-     string dirString = "/media/root/fdrive/";
+    string dirString = "/media/ubuntu/fdrive/";
+    // string dirString = "/media/root/fdrive/";
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
@@ -94,12 +94,13 @@ void ofApp::setup(){
 
 
     serialThread.start();
+//    serialThread.sendFileNames();
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+//	serialThread.sendFileNames();
     TotalDraws = pow(numhoriz, 2)*maxGhosts;
 
     if(TotalDraws > 32) maxGhosts--;
@@ -140,9 +141,12 @@ void ofApp::update(){
 //    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
 //        rotateTimer.togglePause();
 //    }
-
+serialThread.lock();
+//controlHI = serialThread.params;
+//serialThread.unlock();
     controlHI = serialThread.pushParams();
-
+serialThread.unlock();
+cout << controlHI.size() << endl;
 }
 
 //-----------------------------------------------------

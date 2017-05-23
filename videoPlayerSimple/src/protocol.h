@@ -10,7 +10,7 @@ public:
     {
         // Mutex blocking is set to true by default
         // It is rare that one would want to use startThread(false).
-        startThread();
+        startThread(true,true);
         serial1.listDevices();
         vector <ofSerialDeviceInfo> deviceList = serial1.getDeviceList();
 
@@ -40,54 +40,60 @@ public:
                         }
                         else{
                             //parseSomeShit(complete);
+			    lock();
 			    params = parseInput(complete);
-                           // cout << complete;
-                           // cout << endl;
+			    unlock();
+                        //    cout << complete;
+			unsigned char stuff = 117;
+		        bool isWritten =  serial1.writeByte(stuff);
+			
+
+                          //  cout << endl;
                             complete = " ";
                         }
                     }
-                }
+                
     }
-
+}
     ofSerial      serial1;
-
     vector <int> params;
 
 vector <int> parseInput(string input){
 
-    vector <int> params;
+    vector <int> params_1;
     istringstream stream(input);
     int tmp;
 
     while (stream >> tmp)
-      params.push_back(tmp);
+      params_1.push_back(tmp);
 
-    if( params[9] != 9 ){
-	cout << "Encoder pressed: " << params[9] << endl;
+    if( params_1[9] != 9 ){
+//	cout << "Encoder pressed: " << params[9] << endl;
     }
 
-    for(int i = 0; i<params.size(); i++)
-        cout << params[i] << ", ";
+    for(int i = 0; i<params_1.size(); i++)
+  //      cout << params[i] << ", ";
 
-    cout << endl;
+    //cout << endl;
 
-    return params;
+    return params_1;
 
 } 
 
-void parseSomeShit(string complete){
-        cout << complete;
-        cout << endl;
+//void sendFileNames(){
+   //   byte write = 114;
+  //    bool byteWrite =  serial1.writeByte('r');
+//	if(byteWrite == true){
+//		cout << "byte sent" << endl;
+//		byteWrite = false;
+//}
+
+//    }
 
 
-
-    }
-
-vector<int> pushParams(){
-    return params;
-
+vector <int> pushParams(){
+	return params;
 }
-
 
 };
 

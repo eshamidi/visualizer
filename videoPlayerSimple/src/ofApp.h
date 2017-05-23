@@ -39,7 +39,7 @@ public:
     pthread_t     message_thread;
 
     MyThread serialThread;
-
+    
 
     //video switching/playback/finding
     vector <string> findVideos(string directory);
