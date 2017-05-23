@@ -107,6 +107,7 @@ public:
     int tileAudio = 0;
     int numhoriz = 1;
     int numvert = 1;
+    int zoomz =0;
 
 
     //rotation variables

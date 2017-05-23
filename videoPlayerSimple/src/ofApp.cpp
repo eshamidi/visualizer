@@ -162,7 +162,7 @@ void ofApp::draw(){
 
     ofSetColor(drawcolor);
 
-    ofTranslate(0,0,-200);
+    ofTranslate(0,0,zoomzs);
 
     //This is where the drawing happens.
 
@@ -473,6 +473,11 @@ void ofApp::controlUpdate(vector <int> control){
     //E1 and F1 - ghost size and # ghosts
     ghostSize = ofMap(control.at(E1),0,127,1,7,false);
     maxGhosts = ofMap(control.at(F1),0,127,1,10,false);
+
+    //E2 and F2 - tile # and zoom zzzz
+    numhoriz = ofMap(control.at(E2), 0, 127, 1,5,false);
+    numvert = numhoriz;
+    zoomz = ofMap(control.at(F2),0,127,0,-1000, false);
 
 
 
