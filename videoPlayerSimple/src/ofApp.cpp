@@ -110,10 +110,6 @@ void ofApp::update(){
     scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
 
 
-    if(ghostfx) numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
-    else numGhosts = maxGhosts;
-    if(tilefx) tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
-
     if(clrdep_new > 0) clrUpdate = ofMap(scaledVol,0.0,1,clrdep_new,true);
         //lets record the volume into an array
         volHistory.push_back( scaledVol );
@@ -136,7 +132,15 @@ void ofApp::update(){
     //update colorModulator or coloraudio depending on which is selected
     if(colorfx) colorModulator(step);
     if(!colorfx) colorAudio(clrUpdate);
+
+    //update rotateAudio if selected
     if(rotateAudio) xang = ofMap(scaledVol, 0.1, 1.0, 0, 150, true);
+
+    if(ghostfx) numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
+    else numGhosts = maxGhosts;
+
+    if(tilefx) tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
+
 
 //    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
 //        rotateTimer.togglePause();
@@ -413,6 +417,8 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::controlUpdate(vector <int> control){
+
+    //video trigger buttons
     if(control.at(VB) != 9){
         switch(control.at(VB)){
         case 0:
@@ -438,11 +444,18 @@ void ofApp::controlUpdate(vector <int> control){
 
         }
     }
+
+    //fx on/off buttons
     if(control.at(FX) != 9){
         switch(control.at(FX)){
         case 0:
             colorfx = !colorfx;
             break;
+        case 1:
+            ghostfx = !ghostfx;
+            break;
+        case 2:
+            tilefx = !tilefx;
         default:
             break;
 
@@ -452,10 +465,14 @@ void ofApp::controlUpdate(vector <int> control){
 
         }
     }
-    colorspeed_p = ofMap(control.at(E0),0,127,0,400,false);
+
+    //E0 and F0 - color speed and color depth
+    colorspeed_p = ofMap(control.at(E0),0,127,10,400,false);
     clrdep_new = ofMap(control.at(F0),0,127,0,160,false);
 
-
+    //E1 and F1 - ghost size and # ghosts
+    ghostSize = ofMap(control.at(E1),0,127,1,7,false);
+    maxGhosts = ofMap(control.at(F1),0,127,1,10,false);
 
 
 
