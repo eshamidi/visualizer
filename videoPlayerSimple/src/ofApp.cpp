@@ -415,12 +415,39 @@ void ofApp::keyPressed(int key){
 void ofApp::controlUpdate(vector <int> control){
     if(control.at(VB) != 9){
         switch(control.at(VB)){
-            case 0:
+        case 0:
             switchVideo(0);
             break;
-
-            default:
+        case 1:
+            switchVideo(1);
             break;
+        case 2:
+            switchVideo(2);
+            break;
+        case 3:
+            switchVideo(3);
+            break;
+        case 4:
+            switchVideo(4);
+            break;
+        case 5:
+            switchVideo(5);
+            break;
+        default:
+            break;
+
+        }
+    }
+    if(control.at(FX) != 9){
+        switch(control.at(FX)){
+        case 0:
+            colorfx = !colorfx;
+            break;
+        default:
+            break;
+
+
+
 
 
         }
