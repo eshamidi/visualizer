@@ -146,7 +146,9 @@ serialThread.lock();
 //serialThread.unlock();
     controlHI = serialThread.pushParams();
 serialThread.unlock();
-cout << controlHI.size() << endl;
+if(controlHI.size() == 10){
+cout << controlHI.at(1) << endl;
+}
 }
 
 //-----------------------------------------------------
