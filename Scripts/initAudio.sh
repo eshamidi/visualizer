@@ -1,6 +1,4 @@
 #!/bin/sh
 
-pulseaudio --kill
-jack_control start
-jack_control exit
-pulseaudio --start
+jackd -dalsa -dhw:1,0 -p256 -n3 -s &
+

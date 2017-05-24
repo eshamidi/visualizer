@@ -1,30 +1,100 @@
-#include <stdlib.h>
-#include <stdint.h>
+#pragma once
 
-typedef enum {
-	EFFECT_ON,
-	EFFECT_OFF,
-	EFFECT_PROPERTY
-} protocol_message_type_e;
+#include "ofMain.h"
+#include "ofThread.h"
 
-typedef enum {
-	EFFECT_NAME
-} protocol_message_effect_type_e;
+class MyThread : public ofThread {
+public:
+    /// Start the thread.
+    void start()
+    {
+        // Mutex blocking is set to true by default
+        // It is rare that one would want to use startThread(false).
+        startThread(true,true);
+        serial1.listDevices();
+        vector <ofSerialDeviceInfo> deviceList = serial1.getDeviceList();
 
-typedef enum {
-	PROPERTY_X_LOCATION,
-	PROPERTY_Y_LOCATION,
-	PROPERTY_WIDTH,
-	PROPERTY_HEGIHT
-} protocol_message_effect_property_e;
+        int baud = 9600;
+        serial1.setup("/dev/ttyTHS1", baud);
+    }
 
-typedef struct {
-	protocol_message_effect_property_e property;
-	int32_t                            value;
-} protocol_message_effect_property_t;
+    /// Signal the thread to stop.  After calling this method,
+    /// isThreadRunning() will return false and the while loop will stop
+    /// next time it has the chance to.
+    void stop()
+    {
+        stopThread();
+    }
 
-typedef struct {
-	protocol_message_type_e            message_type;
-	protocol_message_effect_type_e     effect_type;
-	protocol_message_effect_property_t property;
-} protocol_message_t;
+    // the thread function
+    void threadedFunction() {
+        string myByte = " ";
+        string complete = " ";
+
+
+                 while(isThreadRunning()){
+                    if(serial1.available() > 0){
+                        myByte = serial1.readByte();
+                        if(myByte != "\n"){
+                            complete+=myByte;
+                        }
+                        else{
+                            //parseSomeShit(complete);
+			    lock();
+			    params = parseInput(complete);
+			    unlock();
+                            cout << complete;
+		//	unsigned char stuff = 117;
+		       // bool isWritten =  serial1.writeByte(stuff);
+			
+
+                           cout << endl;
+                            complete = " ";
+                        }
+                    }
+                
+    }
+}
+    ofSerial      serial1;
+    vector <int> params;
+
+vector <int> parseInput(string input){
+
+    vector <int> params_1;
+    istringstream stream(input);
+    int tmp;
+
+    while (stream >> tmp)
+      params_1.push_back(tmp);
+
+    if( params_1[9] != 9 ){
+//	cout << "Encoder pressed: " << params[9] << endl;
+    }
+
+    for(int i = 0; i<params_1.size(); i++)
+  //      cout << params[i] << ", ";
+
+    //cout << endl;
+
+    return params_1;
+
+} 
+
+//void sendFileNames(){
+   //   byte write = 114;
+  //    bool byteWrite =  serial1.writeByte('r');
+//	if(byteWrite == true){
+//		cout << "byte sent" << endl;
+//		byteWrite = false;
+//}
+
+//    }
+
+
+vector <int> pushParams(){
+	return params;
+}
+
+};
+
+
