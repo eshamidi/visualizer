@@ -13,10 +13,10 @@ void ofApp::setup(){
     //timer init
     colorTimer.setup(colorspeed_p);
     rotateTimer.setup(rotate_spd);
-
+    fxTimer.setup(500); 
     ofAddListener( colorTimer.TIMER_COMPLETE , this, &ofApp::colorTimerCompleteHandler ) ;
     ofAddListener( rotateTimer.TIMER_COMPLETE , this, &ofApp::rotateTimerCompleteHandler ) ;
-
+    ofAddListener( fxTimer.TIMER_COMPLETE , this, &ofApp::fxTimerCompleteHandler );
     // Initialize threads and queue for serial comms
     message_queue = g_async_queue_new();
 
@@ -71,7 +71,7 @@ void ofApp::setup(){
     step = 0;
     rotateTimer.start(true);
     rotateTimer.setup(40);
-
+    fxTimer.setup(100);
     serialThread.start();
 //    serialThread.sendFileNames();
 
@@ -99,7 +99,7 @@ void ofApp::update(){
     //update color timer for ColorModulator
     colorTimer.update();
     rotateTimer.update();
-
+    fxTimer.update();
 
     //update video frames
     myMovies[currentVid][toggle].update();
@@ -219,7 +219,7 @@ void ofApp::draw(){
 
     colorTimer.draw(50,40);
     rotateTimer.draw(50,80);
-
+    fxTimer.draw(500, 100);
     ofDrawBitmapString("Controls:" , 50, 200);
     ofDrawBitmapString("Video triggers nums 1-7" , 50, 220);
     ofDrawBitmapString("Audio toggles: color = q, ghosting = 8 " , 50, 240);
@@ -395,58 +395,74 @@ void ofApp::controlUpdate(vector <int> &control){
 
     //video trigger buttons
     
-//    switch(control.at(VB)){
+    switch(control.at(VB)){
 
-  //      case 0:
-      //      switchVideo(0);
-    //        break;
+       case 0:
+            switchVideo(0);
+            break;
 
-        //case 1:
-          //  switchVideo(1);
-          //  break;
+        case 1:
+            switchVideo(1);
+            break;
 
-       // case 2:
-         //   switchVideo(2);
-           // break;
+        case 2:
+            switchVideo(2);
+            break;
 
-   //     case 3:
-     //       switchVideo(3);
-       //     break;
+        case 3:
+            switchVideo(3);
+            break;
 
-      //  case 4:
-        //    switchVideo(4);
-          //  break;
+        case 4:
+            switchVideo(4);
+            break;
 
-   //     case 5:
-    //       switchVideo(5);
-  //          break;
+        case 5:
+           switchVideo(5);
+            break;
 
-    //    default:
-      //      break;
+        default:
+            break;
 
-  //  }
+    }
 
     //fx on/off buttons
     switch(control.at(FX)){
 
         case 0:
+	    if(fxFlag == true){
             colorfx = !colorfx;
             cout << "Colorfx toggled" << endl;
+	    fxFlag = false; 
+	    fxTimer.start(true); 
+	    }
             break;
     
         case 1:
+	    if(fxFlag == true){
             ghostfx = !ghostfx;
             cout << "ghostfx toggled" << endl;
+	    fxFlag = false;
+	    fxTimer.start(true);
+	    }
             break;
         
         case 2:
+	    if(fxFlag == true){
             tilefx = !tilefx;
             cout << "tilefx toggled" << endl;
+	    fxFlag = false; 
+ 	    fxTimer.start(true);
+	    }
             break;
         
         case 3:
+	    if(fxFlag == true){
             rotateAudio = !rotateAudio;
             cout << "rotateaudio toggled" << endl; 
+	    fxFlag = false;
+	    fxTimer.start(true);
+	    }
             break;
         
         default:
@@ -650,6 +666,12 @@ void ofApp::rotateTimerCompleteHandler(int &args) {
         xang = 0;
     }
 
+}
+
+void ofApp::fxTimerCompleteHandler(int &args) {
+fxFlag = true;
+cout << "timer complete" << endl; 
+fxTimer.stop();
 }
 
 

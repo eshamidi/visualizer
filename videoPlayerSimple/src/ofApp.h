@@ -63,7 +63,8 @@ public:
 
     ofxSimpleTimer colorTimer;
     ofxSimpleTimer rotateTimer;
-
+    ofxSimpleTimer fxTimer;
+    bool fxFlag = true;
     void colorTimerCompleteHandler( int &args ) ;
 
 
@@ -117,7 +118,8 @@ public:
     int rotate_spd = 10;
     void rotateTimerCompleteHandler( int &args ) ;
     bool rotateAudio = false;
-
+    
+    void fxTimerCompleteHandler( int &args);
 
 
 
