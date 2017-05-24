@@ -84,7 +84,7 @@ public:
     float ghostSize = 1;
     int cycle = 2000;
     int timer = 0;
-    bool inc = true;
+
 
 
     //color fade stuff
@@ -110,7 +110,7 @@ public:
     int numhoriz = 1;
     int numvert = 1;
     int zoomz =0;
-
+    int rotmult = 0;
 
     //rotation variables
     float xang = 0;
