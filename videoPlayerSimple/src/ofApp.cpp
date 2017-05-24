@@ -21,11 +21,9 @@ void ofApp::setup(){
     message_queue = g_async_queue_new();
 
 
-
-
+    // external system scripts
     system("sudo ~/unmountFlash.sh");
     system("sudo ~/mountFlash.sh");
-
 
     // location of mounted flash drive - varies per system
     //string dirString = "/media/jere/fdrive/";
@@ -34,9 +32,6 @@ void ofApp::setup(){
 
     // locate all videos on connected flash drive
     vector<string> videos = findVideos(dirString);
-
-
-
 
     // load videos into each ofVideoPlayer, each video has 2 for faster switching
     int i = 0;
@@ -51,12 +46,9 @@ void ofApp::setup(){
     }
 
 
-// Audio setup stuff
-
+    // Audio setup stuff
     soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
-
     int bufferSize = 256;
-
 
     left.assign(bufferSize, 0.0);
     right.assign(bufferSize, 0.0);
@@ -69,18 +61,15 @@ void ofApp::setup(){
 
     soundStream.setup(this, 0, 2, 48000, bufferSize, 4);
 
+
     ofSetVerticalSync(TRUE);
     ofBackground(0,0,0);
-
 
 
     //timer start
     colorTimer.start(true);
     step = 0;
-
-
     rotateTimer.start(true);
-
 
 
     serialThread.start();
@@ -90,15 +79,13 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-//	serialThread.sendFileNames();
+
     TotalDraws = pow(numhoriz, 2)*maxGhosts;
 
     if(TotalDraws > 32) maxGhosts--;
 
     //audio update envelope
-
     scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
-
 
     if(clrdep_new > 0) clrUpdate = ofMap(scaledVol,0.0,1,clrdep_new,true);
         //lets record the volume into an array
@@ -118,7 +105,6 @@ void ofApp::update(){
     myMovies[currentVid][toggle].update();
 
 
-
     //update colorModulator or coloraudio depending on which is selected
     if(colorfx) 
         colorModulator(step);
@@ -127,7 +113,7 @@ void ofApp::update(){
 
     //update rotateAudio if selected
     if(rotateAudio) 
-        xang = ofMap(scaledVol, 0.1, 1.0, 0, 150, true);
+        xang = ofMap(scaledVol, 0.1, 1.0, -75, 75, true);
     else
         xang = 0;
 
@@ -136,23 +122,25 @@ void ofApp::update(){
     else
         numGhosts = maxGhosts;
 
-    if(tilefx) 
-        tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
+    if(tilefx)
+        numTiles = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
     else
-        tileAudio = numhoriz;
+        numTiles = numhoriz;
 
 //    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
 //        rotateTimer.togglePause();
 //    }
+
+    // lock serial thread, get new parameters, unlock thread
     serialThread.lock();
-//controlHI = serialThread.params;
-//serialThread.unlock();
+    //controlHI = serialThread.params;
+    //serialThread.unlock();
     controlHI = serialThread.pushParams();
 
-    if(controlHI.size() == 10){
+    if(controlHI.size() == 10)
         controlUpdate(controlHI);
-   }
-   serialThread.unlock();
+    
+    serialThread.unlock();
 }
 
 //-----------------------------------------------------
@@ -164,73 +152,60 @@ void ofApp::draw(){
 
     ofTranslate(0,0,zoomz);
 
-    //This is where the drawing happens.
+    //----THIS IS WHERE DRAWING HAPPENS----
 
-    //Mapping tile horizontal amount to audio variable if effect is engaged
-    if(tilefx == true) numTiles = tileAudio;
-    else numTiles = numhoriz;
     //First nesting loop: pans horizontal thru tiles
-       for(int f = 0; f < numTiles; f++){
+    for(int f = 0; f < numTiles; f++){
 
-    //Adjusts draw x coordinates to corner of next tile
+        //Adjusts draw x coordinates to corner of next tile
         drawx = (1920/numhoriz)*f;
         ofTranslate(drawx, 0,0);
 
-    //Second nested loop: steps thru vertical tiles
-            for(int v = 0; v < numvert; v++){
+        //Second nested loop: steps thru vertical tiles
+        for(int v = 0; v < numvert; v++){
 
-    //Adjusts draw y coordinates to corner of next tile
-                drawy = (1080/numvert)*v;
-                ofTranslate(0,drawy,0);
+            //Adjusts draw y coordinates to corner of next tile
+            drawy = (1080/numvert)*v;
+            ofTranslate(0,drawy,0);
 
+            ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
+            ofRotate(xang,0,0,1);
 
-                ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-                ofRotate(xang,0,0,1);
+            ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
+            myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
+            //sets alpha value to 50  for ghosting
+            drawcolor.a = 50;
 
-                ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
-                myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
-                //sets alpha value to 50  for ghosting
-                drawcolor.a = 50;
+            for(int g = 0; g < numGhosts; g++){
 
-
-                //
-                for(int g = 0; g < numGhosts; g++){
-                    //sets draw color with new alpha value
-                    ofSetColor(drawcolor);
+                //sets draw color with new alpha value
+                ofSetColor(drawcolor);
                 //TODO - need to figure out transformation of ghost position
                 //ghost position is roughly centered now
-                    myMovies[currentVid][toggle].draw(-50*ghostSize*g,-50*ghostSize*g,(1920/numhoriz)+100*g*ghostSize,(1080/numvert)+100*g*ghostSize);
+                myMovies[currentVid][toggle].draw(-50*ghostSize*g,-50*ghostSize*g,(1920/numhoriz)+100*g*ghostSize,(1080/numvert)+100*g*ghostSize);
+            
+            }
 
-           }
+            drawcolor.a = 255;
+            ofSetColor(drawcolor);
 
-           drawcolor.a = 255;
-           ofSetColor(drawcolor);
+            ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
+            ofRotate(-xang,0,0,1);
+            ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
 
-           ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-           ofRotate(-xang,0,0,1);
-           ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
+            ofTranslate(0,-drawy,0);
 
+        }
 
-           ofTranslate(0,-drawy,0);
-
-           }
-       ofTranslate(-drawx,0,0);
-       }
-
-
-
-
-
-
-
-
-
+        ofTranslate(-drawx,0,0);
+    
+    }
 
     drawcolor.a = 255;
     ofSetColor(drawcolor);
 
 
-//debug stuff -- get rid of in final version
+    //Debug Info
 
     int fr = int(ofGetFrameRate());
     ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 500, 500);
@@ -242,7 +217,6 @@ void ofApp::draw(){
     ofDrawBitmapString("chgamt" + ofToString(chgamt * 1.0, 0), 50, 620);
     ofDrawBitmapString("framerate" + ofToString(fr * 1.0, 0), 50, 640);
     ofDrawBitmapString("xang" + ofToString(xang * 1.0, 0), 50, 660);
-
 
     colorTimer.draw(50,40);
     rotateTimer.draw(50,80);
@@ -287,6 +261,7 @@ vector <string> ofApp::findVideos(string directory){
     }
 
     return videos;
+
 }
 
 
@@ -323,14 +298,14 @@ void ofApp::keyPressed(int key){
         //toggle ghost audio
         case '8':
             ghostfx = !ghostfx;
-        break;
+            break;
 
         //max amount of ghosts
         case '9':
-
             maxGhosts++;
-      //  if(TotalDraws >= 32) maxGhosts = TotalDraws/pow(numhoriz,2);
+            //if(TotalDraws >= 32) maxGhosts = TotalDraws/pow(numhoriz,2);
             break;
+        
         case '0':
             maxGhosts--;
             if(maxGhosts < 0) maxGhosts = 0;
@@ -339,13 +314,12 @@ void ofApp::keyPressed(int key){
         case 'n':
             ghostSize +=0.5;
             if(ghostSize > 7) ghostSize = 7;
-        break;
+            break;
+        
         case 'm':
             ghostSize-=0.5;
             if(ghostSize < 1) ghostSize = 1;
-        break;
-
-
+            break;
 
         //toggle color audio
         case 'q':
@@ -358,7 +332,8 @@ void ofApp::keyPressed(int key){
             numvert--;
             if(numhoriz < 1) numhoriz = 1;
             if(numvert < 1) numvert = 1;
-        break;
+            break;
+        
         //more tiles
         case 't':
             numhoriz++;
@@ -366,31 +341,33 @@ void ofApp::keyPressed(int key){
             if(numhoriz > 5) numhoriz = 5;
             if(numvert > 5 ) numvert = 5;
             //if(TotalDraws >= 32) maxGhosts = TotalDraws/pow(numhoriz,2);
-        break;
+            break;
 
         case 'e':
             tilefx = !tilefx;
-        break;
+            break;
 
 
         //adjust auto color speed
         case 'g':
             colorspeed_p-=50;
             if(colorspeed_p < 50) colorspeed_p = 50;
-        break;
+            break;
+        
         case 'h':
             colorspeed_p+=50;
-        break;
+            break;
 
         //adjust color mod depth
         case 'j':
             clrdep_new+=10;
             if(clrdep_new > 250)clrdep_new = 250;
-        break;
+            break;
+        
         case 'k':
             clrdep_new-=10;
             if(clrdep_new < 0)clrdep_new = 0;
-        break;
+            break;
 
         //rotate speed + rotate amount per step
 //        case 'i':
@@ -400,75 +377,85 @@ void ofApp::keyPressed(int key){
 //            rotate_spd-=100;
 //        break;
         case 'l':
-        rotate_amt+=0.2;
-        break;
+            rotate_amt+=0.2;
+            break;
+        
         case 'p':
-        rotate_amt-=0.2;
-        break;
+            rotate_amt-=0.2;
+            break;
+        
         case 'o':
             rotateAudio = !rotateAudio;
-        break;
-
-
-
-
+            break;
 
     }
+
 }
 
 void ofApp::controlUpdate(vector <int> &control){
 
     //video trigger buttons
     
-        switch(control.at(VB)){
+    switch(control.at(VB)){
+
         case 0:
             switchVideo(0);
-	    cout << "Video 1 triggered" << endl;
             break;
+
         case 1:
             switchVideo(1);
             break;
+
         case 2:
             switchVideo(2);
             break;
+
         case 3:
             switchVideo(3);
             break;
+
         case 4:
             switchVideo(4);
             break;
+
         case 5:
             switchVideo(5);
             break;
+
         default:
             break;
 
-        }
-    
+    }
 
     //fx on/off buttons
-    
-        switch(control.at(FX)){
+    switch(control.at(FX)){
+
         case 0:
             colorfx = !colorfx;
-	    cout << "Colorfx toggled" << endl;
+            cout << "Colorfx toggled" << endl;
             break;
+    
         case 1:
             ghostfx = !ghostfx;
-	    cout << "ghostfx toggled" << endl;
+            cout << "ghostfx toggled" << endl;
             break;
+        
         case 2:
             tilefx = !tilefx;
- 	    cout << "tilefx toggled" << endl;
-	    break;
-	case 3:
-	    rotateAudio = !rotateAudio;
-	    cout << "rotateaudio toggled" << endl; 
-	    break;
+            cout << "tilefx toggled" << endl;
+            break;
+        
+        case 3:
+            rotateAudio = !rotateAudio;
+            cout << "rotateaudio toggled" << endl; 
+            break;
+        
         default:
             break;
         
     }
+
+    //Fader and Encoder Position Mapping
 
     //E0 and F0 - color speed and color depth
     colorspeed_p = ofMap(control.at(E0),0,127,10,400,false);
@@ -481,13 +468,16 @@ void ofApp::controlUpdate(vector <int> &control){
     //E2 and F2 - tile # and zoom zzzz
     numhoriz = control.at(E2);
     numvert = numhoriz;
-    if(control.at(F2) > 13) zoomz = ofMap(control.at(F2),0,127,0,-1000, false);
-    else zoomz = 0;
-    if(control.at(E3) > 24 && control.at(E3) < 32) rotate_amt =0;
-    else{
-    rotate_amt = ofMap(control.at(E3),0,127,-3,3,false);
-}
 
+    if(control.at(F2) > 13) 
+        zoomz = ofMap(control.at(F2),0,127,0,-1000, false);
+    else 
+        zoomz = 0;
+    
+    if(control.at(E3) > 24 && control.at(E3) < 32) 
+        rotate_amt =0;
+    else
+        rotate_amt = ofMap(control.at(E3),0,127,-3,3,false);
 
 }
 
@@ -501,6 +491,8 @@ void ofApp::switchVideo(int targetVid){
 
     myMovies[targetVid][toggle].setPaused(false);
     currentVid = targetVid;
+
+    cout << "Video " <<  targetVid+1 << " triggered" << endl;
 }
 
 
@@ -514,12 +506,6 @@ void ofApp::keyReleased(int key){
 void ofApp::gotMessage(ofMessage msg){
 
 }
-
-
-
-
-
-
 
 //// does processing for fx/input without hanging up display - empty as of 5/3/17
 //void *message_processing_thread(void *data) {
@@ -565,14 +551,13 @@ void ofApp::colorTimerCompleteHandler( int &args )
     colorTimer.draw(90,90);
 
 
-    if(step <= 4) step++;
+    if(step <= 4) 
+        step++;
     else{
         colorTimer.setup(colorspeed_p);
         chgamt = 35*clrdep_new/colorspeed_p;
         step = 0;
-}
-
-
+    }
 
 
 }
@@ -585,9 +570,7 @@ void ofApp::colorModulator(int step){
 
     //timer++;
     drawcolor.a = 255;
-        //progressive color tint
-
-
+    //progressive color tint
 
     //timer = ofGetElapsedTimeMillis();
 
@@ -595,57 +578,53 @@ void ofApp::colorModulator(int step){
 
     switch(step){
 
-    case 0:
+        case 0:
+            break;
 
-    break;
+        case 1:
+            if(drawcolor.r > 1) drawcolor.r -= chgamt;
+            if(drawcolor.g > 1) drawcolor.g -= chgamt;
 
-    case 1:
+            break;
 
-
-           if(drawcolor.r > 1) drawcolor.r -= chgamt;
-           if(drawcolor.g > 1) drawcolor.g -= chgamt;
-
-    break;
-
-    //green +, blue -, result is green
-    case 2:
-
+        //green +, blue -, result is green
+        case 2:
             if(drawcolor.g < 254) drawcolor.g += chgamt;
             if(drawcolor.b > 1) drawcolor.b -= chgamt;
 
+            break;
+        
+        //red +, green -, result is red
+        case 3:
+            if(drawcolor.r < 254) drawcolor.r += chgamt;
+            if(drawcolor.g > 1) drawcolor.g -= chgamt;
 
-    break;
-    //red +, green -, result is red
-    case 3:
 
-        if(drawcolor.r < 254) drawcolor.r += chgamt;
-        if(drawcolor.g > 1) drawcolor.g -= chgamt;
+            break;
+        
+        //green +, result is red + green
+        case 4:
+            if(drawcolor.g < 254) drawcolor.g += chgamt;
 
+            break;
+        
+        //blue +, result is white
+        case 5:
+            // colorTimer.togglePause();
+            if(drawcolor.b < 254) drawcolor.b += chgamt;
+            if(drawcolor.r < 254) drawcolor.r += chgamt;
+            if(drawcolor.g < 254) drawcolor.g += chgamt;
 
-    break;
-    //green +, result is red + green
-    case 4:
+    //        if(drawcolor.b == 254 & drawcolor.g == 254 & drawcolor.r == 254){
+    //            step = 0;
+    //            colorTimer.togglePause();
+    //        }
+            break;
 
-        if(drawcolor.g < 254) drawcolor.g += chgamt;
+        default:
+            break;
 
-    break;
-    //blue +, result is white
-    case 5:
-       // colorTimer.togglePause();
-        if(drawcolor.b < 254) drawcolor.b += chgamt;
-        if(drawcolor.r < 254) drawcolor.r += chgamt;
-        if(drawcolor.g < 254) drawcolor.g += chgamt;
-
-//        if(drawcolor.b == 254 & drawcolor.g == 254 & drawcolor.r == 254){
-//            step = 0;
-//            colorTimer.togglePause();
-//        }
-    break;
-
-    default:
-        break;
     }
-
 
 }
 
@@ -663,17 +642,16 @@ void ofApp::rotateTimerCompleteHandler(int &args) {
 
     xang += rotate_amt;
     if(abs(xang) > 360){
-        if(rotate_amt == 0)rotateTimer.togglePause();
+        if(rotate_amt == 0)
+            rotateTimer.togglePause();
         xang = 0;
-}
-
-
+    }
 
 }
 
 
 void ofApp::exit() {
 
-    // stop the thread
     serialThread.stopThread();
+
 }
