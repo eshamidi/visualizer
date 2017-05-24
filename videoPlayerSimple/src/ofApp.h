@@ -4,6 +4,7 @@
 #include "ofxSimpleTimer.h"
 #include "protocol.h"
 
+
 #define E0 0
 #define F0 1
 #define E1 2
@@ -43,7 +44,7 @@ public:
 
     MyThread serialThread;
 
-    void controlUpdate(vector<int> control);
+    void controlUpdate(vector<int> &control);
     
 
     //video switching/playback/finding

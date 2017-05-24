@@ -135,12 +135,13 @@ void ofApp::update(){
 
     //update rotateAudio if selected
     if(rotateAudio) xang = ofMap(scaledVol, 0.1, 1.0, 0, 150, true);
+    if(!rotateAudio) xang = 0;
 
     if(ghostfx) numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
-    else numGhosts = maxGhosts;
+    if(!ghostfx) numGhosts = maxGhosts;
 
     if(tilefx) tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
-
+    if(!tilefx) tileAudio = numhoriz;
 
 //    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
 //        rotateTimer.togglePause();
@@ -149,10 +150,11 @@ void ofApp::update(){
 //controlHI = serialThread.params;
 //serialThread.unlock();
     controlHI = serialThread.pushParams();
-    serialThread.unlock();
+
     if(controlHI.size() == 10){
         controlUpdate(controlHI);
-    }
+   }
+   serialThread.unlock();
 }
 
 //-----------------------------------------------------
@@ -162,7 +164,7 @@ void ofApp::draw(){
 
     ofSetColor(drawcolor);
 
-    ofTranslate(0,0,zoomzs);
+    ofTranslate(0,0,zoomz);
 
     //This is where the drawing happens.
 
@@ -233,7 +235,7 @@ void ofApp::draw(){
 //debug stuff -- get rid of in final version
 
     int fr = int(ofGetFrameRate());
-    ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 4, 18);
+    ofDrawBitmapString("Scaled average vol (0-100): " + ofToString(scaledVol * 100.0, 0), 500, 500);
     ofDrawBitmapString("red" + ofToString(drawcolor.r * 1.0, 0), 50, 500);
     ofDrawBitmapString("green" + ofToString(drawcolor.g * 1.0, 0), 50, 520);
     ofDrawBitmapString("blue" + ofToString(drawcolor.b * 1.0, 0), 50, 540);
@@ -416,13 +418,14 @@ void ofApp::keyPressed(int key){
     }
 }
 
-void ofApp::controlUpdate(vector <int> control){
+void ofApp::controlUpdate(vector <int> &control){
 
     //video trigger buttons
-    if(control.at(VB) != 9){
+    
         switch(control.at(VB)){
         case 0:
             switchVideo(0);
+	    cout << "Video 1 triggered" << endl;
             break;
         case 1:
             switchVideo(1);
@@ -443,27 +446,30 @@ void ofApp::controlUpdate(vector <int> control){
             break;
 
         }
-    }
+    
 
     //fx on/off buttons
-    if(control.at(FX) != 9){
+    
         switch(control.at(FX)){
         case 0:
             colorfx = !colorfx;
+	    cout << "Colorfx toggled" << endl;
             break;
         case 1:
             ghostfx = !ghostfx;
+	    cout << "ghostfx toggled" << endl;
             break;
         case 2:
             tilefx = !tilefx;
+ 	    cout << "tilefx toggled" << endl;
+	    break;
+	case 3:
+	    rotateAudio = !rotateAudio;
+	    cout << "rotateaudio toggled" << endl; 
+	    break;
         default:
             break;
-
-
-
-
-
-        }
+        
     }
 
     //E0 and F0 - color speed and color depth
@@ -471,18 +477,18 @@ void ofApp::controlUpdate(vector <int> control){
     clrdep_new = ofMap(control.at(F0),0,127,0,160,false);
 
     //E1 and F1 - ghost size and # ghosts
-    ghostSize = ofMap(control.at(E1),0,127,1,7,false);
+    ghostSize = ofMap(control.at(E1),0,127,0.2,7,false);
     maxGhosts = ofMap(control.at(F1),0,127,1,10,false);
 
     //E2 and F2 - tile # and zoom zzzz
-    numhoriz = ofMap(control.at(E2), 0, 127, 1,5,false);
+    numhoriz = control.at(E2);
     numvert = numhoriz;
-    zoomz = ofMap(control.at(F2),0,127,0,-1000, false);
-
-
-
-
-
+    if(control.at(F2) > 13) zoomz = ofMap(control.at(F2),0,127,0,-1000, false);
+    else zoomz = 0;
+    if(control.at(E3) > 24 && control.at(E3) < 32) rotate_amt =0;
+    else{
+    rotate_amt = ofMap(control.at(E3),0,127,-3,3,false);
+}
 
 
 }
