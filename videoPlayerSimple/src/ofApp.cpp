@@ -8,24 +8,14 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-   // system(" ~/initAudio.sh");
+    // system(" ~/initAudio.sh");
 
     //timer init
     colorTimer.setup(colorspeed_p);
     rotateTimer.setup(rotate_spd);
 
-     ofAddListener( colorTimer.TIMER_COMPLETE , this, &ofApp::colorTimerCompleteHandler ) ;
-     ofAddListener( rotateTimer.TIMER_COMPLETE , this, &ofApp::rotateTimerCompleteHandler ) ;
-
-    //serial comms init;
-
-//    serial.listDevices();
-//    vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
-
-//    //need to set up custom to Jetson serial port - ttyTHS1
-//    //open the first device and talk to it at 57600 baud
-//    int baud = 9600;
-//    serial.setup(0, baud);
+    ofAddListener( colorTimer.TIMER_COMPLETE , this, &ofApp::colorTimerCompleteHandler ) ;
+    ofAddListener( rotateTimer.TIMER_COMPLETE , this, &ofApp::rotateTimerCompleteHandler ) ;
 
     // Initialize threads and queue for serial comms
     message_queue = g_async_queue_new();
@@ -130,18 +120,26 @@ void ofApp::update(){
 
 
     //update colorModulator or coloraudio depending on which is selected
-    if(colorfx) colorModulator(step);
-    if(!colorfx) colorAudio(clrUpdate);
+    if(colorfx) 
+        colorModulator(step);
+    else
+        colorAudio(clrUpdate);
 
     //update rotateAudio if selected
-    if(rotateAudio) xang = ofMap(scaledVol, 0.1, 1.0, 0, 150, true);
-    if(!rotateAudio) xang = 0;
+    if(rotateAudio) 
+        xang = ofMap(scaledVol, 0.1, 1.0, 0, 150, true);
+    else
+        xang = 0;
 
-    if(ghostfx) numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
-    if(!ghostfx) numGhosts = maxGhosts;
+    if(ghostfx)
+        numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
+    else
+        numGhosts = maxGhosts;
 
-    if(tilefx) tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
-    if(!tilefx) tileAudio = numhoriz;
+    if(tilefx) 
+        tileAudio = ofMap(scaledVol,0.0, 1.0, 1, numhoriz, false);
+    else
+        tileAudio = numhoriz;
 
 //    if((rotateTimer.bIsPaused == true) & (rotate_amt != 0)){
 //        rotateTimer.togglePause();
