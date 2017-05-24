@@ -168,7 +168,7 @@ void ofApp::draw(){
             ofTranslate(0,drawy,0);
 
             ofTranslate((1920/(2*numhoriz))*1, (1080/(2*numvert))*1,0);
-            ofRotate(xang,0,0,1);
+            ofRotate(xang*rotmult,0,0,1);
 
             ofTranslate(-(1920/(2*numhoriz))*1,-(1080/(2*numvert))*1,0);
             myMovies[currentVid][toggle].draw(0,0,1920/numhoriz,1080/numvert);
@@ -495,6 +495,8 @@ void ofApp::controlUpdate(vector <int> &control){
 	}
     else
         rotate_amt = ofMap(control.at(E3),0,56,-3,3,false);
+    rotmult = ofMap(control.at(F3),0,127,0,10,false);
+
 
 control.at(FX) = 9; 
 
