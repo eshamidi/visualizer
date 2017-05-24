@@ -70,7 +70,7 @@ void ofApp::setup(){
     colorTimer.start(true);
     step = 0;
     rotateTimer.start(true);
-
+    rotateTimer.setup(40);
 
     serialThread.start();
 //    serialThread.sendFileNames();
@@ -114,8 +114,6 @@ void ofApp::update(){
     //update rotateAudio if selected
     if(rotateAudio) 
         xang = ofMap(scaledVol, 0.1, 1.0, -75, 75, true);
-    else
-        xang = 0;
 
     if(ghostfx)
         numGhosts = ofMap(scaledVol, 0.0, 1.0,1,maxGhosts,true);
@@ -137,9 +135,10 @@ void ofApp::update(){
     //serialThread.unlock();
     controlHI = serialThread.pushParams();
 
-    if(controlHI.size() == 10)
+    if(controlHI.size() == 10 ){
         controlUpdate(controlHI);
-    
+   	controlHI.at(FX) = 9; 
+}
     serialThread.unlock();
 }
 
@@ -466,7 +465,7 @@ void ofApp::controlUpdate(vector <int> &control){
     maxGhosts = ofMap(control.at(F1),0,127,1,10,false);
 
     //E2 and F2 - tile # and zoom zzzz
-    numhoriz = control.at(E2);
+    numhoriz = control.at(E2) + 1;
     numvert = numhoriz;
 
     if(control.at(F2) > 13) 
@@ -474,10 +473,14 @@ void ofApp::controlUpdate(vector <int> &control){
     else 
         zoomz = 0;
     
-    if(control.at(E3) > 24 && control.at(E3) < 32) 
+    if(control.at(E3) > 24 && control.at(E3) < 32){ 
         rotate_amt =0;
+	xang =0;
+	}
     else
-        rotate_amt = ofMap(control.at(E3),0,127,-3,3,false);
+        rotate_amt = ofMap(control.at(E3),0,56,-3,3,false);
+
+control.at(FX) = 9; 
 
 }
 
